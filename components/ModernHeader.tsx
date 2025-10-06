@@ -31,30 +31,38 @@ export function ModernHeader({
       <View style={styles.leftSection}>
         {showBackButton && (
           <TouchableOpacity
-            style={styles.backButton}
+            style={variant === 'minimal' ? styles.minimalBackButton : styles.backButton}
             onPress={onBackPress}
             activeOpacity={0.7}
           >
-            <Ionicons name="arrow-back" size={24} color={lightTheme.colors.white} />
+            <Ionicons 
+              name="arrow-back" 
+              size={20} 
+              color={variant === 'minimal' ? lightTheme.colors.text : lightTheme.colors.white} 
+            />
           </TouchableOpacity>
         )}
       </View>
 
       {/* Center Section */}
       <View style={styles.centerSection}>
-        <Text style={styles.title}>{title}</Text>
-        {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
+        <Text style={variant === 'minimal' ? styles.minimalTitle : styles.title}>{title}</Text>
+        {subtitle && <Text style={variant === 'minimal' ? styles.minimalSubtitle : styles.subtitle}>{subtitle}</Text>}
       </View>
 
       {/* Right Section */}
       <View style={styles.rightSection}>
         {rightAction && (
           <TouchableOpacity
-            style={styles.rightButton}
+            style={variant === 'minimal' ? styles.minimalRightButton : styles.rightButton}
             onPress={rightAction.onPress}
             activeOpacity={0.7}
           >
-            <Ionicons name={rightAction.icon} size={24} color={lightTheme.colors.white} />
+            <Ionicons 
+              name={rightAction.icon} 
+              size={20} 
+              color={variant === 'minimal' ? lightTheme.colors.text : lightTheme.colors.white} 
+            />
           </TouchableOpacity>
         )}
       </View>
@@ -104,71 +112,99 @@ const styles = StyleSheet.create({
   },
   gradientHeader: {
     shadowColor: lightTheme.colors.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 8,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 4,
   },
   defaultHeader: {
     backgroundColor: lightTheme.colors.primary,
     shadowColor: lightTheme.colors.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 8,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    elevation: 4,
   },
   minimalHeader: {
     backgroundColor: lightTheme.colors.background,
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.5,
     borderBottomColor: lightTheme.colors.gray200,
   },
   content: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 12,
-    minHeight: 56,
+    paddingVertical: 8,
+    minHeight: 44,
   },
   leftSection: {
-    width: 48,
+    width: 40,
     alignItems: 'flex-start',
   },
   centerSection: {
     flex: 1,
     alignItems: 'center',
-    paddingHorizontal: 16,
+    paddingHorizontal: 12,
   },
   rightSection: {
-    width: 48,
+    width: 40,
     alignItems: 'flex-end',
   },
   backButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   rightButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   title: {
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 16,
+    fontWeight: '600',
     color: lightTheme.colors.white,
     textAlign: 'center',
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: 12,
     color: lightTheme.colors.white,
-    opacity: 0.9,
+    opacity: 0.8,
     textAlign: 'center',
-    marginTop: 2,
+    marginTop: 1,
+  },
+  minimalTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: lightTheme.colors.text,
+    textAlign: 'center',
+  },
+  minimalSubtitle: {
+    fontSize: 12,
+    color: lightTheme.colors.gray700,
+    textAlign: 'center',
+    marginTop: 1,
+  },
+  minimalBackButton: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: lightTheme.colors.gray100,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  minimalRightButton: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: lightTheme.colors.gray100,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
