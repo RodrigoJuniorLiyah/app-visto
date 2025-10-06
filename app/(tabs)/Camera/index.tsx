@@ -72,10 +72,15 @@ const ModalOverlay = styled.View`
 
 const ModalContent = styled.View`
   width: 80%;
-  background-color: ${(props: any) => props.theme.colors.white};
+  background-color: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? '#2A2A2A' : props.theme.colors.white};
   border-radius: 10px;
   padding: 20px;
   align-items: center;
+  shadow-color: ${(props: any) => props.theme.colors.text};
+  shadow-offset: 0px 4px;
+  shadow-opacity: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? 0.3 : 0.1};
+  shadow-radius: 8px;
+  elevation: 4;
 `;
 
 const ModalTitle = styled.Text`
@@ -95,12 +100,13 @@ const PreviewImage = styled.Image`
 const TitleInput = styled(TextInput)`
   width: 100%;
   border-width: 1px;
-  border-color: ${(props: any) => props.theme.colors.gray200};
-  border-radius: 5px;
-  padding: 10px;
+  border-color: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? props.theme.colors.gray600 : props.theme.colors.gray200};
+  border-radius: 8px;
+  padding: 12px;
   margin-bottom: 20px;
   color: ${(props: any) => props.theme.colors.text};
-  background-color: ${(props: any) => props.theme.colors.background};
+  background-color: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? '#1A1A1A' : props.theme.colors.background};
+  font-size: 16px;
 `;
 
 const ModalActions = styled.View`
@@ -110,15 +116,31 @@ const ModalActions = styled.View`
 `;
 
 const ModalButton = styled.TouchableOpacity<{ variant: 'cancel' | 'save' }>`
-  padding-vertical: 10px;
-  padding-horizontal: 20px;
-  border-radius: 5px;
-  background-color: ${(props: any) => props.variant === 'cancel' ? props.theme.colors.gray200 : props.theme.colors.blue};
+  padding-vertical: 12px;
+  padding-horizontal: 24px;
+  border-radius: 8px;
+  background-color: ${(props: any) => {
+    if (props.variant === 'cancel') {
+      return props.theme.colors.background === '#1A1A1A' ? props.theme.colors.gray600 : props.theme.colors.gray200;
+    }
+    return props.theme.colors.blue;
+  }};
+  shadow-color: ${(props: any) => props.theme.colors.text};
+  shadow-offset: 0px 2px;
+  shadow-opacity: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? 0.3 : 0.1};
+  shadow-radius: 4px;
+  elevation: 2;
 `;
 
 const ModalButtonText = styled.Text<{ variant: 'cancel' | 'save' }>`
-  color: ${(props: any) => props.variant === 'cancel' ? props.theme.colors.text : props.theme.colors.white};
-  font-weight: bold;
+  color: ${(props: any) => {
+    if (props.variant === 'cancel') {
+      return props.theme.colors.background === '#1A1A1A' ? props.theme.colors.white : props.theme.colors.text;
+    }
+    return props.theme.colors.white;
+  }};
+  font-weight: 600;
+  font-size: 16px;
 `;
 
 const Message = styled.Text`
@@ -172,10 +194,10 @@ export default function CameraScreen() {
       <SafeAreaView style={{ flex: 1 }} edges={['top']}>
         <Container>
           <Message>
-            Camera permission is required to take photos
+            Permissão da câmera é necessária para tirar fotos
           </Message>
           <Button onPress={requestPermission}>
-            <ButtonText>Grant Permission</ButtonText>
+            <ButtonText>Conceder Permissão</ButtonText>
           </Button>
         </Container>
       </SafeAreaView>
@@ -232,8 +254,8 @@ export default function CameraScreen() {
   return (
     <SafeAreaView style={{ flex: 1 }} edges={['top']}>
       <ModernHeader
-        title="📷 Camera"
-        subtitle="Take a photo"
+        title="📷 Câmera"
+        subtitle="Tire uma foto"
         variant="gradient"
         showBackButton
         onBackPress={() => router.back()}
@@ -272,10 +294,10 @@ export default function CameraScreen() {
         >
           <ModalOverlay>
             <ModalContent>
-              <ModalTitle>Save Photo</ModalTitle>
+                  <ModalTitle>Salvar Foto</ModalTitle>
 
-              <TitleInput
-                placeholder="Enter photo title (optional)"
+                  <TitleInput
+                    placeholder="Digite o título da foto (opcional)"
                 value={photoTitle}
                 onChangeText={setPhotoTitle}
                 autoFocus
@@ -287,14 +309,14 @@ export default function CameraScreen() {
                   variant="cancel"
                   onPress={cancelPhoto}
                 >
-                  <ModalButtonText variant="cancel">Cancel</ModalButtonText>
+                  <ModalButtonText variant="cancel">Cancelar</ModalButtonText>
                 </ModalButton>
 
                 <ModalButton
                   variant="save"
                   onPress={savePhoto}
                 >
-                  <ModalButtonText variant="save">Save</ModalButtonText>
+                  <ModalButtonText variant="save">Salvar</ModalButtonText>
                 </ModalButton>
               </ModalActions>
             </ModalContent>

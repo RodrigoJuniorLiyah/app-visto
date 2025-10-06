@@ -304,7 +304,7 @@ export default function GalleryScreen() {
     setIsSelectionMode(false);
   };
 
-  const renderPhotoItem = ({ item }: { item: any }) => {
+  const renderPhotoItem = ({ item }: { item: PhotoMetadata }) => {
     const isSelected = selectedPhotos.has(item.id);
 
     return (
@@ -349,12 +349,12 @@ export default function GalleryScreen() {
   const renderEmptyState = () => (
     <EmptyState>
       <Ionicons name="camera-outline" size={80} color={theme.colors.gray500} />
-      <EmptyTitle>No Photos Yet</EmptyTitle>
+      <EmptyTitle>Ainda Não Há Fotos</EmptyTitle>
       <EmptySubtitle>
-        Take your first photo to get started!
+        Tire sua primeira foto para começar!
       </EmptySubtitle>
       <TakePhotoButton onPress={() => router.push('/(tabs)/Camera')}>
-        <TakePhotoButtonText>Take Photo</TakePhotoButtonText>
+        <TakePhotoButtonText>Tirar Foto</TakePhotoButtonText>
       </TakePhotoButton>
     </EmptyState>
   );
@@ -362,8 +362,8 @@ export default function GalleryScreen() {
   return (
     <SafeAreaView style={{ flex: 1 }} edges={['top']}>
       <ModernHeader
-        title="📸 Gallery"
-        subtitle={`${photos.length} photos`}
+        title="📸 Galeria"
+        subtitle={`${photos.length} fotos`}
         variant="gradient"
         rightAction={{
           icon: "camera",
@@ -376,7 +376,7 @@ export default function GalleryScreen() {
           <SearchContainer>
             <SearchIcon />
             <SearchInput
-              placeholder="Search photos..."
+              placeholder="Buscar fotos..."
               value={searchText}
               onChangeText={setSearchText}
               placeholderTextColor={theme.colors.gray500}
@@ -394,13 +394,13 @@ export default function GalleryScreen() {
           <SelectionActions>
             <ActionButton onPress={handleDeleteSelected}>
               <Ionicons name="trash" size={20} color={theme.colors.danger} />
-              <ActionButtonText>Delete</ActionButtonText>
+                  <ActionButtonText>Excluir</ActionButtonText>
             </ActionButton>
             
             {selectedPhotos.size === 2 && (
               <ActionButton onPress={handleComparePhotos}>
                 <Ionicons name="git-compare" size={20} color={theme.colors.blue} />
-                <ActionButtonText>Compare</ActionButtonText>
+                <ActionButtonText>Comparar</ActionButtonText>
               </ActionButton>
             )}
           </SelectionActions>

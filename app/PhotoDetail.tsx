@@ -319,8 +319,8 @@ export default function PhotoDetailScreen() {
   return (
     <SafeAreaView style={{ flex: 1 }} edges={['top']}>
       <ModernHeader
-        title="📸 Photo Details"
-        subtitle={photo?.title || 'Loading...'}
+        title="📸 Detalhes da Foto"
+        subtitle={photo?.title || 'Carregando...'}
         variant="gradient"
         showBackButton
         onBackPress={() => router.back()}
@@ -351,7 +351,7 @@ export default function PhotoDetailScreen() {
           <InfoCard>
             <CardHeader>
               <Ionicons name="information-circle" size={24} color={theme.colors.blue} />
-              <CardTitle>Photo Information</CardTitle>
+              <CardTitle>Informações da Foto</CardTitle>
             </CardHeader>
             
             <InfoGrid>
@@ -419,7 +419,7 @@ export default function PhotoDetailScreen() {
           <ActionsCard>
             <CardHeader>
               <Ionicons name="settings" size={24} color={theme.colors.blue} />
-              <CardTitle>Actions</CardTitle>
+              <CardTitle>Ações</CardTitle>
             </CardHeader>
             
             <ActionsGrid>
@@ -428,7 +428,7 @@ export default function PhotoDetailScreen() {
                 onPress={() => setShowEditModal(true)}
               >
                 <Ionicons name="create" size={20} color={theme.colors.white} />
-                <ActionButtonText>Edit Title</ActionButtonText>
+                <ActionButtonText>Editar Título</ActionButtonText>
               </ActionButton>
               
               <ActionButton
@@ -436,7 +436,7 @@ export default function PhotoDetailScreen() {
                 onPress={handleSharePhoto}
               >
                 <Ionicons name="share" size={20} color={theme.colors.white} />
-                <ActionButtonText>Share</ActionButtonText>
+                <ActionButtonText>Compartilhar</ActionButtonText>
               </ActionButton>
               
               <ActionButton
@@ -444,7 +444,7 @@ export default function PhotoDetailScreen() {
                 onPress={handleDeletePhoto}
               >
                 <Ionicons name="trash" size={20} color={theme.colors.white} />
-                <ActionButtonText>Delete</ActionButtonText>
+                <ActionButtonText>Excluir</ActionButtonText>
               </ActionButton>
             </ActionsGrid>
           </ActionsCard>
@@ -459,10 +459,10 @@ export default function PhotoDetailScreen() {
         >
           <ModalOverlay>
             <ModalContent>
-              <ModalTitle>Edit Photo Title</ModalTitle>
+              <ModalTitle>Editar Título da Foto</ModalTitle>
               
               <TitleInput
-                placeholder="Enter photo title"
+                placeholder="Digite o título da foto"
                 value={editTitle}
                 onChangeText={setEditTitle}
                 autoFocus

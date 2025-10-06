@@ -20,7 +20,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="Home/index"
         options={{
-          title: 'Home',
+          title: 'Início',
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="home" size={size} color={color} />
           ),
@@ -29,7 +29,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="Gallery/index"
         options={{
-          title: 'Gallery',
+          title: 'Galeria',
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="images" size={size} color={color} />
           ),
@@ -38,7 +38,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="Camera/index"
         options={{
-          title: 'Camera',
+          title: 'Câmera',
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="camera" size={size} color={color} />
           ),

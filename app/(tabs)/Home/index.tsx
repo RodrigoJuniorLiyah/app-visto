@@ -32,29 +32,29 @@ export default function HomeScreen() {
   
   const features = [
     {
-      title: 'Take Photos',
-      description: 'Capture amazing moments with your camera',
+      title: 'Tirar Fotos',
+      description: 'Capture momentos incríveis com sua câmera',
       icon: 'camera',
       color: theme.colors.primary,
       onPress: () => router.push('/(tabs)/Camera'),
     },
     {
-      title: 'View Gallery',
-      description: 'Browse through your photo collection',
+      title: 'Ver Galeria',
+      description: 'Navegue pela sua coleção de fotos',
       icon: 'images',
       color: theme.colors.secondary,
       onPress: () => router.push('/(tabs)/Gallery'),
     },
     {
-      title: 'Photo Details',
-      description: 'View metadata and location information',
+      title: 'Detalhes da Foto',
+      description: 'Visualize metadados e informações de localização',
       icon: 'information-circle',
       color: theme.colors.blue,
       onPress: () => router.push('/(tabs)/Gallery'),
     },
     {
-      title: 'Compare Photos',
-      description: 'Side-by-side photo comparison tool',
+      title: 'Comparar Fotos',
+      description: 'Ferramenta de comparação lado a lado',
       icon: 'git-compare',
       color: theme.colors.alert,
       onPress: () => router.push('/(tabs)/Gallery'),
@@ -64,8 +64,8 @@ export default function HomeScreen() {
   return (
     <SafeContainer>
       <ModernHeader
-        title="📸 Photo Gallery"
-        subtitle="Capture, organize, and compare your photos"
+        title="📸 Galeria de Fotos"
+        subtitle="Capture, organize e compare suas fotos"
         variant="gradient"
         showThemeToggle
       />
@@ -101,31 +101,31 @@ export default function HomeScreen() {
         </FeaturesContainer>
 
         <InfoContainer>
-          <InfoTitle>App Features</InfoTitle>
+          <InfoTitle>Recursos do App</InfoTitle>
           <InfoList>
             <InfoItem>
               <CheckIcon />
-              <InfoText>Camera integration with location</InfoText>
+              <InfoText>Integração da câmera com localização</InfoText>
             </InfoItem>
             <InfoItem>
               <CheckIcon />
-              <InfoText>Offline storage and cache</InfoText>
+              <InfoText>Armazenamento offline e cache</InfoText>
             </InfoItem>
             <InfoItem>
               <CheckIcon />
-              <InfoText>Search and filter photos</InfoText>
+              <InfoText>Buscar e filtrar fotos</InfoText>
             </InfoItem>
             <InfoItem>
               <CheckIcon />
-              <InfoText>Photo comparison tool</InfoText>
+              <InfoText>Ferramenta de comparação de fotos</InfoText>
             </InfoItem>
             <InfoItem>
               <CheckIcon />
-              <InfoText>Share with metadata</InfoText>
+              <InfoText>Compartilhar com metadados</InfoText>
             </InfoItem>
             <InfoItem>
               <CheckIcon />
-              <InfoText>Dark mode support</InfoText>
+              <InfoText>Suporte ao modo escuro</InfoText>
             </InfoItem>
           </InfoList>
         </InfoContainer>

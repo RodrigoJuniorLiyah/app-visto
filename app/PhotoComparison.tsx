@@ -33,12 +33,12 @@ const PhotoContainer = styled.View`
 
 const PhotoWrapper = styled.View`
   flex: 1;
-  background-color: ${(props: any) => props.theme.colors.white};
+  background-color: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? '#2A2A2A' : props.theme.colors.white};
   border-radius: 12px;
   overflow: hidden;
   shadow-color: ${(props: any) => props.theme.colors.text};
   shadow-offset: 0px 2px;
-  shadow-opacity: 0.1;
+  shadow-opacity: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? 0.3 : 0.1};
   shadow-radius: 4px;
   elevation: 3;
 `;
@@ -61,23 +61,23 @@ const PhotoTitle = styled.Text`
 
 const PhotoDate = styled.Text`
   font-size: 14px;
-  color: ${(props: any) => props.theme.colors.gray500};
+  color: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? props.theme.colors.gray800 : props.theme.colors.gray500};
   margin-bottom: 4px;
 `;
 
 const PhotoLocation = styled.Text`
   font-size: 12px;
-  color: ${(props: any) => props.theme.colors.gray700};
+  color: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? props.theme.colors.gray800 : props.theme.colors.gray700};
 `;
 
 const ComparisonContainer = styled.View`
-  background-color: ${(props: any) => props.theme.colors.white};
+  background-color: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? '#2A2A2A' : props.theme.colors.white};
   border-radius: 12px;
   padding: 16px;
   margin-bottom: 20px;
   shadow-color: ${(props: any) => props.theme.colors.text};
   shadow-offset: 0px 2px;
-  shadow-opacity: 0.1;
+  shadow-opacity: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? 0.3 : 0.1};
   shadow-radius: 4px;
   elevation: 3;
 `;
@@ -96,12 +96,12 @@ const ComparisonItem = styled.View`
   align-items: center;
   padding-vertical: 8px;
   border-bottom-width: 1px;
-  border-bottom-color: ${(props: any) => props.theme.colors.gray200};
+  border-bottom-color: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? props.theme.colors.gray600 : props.theme.colors.gray200};
 `;
 
 const ComparisonLabel = styled.Text`
   font-size: 14px;
-  color: ${(props: any) => props.theme.colors.gray500};
+  color: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? props.theme.colors.gray800 : props.theme.colors.gray500};
   flex: 1;
 `;
 
@@ -170,19 +170,37 @@ export default function PhotoComparisonScreen() {
     return new Date(timestamp).toLocaleString();
   };
 
+  const formatTimeDifference = (timestamp1: number, timestamp2: number): string => {
+    const diffMs = Math.abs(timestamp1 - timestamp2);
+    const diffSeconds = Math.floor(diffMs / 1000);
+    const diffMinutes = Math.floor(diffSeconds / 60);
+    const diffHours = Math.floor(diffMinutes / 60);
+    const diffDays = Math.floor(diffHours / 24);
+
+    if (diffDays > 0) {
+      return `${diffDays} ${diffDays === 1 ? 'dia' : 'dias'}`;
+    } else if (diffHours > 0) {
+      return `${diffHours} ${diffHours === 1 ? 'hora' : 'horas'}`;
+    } else if (diffMinutes > 0) {
+      return `${diffMinutes} ${diffMinutes === 1 ? 'minuto' : 'minutos'}`;
+    } else {
+      return `${diffSeconds} ${diffSeconds === 1 ? 'segundo' : 'segundos'}`;
+    }
+  };
+
   if (!photo1 || !photo2) {
     return (
       <SafeAreaView style={{ flex: 1 }} edges={['top']}>
         <ModernHeader
-          title="📊 Photo Comparison"
-          subtitle="Compare two photos"
+          title="📊 Comparação de Fotos"
+          subtitle="Compare duas fotos"
           variant="gradient"
           showBackButton
           onBackPress={() => router.back()}
         />
         <Container>
           <Content>
-            <ComparisonTitle>Loading...</ComparisonTitle>
+            <ComparisonTitle>Carregando...</ComparisonTitle>
           </Content>
         </Container>
       </SafeAreaView>
@@ -201,8 +219,8 @@ export default function PhotoComparisonScreen() {
   return (
     <SafeAreaView style={{ flex: 1 }} edges={['top']}>
       <ModernHeader
-        title="📊 Photo Comparison"
-        subtitle="Compare two photos"
+        title="📊 Comparação de Fotos"
+        subtitle="Compare duas fotos"
         variant="gradient"
         showBackButton
         onBackPress={() => router.back()}
@@ -253,39 +271,39 @@ export default function PhotoComparisonScreen() {
 
           {/* Comparison Details */}
           <ComparisonContainer>
-            <ComparisonTitle>Comparison Details</ComparisonTitle>
+            <ComparisonTitle>Detalhes da Comparação</ComparisonTitle>
             
             <ComparisonItem>
-              <ComparisonLabel>Date Difference:</ComparisonLabel>
+              <ComparisonLabel>Diferença de Data:</ComparisonLabel>
               <ComparisonValue>
-                {Math.abs(photo1.timestamp - photo2.timestamp) / (1000 * 60 * 60 * 24)} days
+                {formatTimeDifference(photo1.timestamp, photo2.timestamp)}
               </ComparisonValue>
             </ComparisonItem>
 
             {distance !== null && (
               <ComparisonItem>
-                <ComparisonLabel>Distance:</ComparisonLabel>
+                <ComparisonLabel>Distância:</ComparisonLabel>
                 <ComparisonValue>{distance.toFixed(2)} km</ComparisonValue>
               </ComparisonItem>
             )}
 
             <ComparisonItem>
-              <ComparisonLabel>File Size 1:</ComparisonLabel>
+              <ComparisonLabel>Tamanho do Arquivo 1:</ComparisonLabel>
               <ComparisonValue>{formatFileSize(photo1.size)}</ComparisonValue>
             </ComparisonItem>
 
             <ComparisonItem>
-              <ComparisonLabel>File Size 2:</ComparisonLabel>
+              <ComparisonLabel>Tamanho do Arquivo 2:</ComparisonLabel>
               <ComparisonValue>{formatFileSize(photo2.size)}</ComparisonValue>
             </ComparisonItem>
 
             <ComparisonItem>
-              <ComparisonLabel>Dimensions 1:</ComparisonLabel>
+              <ComparisonLabel>Dimensões 1:</ComparisonLabel>
               <ComparisonValue>{photo1.width} × {photo1.height}</ComparisonValue>
             </ComparisonItem>
 
             <ComparisonItem>
-              <ComparisonLabel>Dimensions 2:</ComparisonLabel>
+              <ComparisonLabel>Dimensões 2:</ComparisonLabel>
               <ComparisonValue>{photo2.width} × {photo2.height}</ComparisonValue>
             </ComparisonItem>
           </ComparisonContainer>
@@ -295,14 +313,14 @@ export default function PhotoComparisonScreen() {
             pathname: '/PhotoDetail',
             params: { photoId: photo1.id }
           })}>
-            <ActionButtonText>View Photo 1 Details</ActionButtonText>
+            <ActionButtonText>Ver Detalhes da Foto 1</ActionButtonText>
           </ActionButton>
 
           <ActionButton onPress={() => router.push({
             pathname: '/PhotoDetail',
             params: { photoId: photo2.id }
           })}>
-            <ActionButtonText>View Photo 2 Details</ActionButtonText>
+            <ActionButtonText>Ver Detalhes da Foto 2</ActionButtonText>
           </ActionButton>
         </Content>
       </Container>
