@@ -1,5 +1,5 @@
-import { useTheme } from '@/contexts/ThemeContext';
 import { ModernHeader } from '@/components/ModernHeader';
+import { useTheme } from '@/contexts/ThemeContext';
 import {
   CameraIcon,
   CheckIcon,
@@ -16,16 +16,13 @@ import {
   FeatureText,
   FeatureTitle,
   GalleryIcon,
-  Header,
   InfoContainer,
   InfoIcon,
   InfoItem,
   InfoList,
   InfoText,
   InfoTitle,
-  SafeContainer,
-  Subtitle,
-  Title,
+  SafeContainer
 } from '@/Styles/Home/HomeStyles';
 import { router } from 'expo-router';
 import React from 'react';
