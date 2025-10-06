@@ -18,6 +18,8 @@ export default function RootLayout() {
       <ThemeProvider>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="PhotoDetail" options={{ headerShown: true, title: 'Photo Details' }} />
+          <Stack.Screen name="PhotoComparison" options={{ headerShown: true, title: 'Compare Photos' }} />
         </Stack>
         <StatusBar style="auto" />
       </ThemeProvider>

@@ -18,7 +18,7 @@ export default function TabLayout() {
         tabBarButton: HapticTab,
       }}>
       <Tabs.Screen
-        name="Home/index"
+        name="Home"
         options={{
           title: 'Home',
           tabBarIcon: ({ color, size }) => (
@@ -27,7 +27,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="Gallery/index"
+        name="Gallery"
         options={{
           title: 'Gallery',
           tabBarIcon: ({ color, size }) => (
@@ -36,7 +36,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="Camera/index"
+        name="Camera"
         options={{
           title: 'Camera',
           tabBarIcon: ({ color, size }) => (
