@@ -1,4 +1,5 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { LinearGradient } from "expo-linear-gradient";
 import styled from "styled-components/native";
 import { lightTheme } from "../../constants/theme";
 
@@ -11,11 +12,14 @@ export const Content = styled.View`
   padding: 20px;
 `;
 
-export const Header = styled.View`
+export const Header = styled(LinearGradient).attrs({
+  colors: [lightTheme.colors.primary, lightTheme.colors.secondary],
+  start: { x: 0, y: 0 },
+  end: { x: 1, y: 1 },
+})`
   align-items: center;
   margin-bottom: 32px;
   padding: 24px 20px;
-  background-color: ${lightTheme.colors.primary};
   border-radius: 20px;
   shadow-color: ${lightTheme.colors.primary};
   shadow-offset: 0px 8px;
@@ -72,14 +76,17 @@ export const FeatureContent = styled.View`
   padding: 20px;
 `;
 
-export const FeatureIcon = styled.View<{ color?: string }>`
+export const FeatureIcon = styled(LinearGradient).attrs<{ color?: string }>((props) => ({
+  colors: [props.color || lightTheme.colors.primary, lightTheme.colors.secondary],
+  start: { x: 0, y: 0 },
+  end: { x: 1, y: 1 },
+}))`
   width: 56px;
   height: 56px;
   border-radius: 28px;
   justify-content: center;
   align-items: center;
   margin-right: 16px;
-  background-color: ${props => props.color || lightTheme.colors.primary};
   shadow-color: ${props => props.color || lightTheme.colors.primary};
   shadow-offset: 0px 4px;
   shadow-opacity: 0.3;
