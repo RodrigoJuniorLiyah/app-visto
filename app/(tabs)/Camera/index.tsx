@@ -109,9 +109,9 @@ export default function CameraScreen() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ModernHeader
-        title="Camera"
+        title="📷 Camera"
         subtitle="Take a photo"
-        variant="minimal"
+        variant="gradient"
         showBackButton
         onBackPress={() => router.back()}
         rightAction={{

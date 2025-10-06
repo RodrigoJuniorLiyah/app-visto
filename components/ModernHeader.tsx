@@ -112,10 +112,10 @@ const styles = StyleSheet.create({
   },
   gradientHeader: {
     shadowColor: lightTheme.colors.primary,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-    elevation: 4,
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
   },
   defaultHeader: {
     backgroundColor: lightTheme.colors.primary,
@@ -134,8 +134,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 8,
-    minHeight: 44,
+    paddingVertical: 6,
+    minHeight: 40,
   },
   leftSection: {
     width: 40,
@@ -167,13 +167,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '600',
     color: lightTheme.colors.white,
     textAlign: 'center',
   },
   subtitle: {
-    fontSize: 12,
+    fontSize: 11,
     color: lightTheme.colors.white,
     opacity: 0.8,
     textAlign: 'center',

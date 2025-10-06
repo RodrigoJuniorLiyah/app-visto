@@ -198,7 +198,7 @@ export default function GalleryScreen() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <ModernHeader
-        title="Gallery"
+        title="📸 Gallery"
         subtitle={`${photos.length} photos`}
         variant="gradient"
         rightAction={{
