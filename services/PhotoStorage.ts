@@ -1,5 +1,6 @@
 import * as FileSystem from 'expo-file-system';
 import * as Location from 'expo-location';
+import { getImageSize } from 'react-native-image-size';
 import { PhotoMetadata } from '../types/photo';
 
 const PHOTOS_DIR = `${FileSystem.documentDirectory}photos/`;
@@ -46,29 +47,43 @@ export class PhotoStorage {
     title?: string
   ): Promise<PhotoMetadata> {
     try {
+      console.log('Starting photo save process...');
+      
       // Ensure photos directory exists
+      console.log('Checking photos directory...');
       const dirInfo = await FileSystem.getInfoAsync(PHOTOS_DIR);
       if (!dirInfo.exists) {
+        console.log('Creating photos directory...');
         await FileSystem.makeDirectoryAsync(PHOTOS_DIR, { intermediates: true });
       }
 
       // Get current location
+      console.log('Getting location...');
       const location = await this.getCurrentLocation();
       
       // Get file info
+      console.log('Getting file info...');
       const fileInfo = await FileSystem.getInfoAsync(uri);
+      console.log('File info:', fileInfo);
+      
+      // Get image dimensions
+      console.log('Getting image dimensions...');
       const imageInfo = await this.getImageDimensions(uri);
+      console.log('Image dimensions:', imageInfo);
 
       // Generate unique filename
       const timestamp = Date.now();
       const filename = `photo_${timestamp}.jpg`;
       const newUri = `${PHOTOS_DIR}${filename}`;
+      console.log('New URI:', newUri);
 
       // Copy photo to app directory
+      console.log('Copying photo...');
       await FileSystem.copyAsync({
         from: uri,
         to: newUri,
       });
+      console.log('Photo copied successfully');
 
       // Create metadata
       const photo: PhotoMetadata = {
@@ -84,9 +99,12 @@ export class PhotoStorage {
         height: imageInfo.height,
       };
 
+      console.log('Photo metadata created:', photo);
+
       // Add to photos array
       this.photos.unshift(photo); // Add to beginning for newest first
       await this.savePhotos();
+      console.log('Photo saved successfully');
 
       return photo;
     } catch (error) {
@@ -144,16 +162,13 @@ export class PhotoStorage {
   }
 
   private async getImageDimensions(uri: string): Promise<{ width: number; height: number }> {
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.onload = () => {
-        resolve({ width: img.width, height: img.height });
-      };
-      img.onerror = () => {
-        resolve({ width: 0, height: 0 });
-      };
-      img.src = uri;
-    });
+    try {
+      const dimensions = await getImageSize(uri);
+      return { width: dimensions.width, height: dimensions.height };
+    } catch (error) {
+      console.error('Error getting image dimensions:', error);
+      return { width: 1920, height: 1080 }; // Default dimensions
+    }
   }
 
   public getAllPhotos(): PhotoMetadata[] {
