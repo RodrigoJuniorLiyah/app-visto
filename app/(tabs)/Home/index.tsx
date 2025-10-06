@@ -22,7 +22,6 @@ import {
   InfoList,
   InfoText,
   InfoTitle,
-  SafeContainer,
   Subtitle,
   Title,
 } from '@/Styles/Home/HomeStyles';
@@ -62,9 +61,8 @@ export default function HomeScreen() {
   ];
 
   return (
-    <SafeContainer>
-      <Container>
-        <Content>
+    <Container>
+      <Content>
         <Header>
           <Title>📸 Photo Gallery</Title>
           <Subtitle>
@@ -129,8 +127,7 @@ export default function HomeScreen() {
             </InfoItem>
           </InfoList>
         </InfoContainer>
-        </Content>
-      </Container>
-    </SafeContainer>
+      </Content>
+    </Container>
   );
 }
