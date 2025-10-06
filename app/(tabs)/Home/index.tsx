@@ -1,59 +1,57 @@
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React from 'react';
-import { useTheme } from 'styled-components';
 import {
+  CheckIcon,
+  ChevronIcon,
   Container,
   Content,
-  Header,
-  Title,
-  Subtitle,
-  FeaturesContainer,
-  FeaturesTitle,
   FeatureCard,
   FeatureContent,
+  FeatureDescription,
   FeatureIcon,
+  FeaturesContainer,
+  FeaturesTitle,
   FeatureText,
   FeatureTitle,
-  FeatureDescription,
+  Header,
   InfoContainer,
-  InfoTitle,
-  InfoList,
   InfoItem,
+  InfoList,
   InfoText,
-  ChevronIcon,
-  CheckIcon,
+  InfoTitle,
+  Subtitle,
+  Title,
 } from '../../Styles/Home/HomeStyles';
 
 export default function HomeScreen() {
-  const theme = useTheme();
   const features = [
     {
       title: 'Take Photos',
       description: 'Capture moments with your camera',
       icon: 'camera',
-      color: theme.colors.primary,
+      color: '#0761A6',
       onPress: () => router.push('/(tabs)/Camera'),
     },
     {
       title: 'View Gallery',
       description: 'Browse all your captured photos',
       icon: 'images',
-      color: theme.colors.secondary,
+      color: '#4AB38B',
       onPress: () => router.push('/(tabs)/Gallery'),
     },
     {
       title: 'Photo Details',
       description: 'View metadata and location info',
       icon: 'information-circle',
-      color: theme.colors.blue,
+      color: '#1377FE',
       onPress: () => router.push('/(tabs)/Gallery'),
     },
     {
       title: 'Compare Photos',
       description: 'Side-by-side photo comparison',
       icon: 'git-compare',
-      color: theme.colors.alert,
+      color: '#F59E0B',
       onPress: () => router.push('/(tabs)/Gallery'),
     },
   ];
