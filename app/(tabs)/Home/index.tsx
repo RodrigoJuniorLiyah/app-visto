@@ -1,4 +1,5 @@
 import { useTheme } from '@/contexts/ThemeContext';
+import { ModernHeader } from '@/components/ModernHeader';
 import {
   CameraIcon,
   CheckIcon,
@@ -65,14 +66,14 @@ export default function HomeScreen() {
 
   return (
     <SafeContainer>
+      <ModernHeader
+        title="📸 Photo Gallery"
+        subtitle="Capture, organize, and compare your photos"
+        variant="gradient"
+        showThemeToggle
+      />
       <Container>
         <Content>
-        <Header>
-          <Title>📸 Photo Gallery</Title>
-          <Subtitle>
-            Capture, organize, and compare your photos with location data and metadata
-          </Subtitle>
-        </Header>
 
         <FeaturesContainer>
           <FeaturesTitle>Features</FeaturesTitle>

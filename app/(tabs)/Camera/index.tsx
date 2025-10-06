@@ -112,7 +112,6 @@ export default function CameraScreen() {
         subtitle="Take a photo"
         variant="gradient"
         showBackButton
-        showThemeToggle
         onBackPress={() => router.back()}
         rightAction={{
           icon: "camera-reverse",

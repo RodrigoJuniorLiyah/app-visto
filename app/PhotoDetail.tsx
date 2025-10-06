@@ -13,7 +13,6 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
-import { useTheme } from '../contexts/ThemeContext';
 import { PhotoStorage } from '../services/PhotoStorage';
 import { PhotoMetadata } from '../types/photo';
 
@@ -322,7 +321,6 @@ export default function PhotoDetailScreen() {
         subtitle={photo?.title || 'Loading...'}
         variant="gradient"
         showBackButton
-        showThemeToggle
         onBackPress={() => router.back()}
         rightAction={{
           icon: "share",
