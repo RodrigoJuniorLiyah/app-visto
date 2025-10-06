@@ -3,17 +3,17 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
-import { router } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
-    Alert,
-    Dimensions,
-    FlatList,
-    RefreshControl,
-    StyleSheet,
-    TextInput,
-    TouchableOpacity,
-    View
+  Alert,
+  Dimensions,
+  FlatList,
+  RefreshControl,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { PhotoStorage } from '../../../services/PhotoStorage';
@@ -35,14 +35,22 @@ export default function GalleryScreen() {
     loadPhotos();
   }, []);
 
+  useFocusEffect(
+    useCallback(() => {
+      loadPhotos();
+    }, [])
+  );
+
   useEffect(() => {
     filterPhotos();
   }, [photos, searchText]);
 
   const loadPhotos = async () => {
     try {
+      // Force reload photos from storage
       const allPhotos = photoStorage.getAllPhotos();
       setPhotos(allPhotos);
+
     } catch (error) {
       console.error('Error loading photos:', error);
       Alert.alert('Error', 'Failed to load photos');
@@ -61,8 +69,11 @@ export default function GalleryScreen() {
 
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
-    await loadPhotos();
-    setRefreshing(false);
+    try {
+      await loadPhotos();
+    } finally {
+      setRefreshing(false);
+    }
   }, []);
 
   const handlePhotoPress = (photo: PhotoMetadata) => {
@@ -124,7 +135,7 @@ export default function GalleryScreen() {
     const photoIds = Array.from(selectedPhotos);
     router.push({
       pathname: '/PhotoComparison',
-      params: { 
+      params: {
         photoId1: photoIds[0],
         photoId2: photoIds[1]
       }
@@ -135,7 +146,7 @@ export default function GalleryScreen() {
 
   const renderPhotoItem = ({ item }: { item: PhotoMetadata }) => {
     const isSelected = selectedPhotos.has(item.id);
-    
+
     return (
       <TouchableOpacity
         style={[
@@ -155,13 +166,13 @@ export default function GalleryScreen() {
           style={styles.photo}
           contentFit="cover"
         />
-        
+
         {isSelected && (
           <View style={styles.selectionOverlay}>
             <Ionicons name="checkmark-circle" size={30} color="#007AFF" />
           </View>
         )}
-        
+
         <View style={styles.photoInfo}>
           <ThemedText style={styles.photoTitle} numberOfLines={1}>
             {item.title}
@@ -196,7 +207,7 @@ export default function GalleryScreen() {
   );
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1 }} edges={['top']}>
       <ModernHeader
         title="📸 Gallery"
         subtitle={`${photos.length} photos`}
@@ -208,64 +219,64 @@ export default function GalleryScreen() {
       />
       <ThemedView style={styles.container}>
 
-      {/* Search Bar */}
-      {photos.length > 0 && (
-        <View style={styles.searchContainer}>
-          <Ionicons name="search" size={20} color="#666" style={styles.searchIcon} />
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search photos..."
-            value={searchText}
-            onChangeText={setSearchText}
-            placeholderTextColor="#666"
-          />
-          {searchText.length > 0 && (
-            <TouchableOpacity
-              style={styles.clearButton}
-              onPress={() => setSearchText('')}
-            >
-              <Ionicons name="close-circle" size={20} color="#666" />
-            </TouchableOpacity>
-          )}
-        </View>
-      )}
+        {/* Search Bar */}
+        {photos.length > 0 && (
+          <View style={styles.searchContainer}>
+            <Ionicons name="search" size={20} color="#666" style={styles.searchIcon} />
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Search photos..."
+              value={searchText}
+              onChangeText={setSearchText}
+              placeholderTextColor="#666"
+            />
+            {searchText.length > 0 && (
+              <TouchableOpacity
+                style={styles.clearButton}
+                onPress={() => setSearchText('')}
+              >
+                <Ionicons name="close-circle" size={20} color="#666" />
+              </TouchableOpacity>
+            )}
+          </View>
+        )}
 
-      {/* Selection Actions */}
-      {isSelectionMode && selectedPhotos.size > 0 && (
-        <View style={styles.selectionActions}>
-          <TouchableOpacity
-            style={styles.actionButton}
-            onPress={handleDeleteSelected}
-          >
-            <Ionicons name="trash" size={20} color="#FF3B30" />
-            <ThemedText style={styles.actionButtonText}>Delete</ThemedText>
-          </TouchableOpacity>
-          
-          {selectedPhotos.size === 2 && (
+        {/* Selection Actions */}
+        {isSelectionMode && selectedPhotos.size > 0 && (
+          <View style={styles.selectionActions}>
             <TouchableOpacity
               style={styles.actionButton}
-              onPress={handleComparePhotos}
+              onPress={handleDeleteSelected}
             >
-              <Ionicons name="git-compare" size={20} color="#007AFF" />
-              <ThemedText style={styles.actionButtonText}>Compare</ThemedText>
+              <Ionicons name="trash" size={20} color="#FF3B30" />
+              <ThemedText style={styles.actionButtonText}>Delete</ThemedText>
             </TouchableOpacity>
-          )}
-        </View>
-      )}
 
-      {/* Photos Grid */}
-      <FlatList
-        data={filteredPhotos}
-        renderItem={renderPhotoItem}
-        keyExtractor={(item) => item.id}
-        numColumns={2}
-        contentContainerStyle={styles.photosList}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-        ListEmptyComponent={renderEmptyState}
-        showsVerticalScrollIndicator={false}
-      />
+            {selectedPhotos.size === 2 && (
+              <TouchableOpacity
+                style={styles.actionButton}
+                onPress={handleComparePhotos}
+              >
+                <Ionicons name="git-compare" size={20} color="#007AFF" />
+                <ThemedText style={styles.actionButtonText}>Compare</ThemedText>
+              </TouchableOpacity>
+            )}
+          </View>
+        )}
+
+        {/* Photos Grid */}
+        <FlatList
+          data={filteredPhotos}
+          renderItem={renderPhotoItem}
+          keyExtractor={(item) => item.id}
+          numColumns={2}
+          contentContainerStyle={styles.photosList}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+          ListEmptyComponent={renderEmptyState}
+          showsVerticalScrollIndicator={false}
+        />
       </ThemedView>
     </SafeAreaView>
   );

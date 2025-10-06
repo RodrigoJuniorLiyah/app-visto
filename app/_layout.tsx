@@ -1,8 +1,8 @@
 import { DarkTheme, DefaultTheme, ThemeProvider as NavigationThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
 import 'react-native-reanimated';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { ThemeProvider } from '@/components/ThemeProvider';
 import { useColorScheme } from '@/hooks/use-color-scheme';
@@ -20,8 +20,8 @@ export default function RootLayout() {
         <ThemeProvider>
           <Stack>
             <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="PhotoDetail" options={{ headerShown: true, title: 'Photo Details' }} />
-            <Stack.Screen name="PhotoComparison" options={{ headerShown: true, title: 'Compare Photos' }} />
+            <Stack.Screen name="PhotoDetail" options={{ headerShown: false }} />
+            <Stack.Screen name="PhotoComparison" options={{ headerShown: false }} />
           </Stack>
           <StatusBar style="auto" />
         </ThemeProvider>

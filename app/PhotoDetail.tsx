@@ -1,3 +1,4 @@
+import { ModernHeader } from '@/components/ModernHeader';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Ionicons } from '@expo/vector-icons';
@@ -6,16 +7,17 @@ import { router, useLocalSearchParams } from 'expo-router';
 import * as Sharing from 'expo-sharing';
 import React, { useEffect, useState } from 'react';
 import {
-    Alert,
-    Dimensions,
-    Modal,
-    ScrollView,
-    Share,
-    StyleSheet,
-    TextInput,
-    TouchableOpacity,
-    View
+  Alert,
+  Dimensions,
+  Modal,
+  ScrollView,
+  Share,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  View
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { PhotoStorage } from '../services/PhotoStorage';
 import { PhotoMetadata } from '../types/photo';
 
@@ -115,34 +117,19 @@ export default function PhotoDetailScreen() {
   }
 
   return (
-    <ThemedView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.headerButton}
-          onPress={() => router.back()}
-        >
-          <Ionicons name="arrow-back" size={24} color="#007AFF" />
-        </TouchableOpacity>
-        
-        <ThemedText style={styles.headerTitle}>Photo Details</ThemedText>
-        
-        <View style={styles.headerActions}>
-          <TouchableOpacity
-            style={styles.headerButton}
-            onPress={() => setShowEditModal(true)}
-          >
-            <Ionicons name="create" size={24} color="#007AFF" />
-          </TouchableOpacity>
-          
-          <TouchableOpacity
-            style={styles.headerButton}
-            onPress={handleSharePhoto}
-          >
-            <Ionicons name="share" size={24} color="#007AFF" />
-          </TouchableOpacity>
-        </View>
-      </View>
+    <SafeAreaView style={{ flex: 1 }} edges={['top']}>
+      <ModernHeader
+        title="📸 Photo Details"
+        subtitle={photo?.title || 'Loading...'}
+        variant="gradient"
+        showBackButton
+        onBackPress={() => router.back()}
+        rightAction={{
+          icon: "share",
+          onPress: handleSharePhoto
+        }}
+      />
+      <ThemedView style={styles.container}>
 
       <ScrollView style={styles.content}>
         {/* Photo */}
@@ -265,7 +252,8 @@ export default function PhotoDetailScreen() {
           </View>
         </View>
       </Modal>
-    </ThemedView>
+      </ThemedView>
+    </SafeAreaView>
   );
 }
 

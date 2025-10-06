@@ -4,14 +4,16 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 import { lightTheme } from "../../constants/theme";
 
-export const SafeContainer = styled(SafeAreaView)`
+export const SafeContainer = styled(SafeAreaView).attrs({
+  edges: ['top']
+})`
   flex: 1;
   background-color: ${lightTheme.colors.background};
 `;
 
 export const Container = styled.ScrollView`
   flex: 1;
-  padding-bottom: 0px;
+  
   background-color: ${lightTheme.colors.background};
 `;
 
@@ -119,15 +121,17 @@ export const FeatureDescription = styled.Text`
 `;
 
 export const InfoContainer = styled.View`
-  background-color: ${lightTheme.colors.white};
   border-radius: 16px;
   padding: 24px;
-  
+  margin-bottom: 20px;
+
   shadow-color: ${lightTheme.colors.text};
   shadow-offset: 0px 4px;
   shadow-opacity: 0.1;
   shadow-radius: 12px;
   elevation: 4;
+  
+  background-color: ${lightTheme.colors.white};
 `;
 
 export const InfoTitle = styled.Text`

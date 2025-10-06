@@ -2,7 +2,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { lightTheme } from '../constants/theme';
 
 interface ModernHeaderProps {
@@ -77,39 +76,27 @@ export function ModernHeader({
         end={{ x: 1, y: 1 }}
         style={styles.gradientHeader}
       >
-        <SafeAreaView style={styles.safeArea} edges={['top']}>
-          {renderContent()}
-        </SafeAreaView>
+        {renderContent()}
       </LinearGradient>
     );
   }
 
   if (variant === 'minimal') {
     return (
-      <SafeAreaView style={styles.minimalSafeArea} edges={['top']}>
-        <View style={styles.minimalHeader}>
-          {renderContent()}
-        </View>
-      </SafeAreaView>
+      <View style={styles.minimalHeader}>
+        {renderContent()}
+      </View>
     );
   }
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={['top']}>
-      <View style={styles.defaultHeader}>
-        {renderContent()}
-      </View>
-    </SafeAreaView>
+    <View style={styles.defaultHeader}>
+      {renderContent()}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
-    backgroundColor: lightTheme.colors.primary,
-  },
-  minimalSafeArea: {
-    backgroundColor: lightTheme.colors.background,
-  },
   gradientHeader: {
     shadowColor: lightTheme.colors.primary,
     shadowOffset: { width: 0, height: 1 },
