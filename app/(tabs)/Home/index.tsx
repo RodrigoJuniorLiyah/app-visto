@@ -1,4 +1,4 @@
-import { lightTheme } from '@/constants/theme';
+import { useTheme } from '@/contexts/ThemeContext';
 import {
   CameraIcon,
   CheckIcon,
@@ -30,33 +30,35 @@ import { router } from 'expo-router';
 import React from 'react';
 
 export default function HomeScreen() {
+  const { theme } = useTheme();
+  
   const features = [
     {
       title: 'Take Photos',
       description: 'Capture amazing moments with your camera',
       icon: 'camera',
-      color: lightTheme.colors.primary,
+      color: theme.colors.primary,
       onPress: () => router.push('/(tabs)/Camera'),
     },
     {
       title: 'View Gallery',
       description: 'Browse through your photo collection',
       icon: 'images',
-      color: lightTheme.colors.secondary,
+      color: theme.colors.secondary,
       onPress: () => router.push('/(tabs)/Gallery'),
     },
     {
       title: 'Photo Details',
       description: 'View metadata and location information',
       icon: 'information-circle',
-      color: lightTheme.colors.blue,
+      color: theme.colors.blue,
       onPress: () => router.push('/(tabs)/Gallery'),
     },
     {
       title: 'Compare Photos',
       description: 'Side-by-side photo comparison tool',
       icon: 'git-compare',
-      color: lightTheme.colors.alert,
+      color: theme.colors.alert,
       onPress: () => router.push('/(tabs)/Gallery'),
     },
   ];

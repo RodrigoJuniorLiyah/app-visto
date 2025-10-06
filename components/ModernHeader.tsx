@@ -2,7 +2,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { lightTheme } from '../constants/theme';
+import styled from 'styled-components/native';
+import { useTheme } from '../contexts/ThemeContext';
+import { ThemeToggle } from './ThemeToggle';
 
 interface ModernHeaderProps {
   title: string;
@@ -13,8 +15,105 @@ interface ModernHeaderProps {
     icon: keyof typeof Ionicons.glyphMap;
     onPress: () => void;
   };
+  showThemeToggle?: boolean;
   variant?: 'default' | 'gradient' | 'minimal';
 }
+
+// Styled Components
+const HeaderContainer = styled.View<{ variant: string }>`
+  background-color: ${props => {
+    switch (props.variant) {
+      case 'gradient': return 'transparent';
+      case 'minimal': return props.theme.colors.background;
+      default: return props.theme.colors.primary;
+    }
+  }};
+  border-bottom-width: ${props => props.variant === 'minimal' ? '0.5px' : '0px'};
+  border-bottom-color: ${props => props.theme.colors.gray200};
+  shadow-color: #000;
+  shadow-offset: 0px 1px;
+  shadow-opacity: 0.1;
+  shadow-radius: 2px;
+  elevation: 2;
+`;
+
+const Content = styled.View`
+  flex-direction: row;
+  align-items: center;
+  padding-horizontal: 16px;
+  padding-vertical: 20px;
+  min-height: 80px;
+`;
+
+const LeftSection = styled.View`
+  width: 40px;
+  align-items: flex-start;
+`;
+
+const CenterSection = styled.View`
+  flex: 1;
+  align-items: center;
+  padding-horizontal: 12px;
+`;
+
+const RightSection = styled.View`
+  width: 40px;
+  align-items: flex-end;
+  flex-direction: row;
+  gap: 8px;
+`;
+
+const BackButton = styled.TouchableOpacity<{ variant: string }>`
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
+  background-color: ${props => 
+    props.variant === 'minimal' 
+      ? props.theme.colors.gray100 
+      : 'rgba(255, 255, 255, 0.15)'
+  };
+  justify-content: center;
+  align-items: center;
+`;
+
+const RightButton = styled.TouchableOpacity<{ variant: string }>`
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
+  background-color: ${props => 
+    props.variant === 'minimal' 
+      ? props.theme.colors.gray100 
+      : 'rgba(255, 255, 255, 0.15)'
+  };
+  justify-content: center;
+  align-items: center;
+`;
+
+const Title = styled.Text<{ variant: string }>`
+  font-size: 18px;
+  font-weight: 700;
+  color: ${props => 
+    props.variant === 'minimal' 
+      ? props.theme.colors.text 
+      : '#FFFFFF'
+  };
+  text-align: center;
+  letter-spacing: 0.5px;
+`;
+
+const Subtitle = styled.Text<{ variant: string }>`
+  font-size: 12px;
+  color: ${props => 
+    props.variant === 'minimal' 
+      ? props.theme.colors.gray700 
+      : '#FFFFFF'
+  };
+  opacity: ${props => props.variant === 'minimal' ? 1 : 0.85};
+  text-align: center;
+  margin-top: 4px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+`;
 
 export function ModernHeader({
   title,
@@ -22,182 +121,65 @@ export function ModernHeader({
   showBackButton = false,
   onBackPress,
   rightAction,
+  showThemeToggle = false,
   variant = 'default'
 }: ModernHeaderProps) {
+  const { theme } = useTheme();
+  
   const renderContent = () => (
-    <View style={styles.content}>
+    <Content>
       {/* Left Section */}
-      <View style={styles.leftSection}>
+      <LeftSection>
         {showBackButton && (
-          <TouchableOpacity
-            style={variant === 'minimal' ? styles.minimalBackButton : styles.backButton}
-            onPress={onBackPress}
-            activeOpacity={0.7}
-          >
-            <Ionicons 
-              name="arrow-back" 
-              size={20} 
-              color={variant === 'minimal' ? lightTheme.colors.text : lightTheme.colors.white} 
+          <BackButton variant={variant} onPress={onBackPress} activeOpacity={0.7}>
+            <Ionicons
+              name="arrow-back"
+              size={20}
+              color={variant === 'minimal' ? theme.colors.text : theme.colors.white}
             />
-          </TouchableOpacity>
+          </BackButton>
         )}
-      </View>
+      </LeftSection>
 
       {/* Center Section */}
-      <View style={styles.centerSection}>
-        <Text style={variant === 'minimal' ? styles.minimalTitle : styles.title}>{title}</Text>
-        {subtitle && <Text style={variant === 'minimal' ? styles.minimalSubtitle : styles.subtitle}>{subtitle}</Text>}
-      </View>
+      <CenterSection>
+        <Title variant={variant}>{title}</Title>
+        {subtitle && <Subtitle variant={variant}>{subtitle}</Subtitle>}
+      </CenterSection>
 
       {/* Right Section */}
-      <View style={styles.rightSection}>
+      <RightSection>
+        {showThemeToggle && <ThemeToggle size={20} />}
         {rightAction && (
-          <TouchableOpacity
-            style={variant === 'minimal' ? styles.minimalRightButton : styles.rightButton}
-            onPress={rightAction.onPress}
-            activeOpacity={0.7}
-          >
-            <Ionicons 
-              name={rightAction.icon} 
-              size={20} 
-              color={variant === 'minimal' ? lightTheme.colors.text : lightTheme.colors.white} 
+          <RightButton variant={variant} onPress={rightAction.onPress} activeOpacity={0.7}>
+            <Ionicons
+              name={rightAction.icon}
+              size={20}
+              color={variant === 'minimal' ? theme.colors.text : theme.colors.white}
             />
-          </TouchableOpacity>
+          </RightButton>
         )}
-      </View>
-    </View>
+      </RightSection>
+    </Content>
   );
 
   if (variant === 'gradient') {
     return (
       <LinearGradient
-        colors={[lightTheme.colors.primary, lightTheme.colors.secondary]}
+        colors={[theme.colors.primary, theme.colors.secondary]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
-        style={styles.gradientHeader}
+        style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.1, shadowRadius: 2, elevation: 2 }}
       >
         {renderContent()}
       </LinearGradient>
     );
   }
 
-  if (variant === 'minimal') {
-    return (
-      <View style={styles.minimalHeader}>
-        {renderContent()}
-      </View>
-    );
-  }
-
   return (
-    <View style={styles.defaultHeader}>
+    <HeaderContainer variant={variant}>
       {renderContent()}
-    </View>
+    </HeaderContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  gradientHeader: {
-    shadowColor: lightTheme.colors.primary,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  defaultHeader: {
-    backgroundColor: lightTheme.colors.primary,
-    shadowColor: lightTheme.colors.primary,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
-    elevation: 4,
-  },
-  minimalHeader: {
-    backgroundColor: lightTheme.colors.background,
-    borderBottomWidth: 0.5,
-    borderBottomColor: lightTheme.colors.gray200,
-  },
-  content: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 20,
-    minHeight: 40,
-  },
-  leftSection: {
-    width: 40,
-    alignItems: 'flex-start',
-  },
-  centerSection: {
-    flex: 1,
-    alignItems: 'center',
-    paddingHorizontal: 12,
-  },
-  rightSection: {
-    width: 40,
-    alignItems: 'flex-end',
-  },
-  backButton: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  rightButton: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.15)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: lightTheme.colors.white,
-    textAlign: 'center',
-    letterSpacing: 0.5,
-  },
-  subtitle: {
-    fontSize: 12,
-    color: lightTheme.colors.white,
-    opacity: 0.85,
-    textAlign: 'center',
-    marginTop: 4,
-    fontWeight: '500',
-    letterSpacing: 0.3,
-  },
-  minimalTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: lightTheme.colors.text,
-    textAlign: 'center',
-    letterSpacing: 0.5,
-  },
-  minimalSubtitle: {
-    fontSize: 12,
-    color: lightTheme.colors.gray700,
-    textAlign: 'center',
-    marginTop: 4,
-    fontWeight: '500',
-    letterSpacing: 0.3,
-  },
-  minimalBackButton: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: lightTheme.colors.gray100,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  minimalRightButton: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: lightTheme.colors.gray100,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});

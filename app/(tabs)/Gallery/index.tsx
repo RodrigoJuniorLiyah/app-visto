@@ -212,6 +212,7 @@ export default function GalleryScreen() {
         title="📸 Gallery"
         subtitle={`${photos.length} photos`}
         variant="gradient"
+        showThemeToggle
         rightAction={{
           icon: "camera",
           onPress: () => router.push('/(tabs)/Camera')

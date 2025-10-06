@@ -1,19 +1,27 @@
 import React from 'react';
 import { ThemeProvider as StyledThemeProvider } from 'styled-components';
-import { darkTheme, lightTheme } from '../constants/theme';
-import { useColorScheme } from '../hooks/use-color-scheme';
+import { ThemeProvider as AppThemeProvider, useTheme } from '../contexts/ThemeContext';
 
 interface ThemeProviderProps {
   children: React.ReactNode;
 }
 
-export function ThemeProvider({ children }: ThemeProviderProps) {
-  const colorScheme = useColorScheme();
-  const theme = colorScheme === 'dark' ? darkTheme : lightTheme;
+function StyledThemeWrapper({ children }: { children: React.ReactNode }) {
+  const { theme } = useTheme();
 
   return (
     <StyledThemeProvider theme={theme}>
       {children}
     </StyledThemeProvider>
+  );
+}
+
+export function ThemeProvider({ children }: ThemeProviderProps) {
+  return (
+    <AppThemeProvider>
+      <StyledThemeWrapper>
+        {children}
+      </StyledThemeWrapper>
+    </AppThemeProvider>
   );
 }
