@@ -9,8 +9,7 @@ import {
   Dimensions,
   Modal,
   Share,
-  TextInput,
-  TouchableOpacity,
+  TextInput
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
@@ -126,8 +125,9 @@ const CoordinatesText = styled.Text`
 const ActionsCard = styled.View`
   background-color: ${lightTheme.colors.white};
   border-radius: 16px;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
   padding: 20px;
+  
   shadow-color: ${lightTheme.colors.text};
   shadow-offset: 0px 2px;
   shadow-opacity: 0.1;
