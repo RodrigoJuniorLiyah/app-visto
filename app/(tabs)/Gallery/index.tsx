@@ -1,185 +1,39 @@
 import { ModernHeader } from '@/components/ModernHeader';
 import { useTheme } from '@/contexts/ThemeContext';
+import {
+  ActionButton,
+  ActionButtonText,
+  ClearButton,
+  ClearIcon,
+  Container,
+  EmptyState,
+  EmptySubtitle,
+  EmptyTitle,
+  Photo,
+  PhotoContainer,
+  PhotoDate,
+  PhotoInfo,
+  PhotoLocation,
+  PhotosList,
+  PhotoTitle,
+  SearchContainer,
+  SearchIcon,
+  SearchInput,
+  SelectionActions,
+  SelectionOverlay,
+  TakePhotoButton,
+  TakePhotoButtonText
+} from '@/Styles/Gallery/GalleryStyles';
 import { Ionicons } from '@expo/vector-icons';
-import { Image } from 'expo-image';
 import { router, useFocusEffect } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
 import {
   Alert,
-  Dimensions,
-  FlatList,
-  RefreshControl,
-  TextInput
+  RefreshControl
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import styled from 'styled-components/native';
 import { PhotoStorage } from '../../../services/PhotoStorage';
 import { PhotoMetadata } from '../../../types/photo';
-
-const { width } = Dimensions.get('window');
-const ITEM_SIZE = (width - 30) / 2; // 2 columns with padding
-
-// Styled Components
-const Container = styled.View`
-  flex: 1;
-  background-color: ${(props: any) => props.theme.colors.background};
-`;
-
-const SearchContainer = styled.View`
-  flex-direction: row;
-  align-items: center;
-  background-color: ${(props: any) => props.theme.colors.white};
-  border-radius: 10px;
-  margin: 10px;
-  padding-horizontal: 10px;
-  shadow-color: #000;
-  shadow-offset: 0px 1px;
-  shadow-opacity: 0.1;
-  shadow-radius: 2px;
-  elevation: 2;
-`;
-
-const SearchIcon = styled(Ionicons).attrs((props: any) => ({
-  name: "search",
-  size: 20,
-}))`
-  margin-right: 10px;
-  color: ${(props: any) => props.theme.colors.gray500};
-`;
-
-const SearchInput = styled(TextInput)`
-  flex: 1;
-  height: 40px;
-  color: ${(props: any) => props.theme.colors.text};
-`;
-
-const ClearButton = styled.TouchableOpacity`
-  padding: 5px;
-`;
-
-const ClearIcon = styled(Ionicons).attrs((props: any) => ({
-  name: "close-circle",
-  size: 20,
-}))`
-  color: ${(props: any) => props.theme.colors.gray500};
-`;
-
-const SelectionActions = styled.View`
-  flex-direction: row;
-  justify-content: space-around;
-  padding-vertical: 10px;
-  background-color: ${(props: any) => props.theme.colors.white};
-  border-bottom-width: 1px;
-  border-bottom-color: ${(props: any) => props.theme.colors.gray200};
-`;
-
-const ActionButton = styled.TouchableOpacity`
-  flex-direction: row;
-  align-items: center;
-  gap: 5px;
-  padding: 10px;
-  border-radius: 5px;
-`;
-
-const ActionButtonText = styled.Text`
-  font-size: 14px;
-  font-weight: 600;
-  color: ${(props: any) => props.theme.colors.blue};
-`;
-
-const PhotosList = styled(FlatList)`
-  padding: 5px;
-`;
-
-const PhotoContainer = styled.TouchableOpacity<{ isSelected?: boolean }>`
-  width: ${ITEM_SIZE}px;
-  height: ${ITEM_SIZE}px;
-  margin: 5px;
-  border-radius: 10px;
-  overflow: hidden;
-  position: relative;
-  background-color: ${(props: any) => props.theme.colors.gray200};
-  border-width: ${(props: any) => props.isSelected ? '3px' : '0px'};
-  border-color: ${(props: any) => props.isSelected ? props.theme.colors.blue : 'transparent'};
-`;
-
-const Photo = styled(Image)`
-  width: 100%;
-  height: 100%;
-`;
-
-const SelectionOverlay = styled.View`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 122, 255, 0.5);
-  justify-content: center;
-  align-items: center;
-`;
-
-const PhotoInfo = styled.View`
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: rgba(0,0,0,0.6);
-  padding: 8px;
-`;
-
-const PhotoTitle = styled.Text`
-  font-size: 13px;
-  font-weight: bold;
-  color: white;
-  margin-bottom: 2px;
-`;
-
-const PhotoDate = styled.Text`
-  font-size: 11px;
-  color: #eee;
-  margin-bottom: 2px;
-`;
-
-const PhotoLocation = styled.Text`
-  font-size: 11px;
-  color: #999;
-`;
-
-const EmptyState = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-  padding-horizontal: 40px;
-`;
-
-const EmptyTitle = styled.Text`
-  font-size: 24px;
-  font-weight: 600;
-  margin-top: 20px;
-  margin-bottom: 10px;
-  color: ${(props: any) => props.theme.colors.text};
-`;
-
-const EmptySubtitle = styled.Text`
-  font-size: 16px;
-  color: ${(props: any) => props.theme.colors.gray500};
-  text-align: center;
-  margin-bottom: 30px;
-`;
-
-const TakePhotoButton = styled.TouchableOpacity`
-  background-color: ${(props: any) => props.theme.colors.blue};
-  padding-horizontal: 30px;
-  padding-vertical: 15px;
-  border-radius: 25px;
-`;
-
-const TakePhotoButtonText = styled.Text`
-  color: white;
-  font-size: 16px;
-  font-weight: 600;
-`;
 
 export default function GalleryScreen() {
   const { theme } = useTheme();
@@ -213,7 +67,7 @@ export default function GalleryScreen() {
 
     } catch (error) {
       console.error('Error loading photos:', error);
-      Alert.alert('Error', 'Failed to load photos');
+      Alert.alert('Erro', 'Falha ao carregar fotos');
     }
   };
 
@@ -266,12 +120,12 @@ export default function GalleryScreen() {
     if (selectedPhotos.size === 0) return;
 
     Alert.alert(
-      'Delete Photos',
-      `Are you sure you want to delete ${selectedPhotos.size} photo(s)?`,
+      'Excluir Fotos',
+      `Tem certeza que deseja excluir ${selectedPhotos.size} foto(s)?`,
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: 'Cancelar', style: 'cancel' },
         {
-          text: 'Delete',
+          text: 'Excluir',
           style: 'destructive',
           onPress: async () => {
             for (const photoId of selectedPhotos) {
@@ -288,11 +142,11 @@ export default function GalleryScreen() {
 
   const handleComparePhotos = () => {
     if (selectedPhotos.size !== 2) {
-      Alert.alert('Compare Photos', 'Please select exactly 2 photos to compare');
+      Alert.alert('Comparar Fotos', 'Selecione exatamente 2 fotos para comparar');
       return;
     }
 
-    const photoIds = Array.from(selectedPhotos);
+    const photoIds = [...selectedPhotos];
     router.push({
       pathname: '/PhotoComparison',
       params: {
@@ -360,7 +214,7 @@ export default function GalleryScreen() {
   );
 
   return (
-    <SafeAreaView style={{ flex: 1 }} edges={['top']}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }} edges={['top']}>
       <ModernHeader
         title="📸 Galeria"
         subtitle={`${photos.length} fotos`}
@@ -410,7 +264,7 @@ export default function GalleryScreen() {
         <PhotosList
           data={filteredPhotos}
           renderItem={renderPhotoItem}
-          keyExtractor={(item) => item.id}
+          keyExtractor={(item: any) => item.id}
           numColumns={2}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />

@@ -1,226 +1,45 @@
 import { ModernHeader } from '@/components/ModernHeader';
+import { useTheme } from '@/contexts/ThemeContext';
+import { PhotoStorage } from '@/services/PhotoStorage';
+import {
+  ActionButton,
+  ActionButtonText,
+  ActionsCard,
+  ActionsGrid,
+  CardHeader,
+  CardTitle,
+  Container,
+  Content,
+  CoordinatesText,
+  InfoCard,
+  InfoContent,
+  InfoGrid,
+  InfoItem,
+  InfoLabel,
+  InfoValue,
+  ModalButton,
+  ModalButtonText,
+  ModalButtons,
+  ModalContent,
+  ModalOverlay,
+  ModalTitle,
+  OverlayButton,
+  Photo,
+  PhotoCard,
+  PhotoOverlay,
+  TitleInput
+} from '@/Styles/PhotoDetail/PhotoDetailStyles';
+import { PhotoMetadata } from '@/types/photo';
 import { Ionicons } from '@expo/vector-icons';
-import { Image } from 'expo-image';
 import { router, useLocalSearchParams } from 'expo-router';
 import * as Sharing from 'expo-sharing';
 import React, { useEffect, useState } from 'react';
 import {
   Alert,
-  Dimensions,
   Modal,
-  Share,
-  TextInput
+  Share
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import styled from 'styled-components/native';
-import { useTheme } from '../contexts/ThemeContext';
-import { PhotoStorage } from '../services/PhotoStorage';
-import { PhotoMetadata } from '../types/photo';
-
-const { width, height } = Dimensions.get('window');
-
-// Styled Components
-const Container = styled.View`
-  flex: 1;
-  background-color: ${(props: any) => props.theme.colors.background};
-`;
-
-const Content = styled.ScrollView`
-  flex: 1;
-  padding: 16px;
-`;
-
-const PhotoCard = styled.View`
-  background-color: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? '#2A2A2A' : props.theme.colors.white};
-  border-radius: 16px;
-  margin-bottom: 20px;
-  overflow: hidden;
-  shadow-color: ${(props: any) => props.theme.colors.text};
-  shadow-offset: 0px 4px;
-  shadow-opacity: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? 0.3 : 0.1};
-  shadow-radius: 8px;
-  elevation: 4;
-  position: relative;
-`;
-
-const Photo = styled(Image)`
-  width: 100%;
-  height: 300px;
-`;
-
-const PhotoOverlay = styled.View`
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  flex-direction: row;
-  gap: 8px;
-`;
-
-const OverlayButton = styled.TouchableOpacity`
-  background-color: rgba(0, 0, 0, 0.6);
-  border-radius: 20px;
-  width: 40px;
-  height: 40px;
-  justify-content: center;
-  align-items: center;
-`;
-
-const InfoCard = styled.View`
-  background-color: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? '#2A2A2A' : props.theme.colors.white};
-  border-radius: 16px;
-  margin-bottom: 20px;
-  padding: 20px;
-  shadow-color: ${(props: any) => props.theme.colors.text};
-  shadow-offset: 0px 2px;
-  shadow-opacity: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? 0.3 : 0.1};
-  shadow-radius: 4px;
-  elevation: 3;
-`;
-
-const CardHeader = styled.View`
-  flex-direction: row;
-  align-items: center;
-  margin-bottom: 16px;
-  gap: 8px;
-`;
-
-const CardTitle = styled.Text`
-  font-size: 18px;
-  font-weight: 600;
-  color: ${(props: any) => props.theme.colors.text};
-`;
-
-const InfoGrid = styled.View`
-  gap: 16px;
-`;
-
-const InfoItem = styled.View`
-  flex-direction: row;
-  align-items: flex-start;
-  gap: 12px;
-`;
-
-const InfoContent = styled.View`
-  flex: 1;
-`;
-
-const InfoLabel = styled.Text`
-  font-size: 14px;
-  font-weight: 600;
-  color: ${(props: any) => props.theme.colors.gray700};
-  margin-bottom: 4px;
-`;
-
-const InfoValue = styled.Text`
-  font-size: 16px;
-  color: ${(props: any) => props.theme.colors.text};
-`;
-
-const CoordinatesText = styled.Text`
-  font-size: 12px;
-  color: ${(props: any) => props.theme.colors.gray500};
-  margin-top: 4px;
-`;
-
-const ActionsCard = styled.View`
-  background-color: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? '#2A2A2A' : props.theme.colors.white};
-  border-radius: 16px;
-  margin-bottom: 50px;
-  padding: 20px;
-  
-  shadow-color: ${(props: any) => props.theme.colors.text};
-  shadow-offset: 0px 2px;
-  shadow-opacity: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? 0.3 : 0.1};
-  shadow-radius: 4px;
-  elevation: 3;
-`;
-
-const ActionsGrid = styled.View`
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 12px;
-`;
-
-const ActionButton = styled.TouchableOpacity<{ variant: 'edit' | 'share' | 'delete' }>`
-  flex: 1;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  padding: 12px 16px;
-  border-radius: 12px;
-  gap: 8px;
-  background-color: ${(props: { variant: 'edit' | 'share' | 'delete'; theme: any }) => {
-    switch (props.variant) {
-      case 'edit': return props.theme.colors.blue;
-      case 'share': return props.theme.colors.success;
-      case 'delete': return props.theme.colors.danger;
-      default: return props.theme.colors.blue;
-    }
-  }};
-`;
-
-const ActionButtonText = styled.Text`
-  color: ${(props: any) => props.theme.colors.white};
-  font-size: 14px;
-  font-weight: 600;
-`;
-
-const ModalOverlay = styled.View`
-  flex: 1;
-  background-color: rgba(0, 0, 0, 0.5);
-  justify-content: center;
-  align-items: center;
-`;
-
-const ModalContent = styled.View`
-  background-color: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? '#2A2A2A' : props.theme.colors.white};
-  border-radius: 16px;
-  padding: 24px;
-  width: ${width * 0.8}px;
-  max-width: 400px;
-`;
-
-const ModalTitle = styled.Text`
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 20px;
-  text-align: center;
-  color: ${(props: any) => props.theme.colors.text};
-`;
-
-const TitleInput = styled(TextInput)`
-  border-width: 1px;
-  border-color: ${(props: any) => props.theme.colors.gray200};
-  border-radius: 12px;
-  padding: 16px;
-  font-size: 16px;
-  margin-bottom: 20px;
-  background-color: ${(props: any) => props.theme.colors.background};
-`;
-
-const ModalButtons = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  gap: 12px;
-`;
-
-const ModalButton = styled.TouchableOpacity<{ variant: 'cancel' | 'save' }>`
-  flex: 1;
-  padding: 16px;
-  border-radius: 12px;
-  align-items: center;
-  background-color: ${(props: { variant: 'cancel' | 'save'; theme: any }) => 
-    props.variant === 'cancel' ? props.theme.colors.gray200 : props.theme.colors.blue
-  };
-`;
-
-const ModalButtonText = styled.Text<{ variant: 'cancel' | 'save' }>`
-  color: ${(props: { variant: 'cancel' | 'save'; theme: any }) => 
-    props.variant === 'cancel' ? props.theme.colors.text : props.theme.colors.white
-  };
-  font-weight: 600;
-  font-size: 16px;
-`;
 
 export default function PhotoDetailScreen() {
   const { theme } = useTheme();
@@ -317,7 +136,7 @@ export default function PhotoDetailScreen() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }} edges={['top']}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }} edges={['top']}>
       <ModernHeader
         title="📸 Detalhes da Foto"
         subtitle={photo?.title || 'Carregando...'}

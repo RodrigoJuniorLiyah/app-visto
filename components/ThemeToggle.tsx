@@ -23,7 +23,7 @@ interface ThemeToggleProps {
 }
 
 export function ThemeToggle({ size = 24, style }: ThemeToggleProps) {
-  const { colorScheme, toggleTheme, theme } = useTheme();
+  const { toggleTheme, theme, isDark } = useTheme();
 
   return (
     <ToggleButton
@@ -32,7 +32,7 @@ export function ThemeToggle({ size = 24, style }: ThemeToggleProps) {
       activeOpacity={0.7}
     >
       <Ionicons
-        name={colorScheme === 'dark' ? 'sunny' : 'moon'}
+        name={isDark ? 'sunny' : 'moon'}
         size={size}
         color={theme.colors.text}
       />

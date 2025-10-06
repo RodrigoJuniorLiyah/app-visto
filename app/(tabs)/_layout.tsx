@@ -44,6 +44,18 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="PhotoDetail/index"
+        options={{
+          href: null, // Oculta da tab bar
+        }}
+      />
+      <Tabs.Screen
+        name="PhotoComparison/index"
+        options={{
+          href: null, // Oculta da tab bar
+        }}
+      />
     </Tabs>
   );
 }

@@ -93,7 +93,7 @@ export class PhotoStorage {
         date: new Date(timestamp).toLocaleDateString(),
         time: new Date(timestamp).toLocaleTimeString(),
         location,
-        size: fileInfo.size || 0,
+        size: (fileInfo as any).size || 0,
         width: imageInfo.width,
         height: imageInfo.height,
       };
