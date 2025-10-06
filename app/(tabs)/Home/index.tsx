@@ -11,14 +11,14 @@ const Container = styled.ScrollView`
 `;
 
 const Content = styled.View`
-  padding: ${props => props.theme.spacing.lg}px;
+  padding: 24px;
 `;
 
 const Header = styled.View`
   align-items: center;
-  margin-bottom: ${props => props.theme.spacing.xxl}px;
-  padding-top: ${props => props.theme.spacing.lg}px;
-  padding-bottom: ${props => props.theme.spacing.lg}px;
+  margin-bottom: 48px;
+  padding-top: 24px;
+  padding-bottom: 24px;
 `;
 
 const Title = styled.Text`
@@ -26,7 +26,7 @@ const Title = styled.Text`
   font-weight: ${props => props.theme.fontWeights.bold};
   color: ${props => props.theme.colors.text};
   text-align: center;
-  margin-bottom: ${props => props.theme.spacing.md}px;
+  margin-bottom: 16px;
 `;
 
 const Subtitle = styled.Text`
@@ -37,20 +37,20 @@ const Subtitle = styled.Text`
 `;
 
 const FeaturesContainer = styled.View`
-  margin-bottom: ${props => props.theme.spacing.xxl}px;
+  margin-bottom: 48px;
 `;
 
 const FeaturesTitle = styled.Text`
   font-size: ${props => props.theme.typography.xl.fontSize}px;
   font-weight: ${props => props.theme.fontWeights.semibold};
   color: ${props => props.theme.colors.text};
-  margin-bottom: ${props => props.theme.spacing.lg}px;
+  margin-bottom: 24px;
 `;
 
 const FeatureCard = styled.TouchableOpacity`
   background-color: ${props => props.theme.colors.card};
-  border-radius: ${props => props.theme.borderRadius.lg}px;
-  margin-bottom: ${props => props.theme.spacing.md}px;
+  border-radius: 12px;
+  margin-bottom: 16px;
   border-left-width: 4px;
   border-left-color: ${props => props.color || props.theme.colors.primary[500]};
 `;
@@ -58,7 +58,7 @@ const FeatureCard = styled.TouchableOpacity`
 const FeatureContent = styled.View`
   flex-direction: row;
   align-items: center;
-  padding: ${props => props.theme.spacing.lg}px;
+  padding: 24px;
 `;
 
 const FeatureIcon = styled.View`
@@ -67,7 +67,7 @@ const FeatureIcon = styled.View`
   border-radius: 24px;
   justify-content: center;
   align-items: center;
-  margin-right: ${props => props.theme.spacing.lg}px;
+  margin-right: 24px;
   background-color: ${props => props.color || props.theme.colors.primary[500]};
 `;
 
@@ -79,7 +79,7 @@ const FeatureTitle = styled.Text`
   font-size: ${props => props.theme.typography.md.fontSize}px;
   font-weight: ${props => props.theme.fontWeights.semibold};
   color: ${props => props.theme.colors.text};
-  margin-bottom: ${props => props.theme.spacing.xs}px;
+  margin-bottom: 4px;
 `;
 
 const FeatureDescription = styled.Text`
@@ -89,25 +89,25 @@ const FeatureDescription = styled.Text`
 
 const InfoContainer = styled.View`
   background-color: ${props => props.theme.colors.card};
-  border-radius: ${props => props.theme.borderRadius.lg}px;
-  padding: ${props => props.theme.spacing.lg}px;
+  border-radius: 12px;
+  padding: 24px;
 `;
 
 const InfoTitle = styled.Text`
   font-size: ${props => props.theme.typography.lg.fontSize}px;
   font-weight: ${props => props.theme.fontWeights.semibold};
   color: ${props => props.theme.colors.text};
-  margin-bottom: ${props => props.theme.spacing.lg}px;
+  margin-bottom: 24px;
 `;
 
 const InfoList = styled.View`
-  gap: ${props => props.theme.spacing.sm}px;
+  gap: 8px;
 `;
 
 const InfoItem = styled.View`
   flex-direction: row;
   align-items: center;
-  gap: ${props => props.theme.spacing.md}px;
+  gap: 16px;
 `;
 
 const InfoText = styled.Text`
