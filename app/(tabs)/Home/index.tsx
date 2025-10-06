@@ -1,121 +1,29 @@
-import { MobileTheme } from '@/constants/theme';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React from 'react';
 import { useTheme } from 'styled-components';
-import styled from 'styled-components/native';
-
-// Styled Components
-const Container = styled.ScrollView<{ theme: MobileTheme }>`
-  flex: 1;
-  background-color: ${props => props.theme.colors.background};
-`;
-
-const Content = styled.View<{ theme: MobileTheme }>`
-  padding: 24px;
-`;
-
-const Header = styled.View<{ theme: MobileTheme }>`
-  align-items: center;
-  margin-bottom: 48px;
-  padding-top: 24px;
-  padding-bottom: 24px;
-`;
-
-const Title = styled.Text<{ theme: MobileTheme }>`
-  font-size: 32px;
-  font-weight: bold;
-  color: ${props => props.theme.colors.text};
-  text-align: center;
-  margin-bottom: 16px;
-`;
-
-const Subtitle = styled.Text<{ theme: MobileTheme }>`
-  font-size: 16px;
-  color: ${props => props.theme.colors.gray700};
-  text-align: center;
-  line-height: 24px;
-`;
-
-const FeaturesContainer = styled.View<{ theme: MobileTheme }>`
-  margin-bottom: 48px;
-`;
-
-const FeaturesTitle = styled.Text<{ theme: MobileTheme }>`
-  font-size: 20px;
-  font-weight: bold;
-  color: ${props => props.theme.colors.text};
-  margin-bottom: 24px;
-`;
-
-const FeatureCard = styled.TouchableOpacity<{ theme: MobileTheme; color?: string }>`
-  background-color: ${props => props.theme.colors.white};
-  border-radius: 12px;
-  margin-bottom: 16px;
-  border-left-width: 4px;
-  border-left-color: ${props => props.color || props.theme.colors.primary};
-`;
-
-const FeatureContent = styled.View<{ theme: MobileTheme }>`
-  flex-direction: row;
-  align-items: center;
-  padding: 24px;
-`;
-
-const FeatureIcon = styled.View<{ theme: MobileTheme; color?: string }>`
-  width: 48px;
-  height: 48px;
-  border-radius: 24px;
-  justify-content: center;
-  align-items: center;
-  margin-right: 24px;
-  background-color: ${props => props.color || props.theme.colors.primary};
-`;
-
-const FeatureText = styled.View<{ theme: MobileTheme }>`
-  flex: 1;
-`;
-
-const FeatureTitle = styled.Text<{ theme: MobileTheme }>`
-  font-size: 16px;
-  font-weight: bold;
-  color: ${props => props.theme.colors.text};
-  margin-bottom: 4px;
-`;
-
-const FeatureDescription = styled.Text<{ theme: MobileTheme }>`
-  font-size: 14px;
-  color: ${props => props.theme.colors.gray700};
-`;
-
-const InfoContainer = styled.View<{ theme: MobileTheme }>`
-  background-color: ${props => props.theme.colors.white};
-  border-radius: 12px;
-  padding: 24px;
-`;
-
-const InfoTitle = styled.Text<{ theme: MobileTheme }>`
-  font-size: 18px;
-  font-weight: bold;
-  color: ${props => props.theme.colors.text};
-  margin-bottom: 24px;
-`;
-
-const InfoList = styled.View<{ theme: MobileTheme }>`
-  gap: 8px;
-`;
-
-const InfoItem = styled.View<{ theme: MobileTheme }>`
-  flex-direction: row;
-  align-items: center;
-  gap: 16px;
-`;
-
-const InfoText = styled.Text<{ theme: MobileTheme }>`
-  font-size: 14px;
-  color: ${props => props.theme.colors.text};
-  flex: 1;
-`;
+import {
+  Container,
+  Content,
+  Header,
+  Title,
+  Subtitle,
+  FeaturesContainer,
+  FeaturesTitle,
+  FeatureCard,
+  FeatureContent,
+  FeatureIcon,
+  FeatureText,
+  FeatureTitle,
+  FeatureDescription,
+  InfoContainer,
+  InfoTitle,
+  InfoList,
+  InfoItem,
+  InfoText,
+  ChevronIcon,
+  CheckIcon,
+} from '../../Styles/Home/HomeStyles';
 
 export default function HomeScreen() {
   const theme = useTheme();
@@ -179,11 +87,7 @@ export default function HomeScreen() {
                   <FeatureDescription>{feature.description}</FeatureDescription>
                 </FeatureText>
 
-                <Ionicons 
-                  name="chevron-forward" 
-                  size={20} 
-                  color={theme.colors.gray700} 
-                />
+                <ChevronIcon />
               </FeatureContent>
             </FeatureCard>
           ))}
@@ -193,27 +97,27 @@ export default function HomeScreen() {
           <InfoTitle>App Features</InfoTitle>
           <InfoList>
             <InfoItem>
-              <Ionicons name="checkmark-circle" size={16} color={theme.colors.success} />
+              <CheckIcon />
               <InfoText>Camera integration with location</InfoText>
             </InfoItem>
             <InfoItem>
-              <Ionicons name="checkmark-circle" size={16} color={theme.colors.success} />
+              <CheckIcon />
               <InfoText>Offline storage and cache</InfoText>
             </InfoItem>
             <InfoItem>
-              <Ionicons name="checkmark-circle" size={16} color={theme.colors.success} />
+              <CheckIcon />
               <InfoText>Search and filter photos</InfoText>
             </InfoItem>
             <InfoItem>
-              <Ionicons name="checkmark-circle" size={16} color={theme.colors.success} />
+              <CheckIcon />
               <InfoText>Photo comparison tool</InfoText>
             </InfoItem>
             <InfoItem>
-              <Ionicons name="checkmark-circle" size={16} color={theme.colors.success} />
+              <CheckIcon />
               <InfoText>Share with metadata</InfoText>
             </InfoItem>
             <InfoItem>
-              <Ionicons name="checkmark-circle" size={16} color={theme.colors.success} />
+              <CheckIcon />
               <InfoText>Dark mode support</InfoText>
             </InfoItem>
           </InfoList>
