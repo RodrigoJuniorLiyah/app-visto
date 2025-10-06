@@ -13,6 +13,7 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { PhotoStorage } from '../../../services/PhotoStorage';
 
 const { width, height } = Dimensions.get('window');
@@ -35,22 +36,26 @@ export default function CameraScreen() {
 
   if (!permission) {
     return (
-      <ThemedView style={styles.container}>
-        <ThemedText>Requesting camera permission...</ThemedText>
-      </ThemedView>
+      <SafeAreaView style={{ flex: 1 }}>
+        <ThemedView style={styles.container}>
+          <ThemedText>Requesting camera permission...</ThemedText>
+        </ThemedView>
+      </SafeAreaView>
     );
   }
 
   if (!permission.granted) {
     return (
-      <ThemedView style={styles.container}>
-        <ThemedText style={styles.message}>
-          Camera permission is required to take photos
-        </ThemedText>
-        <TouchableOpacity style={styles.button} onPress={requestPermission}>
-          <ThemedText style={styles.buttonText}>Grant Permission</ThemedText>
-        </TouchableOpacity>
-      </ThemedView>
+      <SafeAreaView style={{ flex: 1 }}>
+        <ThemedView style={styles.container}>
+          <ThemedText style={styles.message}>
+            Camera permission is required to take photos
+          </ThemedText>
+          <TouchableOpacity style={styles.button} onPress={requestPermission}>
+            <ThemedText style={styles.buttonText}>Grant Permission</ThemedText>
+          </TouchableOpacity>
+        </ThemedView>
+      </SafeAreaView>
     );
   }
 
@@ -101,7 +106,8 @@ export default function CameraScreen() {
   };
 
   return (
-    <ThemedView style={styles.container}>
+    <SafeAreaView style={{ flex: 1 }}>
+      <ThemedView style={styles.container}>
       <CameraView
         ref={cameraRef}
         style={styles.camera}
@@ -181,7 +187,8 @@ export default function CameraScreen() {
           </View>
         </View>
       </Modal>
-    </ThemedView>
+      </ThemedView>
+    </SafeAreaView>
   );
 }
 

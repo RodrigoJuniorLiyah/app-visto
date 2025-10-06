@@ -14,6 +14,7 @@ import {
     TouchableOpacity,
     View
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { PhotoStorage } from '../../../services/PhotoStorage';
 import { PhotoMetadata } from '../../../types/photo';
 
@@ -194,7 +195,8 @@ export default function GalleryScreen() {
   );
 
   return (
-    <ThemedView style={styles.container}>
+    <SafeAreaView style={{ flex: 1 }}>
+      <ThemedView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
         <ThemedText style={styles.headerTitle}>Gallery</ThemedText>
@@ -279,7 +281,8 @@ export default function GalleryScreen() {
         ListEmptyComponent={renderEmptyState}
         showsVerticalScrollIndicator={false}
       />
-    </ThemedView>
+      </ThemedView>
+    </SafeAreaView>
   );
 }
 
