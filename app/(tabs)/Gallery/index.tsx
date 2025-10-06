@@ -1,3 +1,4 @@
+import { ModernHeader } from '@/components/ModernHeader';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Ionicons } from '@expo/vector-icons';
@@ -196,32 +197,16 @@ export default function GalleryScreen() {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      <ModernHeader
+        title="Gallery"
+        subtitle={`${photos.length} photos`}
+        variant="gradient"
+        rightAction={{
+          icon: "camera",
+          onPress: () => router.push('/(tabs)/Camera')
+        }}
+      />
       <ThemedView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <ThemedText style={styles.headerTitle}>Gallery</ThemedText>
-        <View style={styles.headerActions}>
-          {photos.length > 0 && (
-            <TouchableOpacity
-              style={styles.headerButton}
-              onPress={toggleSelectionMode}
-            >
-              <Ionicons 
-                name={isSelectionMode ? "close" : "checkmark-circle-outline"} 
-                size={24} 
-                color="#007AFF" 
-              />
-            </TouchableOpacity>
-          )}
-          
-          <TouchableOpacity
-            style={styles.headerButton}
-            onPress={() => router.push('/Camera')}
-          >
-            <Ionicons name="camera" size={24} color="#007AFF" />
-          </TouchableOpacity>
-        </View>
-      </View>
 
       {/* Search Bar */}
       {photos.length > 0 && (

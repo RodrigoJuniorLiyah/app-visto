@@ -1,3 +1,4 @@
+import { ModernHeader } from '@/components/ModernHeader';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Ionicons } from '@expo/vector-icons';
@@ -107,6 +108,17 @@ export default function CameraScreen() {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
+      <ModernHeader
+        title="Camera"
+        subtitle="Take a photo"
+        variant="minimal"
+        showBackButton
+        onBackPress={() => router.back()}
+        rightAction={{
+          icon: "camera-reverse",
+          onPress: toggleCameraFacing
+        }}
+      />
       <ThemedView style={styles.container}>
       <CameraView
         ref={cameraRef}
@@ -115,22 +127,6 @@ export default function CameraScreen() {
         mode="picture"
       >
         <View style={styles.overlay}>
-          {/* Top controls */}
-          <View style={styles.topControls}>
-            <TouchableOpacity
-              style={styles.controlButton}
-              onPress={() => router.back()}
-            >
-              <Ionicons name="close" size={30} color="white" />
-            </TouchableOpacity>
-            
-            <TouchableOpacity
-              style={styles.controlButton}
-              onPress={toggleCameraFacing}
-            >
-              <Ionicons name="camera-reverse" size={30} color="white" />
-            </TouchableOpacity>
-          </View>
 
           {/* Bottom controls */}
           <View style={styles.bottomControls}>
