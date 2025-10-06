@@ -1,6 +1,3 @@
-import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
-import React from 'react';
 import {
   CheckIcon,
   ChevronIcon,
@@ -22,7 +19,10 @@ import {
   InfoTitle,
   Subtitle,
   Title,
-} from '../../Styles/Home/HomeStyles';
+} from '@/Styles/Home/HomeStyles';
+import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
+import React from 'react';
 
 export default function HomeScreen() {
   const features = [

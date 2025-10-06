@@ -1,4 +1,4 @@
-import { Ionicons } from "@expo/vector-icons/Ionicons";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import styled from "styled-components/native";
 import { lightTheme } from "../../constants/theme";
 
@@ -24,7 +24,7 @@ export const Title = styled.Text`
   color: ${lightTheme.colors.text};
   text-align: center;
   margin-bottom: 16px;
-`;
+`
 
 export const Subtitle = styled.Text`
   font-size: 16px;
@@ -49,7 +49,7 @@ export const FeatureCard = styled.TouchableOpacity<{ color?: string }>`
   border-radius: 12px;
   margin-bottom: 16px;
   border-left-width: 4px;
-  border-left-color: ${props => props.color || lightTheme.colors.primary};
+  border-left-color: ${lightTheme.colors.primary};
 `;
 
 export const FeatureContent = styled.View`
@@ -65,7 +65,7 @@ export const FeatureIcon = styled.View<{ color?: string }>`
   justify-content: center;
   align-items: center;
   margin-right: 24px;
-  background-color: ${props => props.color || lightTheme.colors.primary};
+  background-color: ${lightTheme.colors.primary};
 `;
 
 export const FeatureText = styled.View`
