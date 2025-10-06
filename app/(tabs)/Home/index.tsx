@@ -1,4 +1,3 @@
-import { ModernHeader } from '@/components/ModernHeader';
 import { lightTheme } from '@/constants/theme';
 import {
   CameraIcon,
@@ -16,6 +15,7 @@ import {
   FeatureText,
   FeatureTitle,
   GalleryIcon,
+  Header,
   InfoContainer,
   InfoIcon,
   InfoItem,
@@ -23,6 +23,8 @@ import {
   InfoText,
   InfoTitle,
   SafeContainer,
+  Subtitle,
+  Title,
 } from '@/Styles/Home/HomeStyles';
 import { router } from 'expo-router';
 import React from 'react';
@@ -61,17 +63,14 @@ export default function HomeScreen() {
 
   return (
     <SafeContainer>
-      <ModernHeader
-        title="📸 Photo Gallery"
-        subtitle="Capture, organize, and compare your photos with location data and metadata"
-        variant="gradient"
-        rightAction={{
-          icon: "settings",
-          onPress: () => console.log("Settings pressed")
-        }}
-      />
       <Container>
         <Content>
+        <Header>
+          <Title>📸 Photo Gallery</Title>
+          <Subtitle>
+            Capture, organize, and compare your photos with location data and metadata
+          </Subtitle>
+        </Header>
 
         <FeaturesContainer>
           <FeaturesTitle>Features</FeaturesTitle>
