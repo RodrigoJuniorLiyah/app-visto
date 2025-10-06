@@ -1,7 +1,13 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { LinearGradient } from "expo-linear-gradient";
+import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 import { lightTheme } from "../../constants/theme";
+
+export const SafeContainer = styled(SafeAreaView)`
+  flex: 1;
+  background-color: ${lightTheme.colors.background};
+`;
 
 export const Container = styled.ScrollView`
   flex: 1;
@@ -62,7 +68,7 @@ export const FeatureCard = styled.TouchableOpacity<{ color?: string }>`
   border-radius: 16px;
   margin-bottom: 16px;
   border-left-width: 5px;
-  border-left-color: ${props => props.color || lightTheme.colors.primary};
+  border-left-color: ${lightTheme.colors.primary};
   shadow-color: ${lightTheme.colors.text};
   shadow-offset: 0px 4px;
   shadow-opacity: 0.1;
@@ -76,7 +82,7 @@ export const FeatureContent = styled.View`
   padding: 20px;
 `;
 
-export const FeatureIcon = styled(LinearGradient).attrs<{ color?: string }>((props) => ({
+export const FeatureIcon = styled(LinearGradient).attrs<{ color?: string }>((props: { color?: string }) => ({
   colors: [props.color || lightTheme.colors.primary, lightTheme.colors.secondary],
   start: { x: 0, y: 0 },
   end: { x: 1, y: 1 },
@@ -87,7 +93,7 @@ export const FeatureIcon = styled(LinearGradient).attrs<{ color?: string }>((pro
   justify-content: center;
   align-items: center;
   margin-right: 16px;
-  shadow-color: ${props => props.color || lightTheme.colors.primary};
+  shadow-color: ${lightTheme.colors.primary};
   shadow-offset: 0px 4px;
   shadow-opacity: 0.3;
   shadow-radius: 8px;
