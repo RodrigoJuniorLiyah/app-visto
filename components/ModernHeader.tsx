@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { Platform, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { lightTheme } from '../constants/theme';
 
@@ -77,7 +77,7 @@ export function ModernHeader({
         end={{ x: 1, y: 1 }}
         style={styles.gradientHeader}
       >
-        <SafeAreaView style={styles.safeArea}>
+        <SafeAreaView style={styles.safeArea} edges={['top']}>
           {renderContent()}
         </SafeAreaView>
       </LinearGradient>
@@ -86,7 +86,7 @@ export function ModernHeader({
 
   if (variant === 'minimal') {
     return (
-      <SafeAreaView style={styles.minimalSafeArea}>
+      <SafeAreaView style={styles.minimalSafeArea} edges={['top']}>
         <View style={styles.minimalHeader}>
           {renderContent()}
         </View>
@@ -95,7 +95,7 @@ export function ModernHeader({
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} edges={['top']}>
       <View style={styles.defaultHeader}>
         {renderContent()}
       </View>
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 20,
-    minHeight: 80,
+    minHeight: 40,
   },
   leftSection: {
     width: 40,

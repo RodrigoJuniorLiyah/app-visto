@@ -11,11 +11,12 @@ export const SafeContainer = styled(SafeAreaView)`
 
 export const Container = styled.ScrollView`
   flex: 1;
+  padding-bottom: 0px;
   background-color: ${lightTheme.colors.background};
 `;
 
 export const Content = styled.View`
-  padding: 20px;
+  padding: 0px 20px;
 `;
 
 export const Header = styled(LinearGradient).attrs({
@@ -121,6 +122,7 @@ export const InfoContainer = styled.View`
   background-color: ${lightTheme.colors.white};
   border-radius: 16px;
   padding: 24px;
+  
   shadow-color: ${lightTheme.colors.text};
   shadow-offset: 0px 4px;
   shadow-opacity: 0.1;
