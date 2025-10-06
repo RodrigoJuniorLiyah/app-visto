@@ -1,8 +1,3 @@
-/**
- * Mobile-First Design System for React Native
- * Following best practices for mobile development
- */
-
 import { Dimensions, Platform } from 'react-native';
 
 // Get device dimensions for responsive design
@@ -17,7 +12,6 @@ export const breakpoints = {
   xl: 1200,
 } as const;
 
-// Spacing scale following 8px grid system (mobile best practice)
 export const spacing = {
   xs: 4,
   sm: 8,

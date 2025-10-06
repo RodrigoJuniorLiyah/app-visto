@@ -1,10 +1,9 @@
-import * as FileSystem from 'expo-file-system';
+import { File, Directory } from 'expo-file-system';
 import * as Location from 'expo-location';
-import { getImageSize } from 'react-native-image-size';
 import { PhotoMetadata } from '../types/photo';
 
-const PHOTOS_DIR = `${FileSystem.documentDirectory}photos/`;
-const METADATA_FILE = `${FileSystem.documentDirectory}photo_metadata.json`;
+const PHOTOS_DIR = `${Directory.DocumentDirectory}photos/`;
+const METADATA_FILE = `${Directory.DocumentDirectory}photo_metadata.json`;
 
 export class PhotoStorage {
   private static instance: PhotoStorage;
@@ -23,9 +22,9 @@ export class PhotoStorage {
 
   private async loadPhotos(): Promise<void> {
     try {
-      const fileInfo = await FileSystem.getInfoAsync(METADATA_FILE);
-      if (fileInfo.exists) {
-        const content = await FileSystem.readAsStringAsync(METADATA_FILE);
+      const metadataFile = new File(METADATA_FILE);
+      if (await metadataFile.existsAsync()) {
+        const content = await metadataFile.readAsStringAsync();
         this.photos = JSON.parse(content);
       }
     } catch (error) {
@@ -36,7 +35,8 @@ export class PhotoStorage {
 
   private async savePhotos(): Promise<void> {
     try {
-      await FileSystem.writeAsStringAsync(METADATA_FILE, JSON.stringify(this.photos));
+      const metadataFile = new File(METADATA_FILE);
+      await metadataFile.writeAsStringAsync(JSON.stringify(this.photos));
     } catch (error) {
       console.error('Error saving photos:', error);
     }
@@ -51,10 +51,10 @@ export class PhotoStorage {
       
       // Ensure photos directory exists
       console.log('Checking photos directory...');
-      const dirInfo = await FileSystem.getInfoAsync(PHOTOS_DIR);
-      if (!dirInfo.exists) {
+      const photosDir = new Directory(PHOTOS_DIR);
+      if (!(await photosDir.existsAsync())) {
         console.log('Creating photos directory...');
-        await FileSystem.makeDirectoryAsync(PHOTOS_DIR, { intermediates: true });
+        await photosDir.makeAsync({ intermediates: true });
       }
 
       // Get current location
@@ -63,7 +63,8 @@ export class PhotoStorage {
       
       // Get file info
       console.log('Getting file info...');
-      const fileInfo = await FileSystem.getInfoAsync(uri);
+      const sourceFile = new File(uri);
+      const fileInfo = await sourceFile.getInfoAsync();
       console.log('File info:', fileInfo);
       
       // Get image dimensions
@@ -79,10 +80,8 @@ export class PhotoStorage {
 
       // Copy photo to app directory
       console.log('Copying photo...');
-      await FileSystem.copyAsync({
-        from: uri,
-        to: newUri,
-      });
+      const destinationFile = new File(newUri);
+      await sourceFile.copyAsync(destinationFile);
       console.log('Photo copied successfully');
 
       // Create metadata
@@ -163,8 +162,11 @@ export class PhotoStorage {
 
   private async getImageDimensions(uri: string): Promise<{ width: number; height: number }> {
     try {
-      const dimensions = await getImageSize(uri);
-      return { width: dimensions.width, height: dimensions.height };
+      // For now, we'll use default dimensions since getting real dimensions
+      // requires additional native modules that can cause build issues
+      // In a production app, you might want to use expo-image-manipulator
+      // or react-native-image-size with proper Android configuration
+      return { width: 1920, height: 1080 }; // Default dimensions
     } catch (error) {
       console.error('Error getting image dimensions:', error);
       return { width: 1920, height: 1080 }; // Default dimensions
@@ -185,9 +187,9 @@ export class PhotoStorage {
       if (!photo) return false;
 
       // Delete file
-      const fileInfo = await FileSystem.getInfoAsync(photo.uri);
-      if (fileInfo.exists) {
-        await FileSystem.deleteAsync(photo.uri);
+      const photoFile = new File(photo.uri);
+      if (await photoFile.existsAsync()) {
+        await photoFile.deleteAsync();
       }
 
       // Remove from array
