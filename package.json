@@ -3,9 +3,10 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "start": "expo start --dev-client",
+    "start": "expo start --dev-client --clear",
     "start:expo-go": "expo start",
-    "start:native": "expo start --dev-client",
+    "start:native": "expo start --dev-client --clear",
+    "dev": "expo start --dev-client --clear",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "expo run:android",
     "ios": "expo run:ios",
