@@ -1,22 +1,21 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
-  StyleSheet,
-  TextInput,
-  Alert,
-  RefreshControl,
-  Dimensions,
-} from 'react-native';
-import { Image } from 'expo-image';
-import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
-import { PhotoMetadata, PhotoFilter } from '../../../types/photo';
-import { PhotoStorage } from '../../../services/PhotoStorage';
-import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
+import { ThemedView } from '@/components/themed-view';
+import { Ionicons } from '@expo/vector-icons';
+import { Image } from 'expo-image';
+import { router } from 'expo-router';
+import React, { useCallback, useEffect, useState } from 'react';
+import {
+    Alert,
+    Dimensions,
+    FlatList,
+    RefreshControl,
+    StyleSheet,
+    TextInput,
+    TouchableOpacity,
+    View
+} from 'react-native';
+import { PhotoStorage } from '../../../services/PhotoStorage';
+import { PhotoMetadata } from '../../../types/photo';
 
 const { width } = Dimensions.get('window');
 const ITEM_SIZE = (width - 30) / 2; // 2 columns with padding

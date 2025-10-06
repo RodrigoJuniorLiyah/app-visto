@@ -1,19 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-  Dimensions,
-} from 'react-native';
-import { Image } from 'expo-image';
-import { Ionicons } from '@expo/vector-icons';
-import { router, useLocalSearchParams } from 'expo-router';
-import { PhotoMetadata } from '../types/photo';
-import { PhotoStorage } from '../services/PhotoStorage';
-import { ThemedView } from '@/components/themed-view';
 import { ThemedText } from '@/components/themed-text';
+import { ThemedView } from '@/components/themed-view';
+import { Ionicons } from '@expo/vector-icons';
+import { Image } from 'expo-image';
+import { router, useLocalSearchParams } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import {
+    Dimensions,
+    ScrollView,
+    StyleSheet,
+    TouchableOpacity,
+    View
+} from 'react-native';
+import { PhotoStorage } from '../services/PhotoStorage';
+import { PhotoMetadata } from '../types/photo';
 
 const { width } = Dimensions.get('window');
 
