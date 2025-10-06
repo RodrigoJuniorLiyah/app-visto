@@ -1,22 +1,133 @@
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Ionicons } from '@expo/vector-icons';
+import { ModernHeader } from '@/components/ModernHeader';
+import { useTheme } from '@/contexts/ThemeContext';
 import { Image } from 'expo-image';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
     Dimensions,
-    ScrollView,
-    StyleSheet,
-    TouchableOpacity,
-    View
+    ScrollView
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import styled from 'styled-components/native';
 import { PhotoStorage } from '../services/PhotoStorage';
 import { PhotoMetadata } from '../types/photo';
 
 const { width } = Dimensions.get('window');
 
+// Styled Components
+const Container = styled.View`
+  flex: 1;
+  background-color: ${(props: any) => props.theme.colors.background};
+`;
+
+const Content = styled(ScrollView)`
+  flex: 1;
+  padding: 16px;
+`;
+
+const PhotoContainer = styled.View`
+  flex-direction: row;
+  gap: 8px;
+  margin-bottom: 20px;
+`;
+
+const PhotoWrapper = styled.View`
+  flex: 1;
+  background-color: ${(props: any) => props.theme.colors.white};
+  border-radius: 12px;
+  overflow: hidden;
+  shadow-color: ${(props: any) => props.theme.colors.text};
+  shadow-offset: 0px 2px;
+  shadow-opacity: 0.1;
+  shadow-radius: 4px;
+  elevation: 3;
+`;
+
+const Photo = styled(Image)`
+  width: 100%;
+  height: 200px;
+`;
+
+const PhotoInfo = styled.View`
+  padding: 12px;
+`;
+
+const PhotoTitle = styled.Text`
+  font-size: 16px;
+  font-weight: 600;
+  color: ${(props: any) => props.theme.colors.text};
+  margin-bottom: 8px;
+`;
+
+const PhotoDate = styled.Text`
+  font-size: 14px;
+  color: ${(props: any) => props.theme.colors.gray500};
+  margin-bottom: 4px;
+`;
+
+const PhotoLocation = styled.Text`
+  font-size: 12px;
+  color: ${(props: any) => props.theme.colors.gray700};
+`;
+
+const ComparisonContainer = styled.View`
+  background-color: ${(props: any) => props.theme.colors.white};
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  shadow-color: ${(props: any) => props.theme.colors.text};
+  shadow-offset: 0px 2px;
+  shadow-opacity: 0.1;
+  shadow-radius: 4px;
+  elevation: 3;
+`;
+
+const ComparisonTitle = styled.Text`
+  font-size: 18px;
+  font-weight: 600;
+  color: ${(props: any) => props.theme.colors.text};
+  margin-bottom: 16px;
+  text-align: center;
+`;
+
+const ComparisonItem = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-vertical: 8px;
+  border-bottom-width: 1px;
+  border-bottom-color: ${(props: any) => props.theme.colors.gray200};
+`;
+
+const ComparisonLabel = styled.Text`
+  font-size: 14px;
+  color: ${(props: any) => props.theme.colors.gray500};
+  flex: 1;
+`;
+
+const ComparisonValue = styled.Text`
+  font-size: 14px;
+  color: ${(props: any) => props.theme.colors.text};
+  font-weight: 500;
+`;
+
+const ActionButton = styled.TouchableOpacity`
+  background-color: ${(props: any) => props.theme.colors.blue};
+  padding-horizontal: 20px;
+  padding-vertical: 12px;
+  border-radius: 8px;
+  align-items: center;
+  margin-bottom: 10px;
+`;
+
+const ActionButtonText = styled.Text`
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+`;
+
 export default function PhotoComparisonScreen() {
+  const { theme } = useTheme();
   const { photoId1, photoId2 } = useLocalSearchParams<{ 
     photoId1: string; 
     photoId2: string; 
@@ -61,9 +172,20 @@ export default function PhotoComparisonScreen() {
 
   if (!photo1 || !photo2) {
     return (
-      <ThemedView style={styles.container}>
-        <ThemedText>Loading...</ThemedText>
-      </ThemedView>
+      <SafeAreaView style={{ flex: 1 }} edges={['top']}>
+        <ModernHeader
+          title="📊 Photo Comparison"
+          subtitle="Compare two photos"
+          variant="gradient"
+          showBackButton
+          onBackPress={() => router.back()}
+        />
+        <Container>
+          <Content>
+            <ComparisonTitle>Loading...</ComparisonTitle>
+          </Content>
+        </Container>
+      </SafeAreaView>
     );
   }
 
@@ -77,315 +199,113 @@ export default function PhotoComparisonScreen() {
     : null;
 
   return (
-    <ThemedView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.headerButton}
-          onPress={() => router.back()}
-        >
-          <Ionicons name="arrow-back" size={24} color="#007AFF" />
-        </TouchableOpacity>
-        
-        <ThemedText style={styles.headerTitle}>Photo Comparison</ThemedText>
-        
-        <View style={styles.headerActions}>
-          <TouchableOpacity
-            style={styles.headerButton}
-            onPress={() => router.push({
-              pathname: '/PhotoDetail',
-              params: { photoId: photo1.id }
-            })}
-          >
-            <Ionicons name="eye" size={24} color="#007AFF" />
-          </TouchableOpacity>
-        </View>
-      </View>
+    <SafeAreaView style={{ flex: 1 }} edges={['top']}>
+      <ModernHeader
+        title="📊 Photo Comparison"
+        subtitle="Compare two photos"
+        variant="gradient"
+        showBackButton
+        onBackPress={() => router.back()}
+        rightAction={{
+          icon: "eye",
+          onPress: () => router.push({
+            pathname: '/PhotoDetail',
+            params: { photoId: photo1.id }
+          })
+        }}
+      />
+      <Container>
+        <Content>
+          {/* Photos Side by Side */}
+          <PhotoContainer>
+            <PhotoWrapper>
+              <Photo
+                source={{ uri: photo1.uri }}
+                contentFit="cover"
+              />
+              <PhotoInfo>
+                <PhotoTitle>{photo1.title || 'Untitled'}</PhotoTitle>
+                <PhotoDate>{formatDate(photo1.timestamp)}</PhotoDate>
+                {photo1.location && (
+                  <PhotoLocation>
+                    📍 {photo1.location.address || `${photo1.location.latitude.toFixed(4)}, ${photo1.location.longitude.toFixed(4)}`}
+                  </PhotoLocation>
+                )}
+              </PhotoInfo>
+            </PhotoWrapper>
+            
+            <PhotoWrapper>
+              <Photo
+                source={{ uri: photo2.uri }}
+                contentFit="cover"
+              />
+              <PhotoInfo>
+                <PhotoTitle>{photo2.title || 'Untitled'}</PhotoTitle>
+                <PhotoDate>{formatDate(photo2.timestamp)}</PhotoDate>
+                {photo2.location && (
+                  <PhotoLocation>
+                    📍 {photo2.location.address || `${photo2.location.latitude.toFixed(4)}, ${photo2.location.longitude.toFixed(4)}`}
+                  </PhotoLocation>
+                )}
+              </PhotoInfo>
+            </PhotoWrapper>
+          </PhotoContainer>
 
-      <ScrollView style={styles.content}>
-        {/* Photos Side by Side */}
-        <View style={styles.photosContainer}>
-          <View style={styles.photoColumn}>
-            <Image
-              source={{ uri: photo1.uri }}
-              style={styles.photo}
-              contentFit="cover"
-            />
-            <View style={styles.photoInfo}>
-              <ThemedText style={styles.photoTitle} numberOfLines={1}>
-                {photo1.title}
-              </ThemedText>
-              <ThemedText style={styles.photoDate}>
-                {formatDate(photo1.timestamp)}
-              </ThemedText>
-            </View>
-          </View>
+          {/* Comparison Details */}
+          <ComparisonContainer>
+            <ComparisonTitle>Comparison Details</ComparisonTitle>
+            
+            <ComparisonItem>
+              <ComparisonLabel>Date Difference:</ComparisonLabel>
+              <ComparisonValue>
+                {Math.abs(photo1.timestamp - photo2.timestamp) / (1000 * 60 * 60 * 24)} days
+              </ComparisonValue>
+            </ComparisonItem>
 
-          <View style={styles.photoColumn}>
-            <Image
-              source={{ uri: photo2.uri }}
-              style={styles.photo}
-              contentFit="cover"
-            />
-            <View style={styles.photoInfo}>
-              <ThemedText style={styles.photoTitle} numberOfLines={1}>
-                {photo2.title}
-              </ThemedText>
-              <ThemedText style={styles.photoDate}>
-                {formatDate(photo2.timestamp)}
-              </ThemedText>
-            </View>
-          </View>
-        </View>
-
-        {/* Comparison Stats */}
-        <View style={styles.statsContainer}>
-          <ThemedText style={styles.statsTitle}>Comparison Stats</ThemedText>
-          
-          {/* Time Difference */}
-          <View style={styles.statRow}>
-            <ThemedText style={styles.statLabel}>Time Difference</ThemedText>
-            <ThemedText style={styles.statValue}>
-              {Math.abs(photo1.timestamp - photo2.timestamp) < 60000 
-                ? 'Less than 1 minute'
-                : `${Math.abs(photo1.timestamp - photo2.timestamp) / 60000 | 0} minutes`
-              }
-            </ThemedText>
-          </View>
-
-          {/* Distance */}
-          {distance !== null && (
-            <View style={styles.statRow}>
-              <ThemedText style={styles.statLabel}>Distance</ThemedText>
-              <ThemedText style={styles.statValue}>
-                {distance < 1 
-                  ? `${(distance * 1000).toFixed(0)} meters`
-                  : `${distance.toFixed(2)} km`
-                }
-              </ThemedText>
-            </View>
-          )}
-
-          {/* Size Comparison */}
-          <View style={styles.statRow}>
-            <ThemedText style={styles.statLabel}>File Size</ThemedText>
-            <ThemedText style={styles.statValue}>
-              {formatFileSize(photo1.size)} vs {formatFileSize(photo2.size)}
-            </ThemedText>
-          </View>
-
-          {/* Dimensions Comparison */}
-          <View style={styles.statRow}>
-            <ThemedText style={styles.statLabel}>Dimensions</ThemedText>
-            <ThemedText style={styles.statValue}>
-              {photo1.width}×{photo1.height} vs {photo2.width}×{photo2.height}
-            </ThemedText>
-          </View>
-        </View>
-
-        {/* Detailed Info */}
-        <View style={styles.detailsContainer}>
-          <ThemedText style={styles.detailsTitle}>Detailed Information</ThemedText>
-          
-          {/* Photo 1 Details */}
-          <View style={styles.detailSection}>
-            <ThemedText style={styles.detailSectionTitle}>Photo 1</ThemedText>
-            <View style={styles.detailRow}>
-              <ThemedText style={styles.detailLabel}>Title:</ThemedText>
-              <ThemedText style={styles.detailValue}>{photo1.title || 'Untitled'}</ThemedText>
-            </View>
-            <View style={styles.detailRow}>
-              <ThemedText style={styles.detailLabel}>Date:</ThemedText>
-              <ThemedText style={styles.detailValue}>{photo1.date} {photo1.time}</ThemedText>
-            </View>
-            {photo1.location && (
-              <View style={styles.detailRow}>
-                <ThemedText style={styles.detailLabel}>Location:</ThemedText>
-                <ThemedText style={styles.detailValue}>
-                  {photo1.location.address || 
-                    `${photo1.location.latitude.toFixed(4)}, ${photo1.location.longitude.toFixed(4)}`}
-                </ThemedText>
-              </View>
+            {distance !== null && (
+              <ComparisonItem>
+                <ComparisonLabel>Distance:</ComparisonLabel>
+                <ComparisonValue>{distance.toFixed(2)} km</ComparisonValue>
+              </ComparisonItem>
             )}
-            <View style={styles.detailRow}>
-              <ThemedText style={styles.detailLabel}>Size:</ThemedText>
-              <ThemedText style={styles.detailValue}>{formatFileSize(photo1.size)}</ThemedText>
-            </View>
-            <View style={styles.detailRow}>
-              <ThemedText style={styles.detailLabel}>Dimensions:</ThemedText>
-              <ThemedText style={styles.detailValue}>{photo1.width} × {photo1.height}</ThemedText>
-            </View>
-          </View>
 
-          {/* Photo 2 Details */}
-          <View style={styles.detailSection}>
-            <ThemedText style={styles.detailSectionTitle}>Photo 2</ThemedText>
-            <View style={styles.detailRow}>
-              <ThemedText style={styles.detailLabel}>Title:</ThemedText>
-              <ThemedText style={styles.detailValue}>{photo2.title || 'Untitled'}</ThemedText>
-            </View>
-            <View style={styles.detailRow}>
-              <ThemedText style={styles.detailLabel}>Date:</ThemedText>
-              <ThemedText style={styles.detailValue}>{photo2.date} {photo2.time}</ThemedText>
-            </View>
-            {photo2.location && (
-              <View style={styles.detailRow}>
-                <ThemedText style={styles.detailLabel}>Location:</ThemedText>
-                <ThemedText style={styles.detailValue}>
-                  {photo2.location.address || 
-                    `${photo2.location.latitude.toFixed(4)}, ${photo2.location.longitude.toFixed(4)}`}
-                </ThemedText>
-              </View>
-            )}
-            <View style={styles.detailRow}>
-              <ThemedText style={styles.detailLabel}>Size:</ThemedText>
-              <ThemedText style={styles.detailValue}>{formatFileSize(photo2.size)}</ThemedText>
-            </View>
-            <View style={styles.detailRow}>
-              <ThemedText style={styles.detailLabel}>Dimensions:</ThemedText>
-              <ThemedText style={styles.detailValue}>{photo2.width} × {photo2.height}</ThemedText>
-            </View>
-          </View>
-        </View>
-      </ScrollView>
-    </ThemedView>
+            <ComparisonItem>
+              <ComparisonLabel>File Size 1:</ComparisonLabel>
+              <ComparisonValue>{formatFileSize(photo1.size)}</ComparisonValue>
+            </ComparisonItem>
+
+            <ComparisonItem>
+              <ComparisonLabel>File Size 2:</ComparisonLabel>
+              <ComparisonValue>{formatFileSize(photo2.size)}</ComparisonValue>
+            </ComparisonItem>
+
+            <ComparisonItem>
+              <ComparisonLabel>Dimensions 1:</ComparisonLabel>
+              <ComparisonValue>{photo1.width} × {photo1.height}</ComparisonValue>
+            </ComparisonItem>
+
+            <ComparisonItem>
+              <ComparisonLabel>Dimensions 2:</ComparisonLabel>
+              <ComparisonValue>{photo2.width} × {photo2.height}</ComparisonValue>
+            </ComparisonItem>
+          </ComparisonContainer>
+
+          {/* Action Buttons */}
+          <ActionButton onPress={() => router.push({
+            pathname: '/PhotoDetail',
+            params: { photoId: photo1.id }
+          })}>
+            <ActionButtonText>View Photo 1 Details</ActionButtonText>
+          </ActionButton>
+
+          <ActionButton onPress={() => router.push({
+            pathname: '/PhotoDetail',
+            params: { photoId: photo2.id }
+          })}>
+            <ActionButtonText>View Photo 2 Details</ActionButtonText>
+          </ActionButton>
+        </Content>
+      </Container>
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    backgroundColor: 'white',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
-  headerButton: {
-    padding: 8,
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-  },
-  headerActions: {
-    flexDirection: 'row',
-    gap: 10,
-  },
-  content: {
-    flex: 1,
-  },
-  photosContainer: {
-    flexDirection: 'row',
-    padding: 20,
-    gap: 10,
-  },
-  photoColumn: {
-    flex: 1,
-    backgroundColor: 'white',
-    borderRadius: 10,
-    overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  photo: {
-    width: '100%',
-    height: 200,
-  },
-  photoInfo: {
-    padding: 10,
-  },
-  photoTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    marginBottom: 4,
-  },
-  photoDate: {
-    fontSize: 12,
-    color: '#666',
-  },
-  statsContainer: {
-    backgroundColor: 'white',
-    margin: 20,
-    marginTop: 0,
-    borderRadius: 10,
-    padding: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  statsTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 15,
-  },
-  statRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
-  },
-  statLabel: {
-    fontSize: 14,
-    color: '#666',
-    flex: 1,
-  },
-  statValue: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#333',
-  },
-  detailsContainer: {
-    backgroundColor: 'white',
-    margin: 20,
-    marginTop: 0,
-    borderRadius: 10,
-    padding: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  detailsTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 15,
-  },
-  detailSection: {
-    marginBottom: 20,
-  },
-  detailSectionTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    marginBottom: 10,
-    color: '#007AFF',
-  },
-  detailRow: {
-    flexDirection: 'row',
-    paddingVertical: 4,
-  },
-  detailLabel: {
-    fontSize: 14,
-    color: '#666',
-    width: 80,
-  },
-  detailValue: {
-    fontSize: 14,
-    color: '#333',
-    flex: 1,
-  },
-});

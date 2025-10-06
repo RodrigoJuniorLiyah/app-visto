@@ -1,7 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import styled from 'styled-components/native';
 import { useTheme } from '../contexts/ThemeContext';
 import { ThemeToggle } from './ThemeToggle';
@@ -21,18 +20,18 @@ interface ModernHeaderProps {
 
 // Styled Components
 const HeaderContainer = styled.View<{ variant: string }>`
-  background-color: ${props => {
+  background-color: ${(props: any) => {
     switch (props.variant) {
       case 'gradient': return 'transparent';
       case 'minimal': return props.theme.colors.background;
-      default: return props.theme.colors.primary;
+      default: return props.theme.colors.background === '#1A1A1A' ? '#2A2A2A' : props.theme.colors.primary;
     }
   }};
-  border-bottom-width: ${props => props.variant === 'minimal' ? '0.5px' : '0px'};
-  border-bottom-color: ${props => props.theme.colors.gray200};
-  shadow-color: #000;
+  border-bottom-width: ${(props: any) => props.variant === 'minimal' ? '0.5px' : '0px'};
+  border-bottom-color: ${(props: any) => props.theme.colors.gray200};
+  shadow-color: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? '#000000' : '#000'};
   shadow-offset: 0px 1px;
-  shadow-opacity: 0.1;
+  shadow-opacity: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? 0.3 : 0.1};
   shadow-radius: 2px;
   elevation: 2;
 `;
@@ -67,7 +66,7 @@ const BackButton = styled.TouchableOpacity<{ variant: string }>`
   width: 32px;
   height: 32px;
   border-radius: 16px;
-  background-color: ${props => 
+  background-color: ${(props: any) => 
     props.variant === 'minimal' 
       ? props.theme.colors.gray100 
       : 'rgba(255, 255, 255, 0.15)'
@@ -80,7 +79,7 @@ const RightButton = styled.TouchableOpacity<{ variant: string }>`
   width: 32px;
   height: 32px;
   border-radius: 16px;
-  background-color: ${props => 
+  background-color: ${(props: any) => 
     props.variant === 'minimal' 
       ? props.theme.colors.gray100 
       : 'rgba(255, 255, 255, 0.15)'
@@ -92,10 +91,10 @@ const RightButton = styled.TouchableOpacity<{ variant: string }>`
 const Title = styled.Text<{ variant: string }>`
   font-size: 18px;
   font-weight: 700;
-  color: ${props => 
+  color: ${(props: any) => 
     props.variant === 'minimal' 
       ? props.theme.colors.text 
-      : '#FFFFFF'
+      : props.theme.colors.white
   };
   text-align: center;
   letter-spacing: 0.5px;
@@ -103,12 +102,12 @@ const Title = styled.Text<{ variant: string }>`
 
 const Subtitle = styled.Text<{ variant: string }>`
   font-size: 12px;
-  color: ${props => 
+  color: ${(props: any) => 
     props.variant === 'minimal' 
       ? props.theme.colors.gray700 
-      : '#FFFFFF'
+      : props.theme.colors.white
   };
-  opacity: ${props => props.variant === 'minimal' ? 1 : 0.85};
+  opacity: ${(props: any) => props.variant === 'minimal' ? 1 : 0.85};
   text-align: center;
   margin-top: 4px;
   font-weight: 500;
@@ -164,12 +163,22 @@ export function ModernHeader({
   );
 
   if (variant === 'gradient') {
+    const gradientColors = theme.colors.background === '#1A1A1A' 
+      ? ['#2A2A2A', '#1F1F1F'] as const
+      : [theme.colors.primary, theme.colors.secondary] as const;
+    
     return (
       <LinearGradient
-        colors={[theme.colors.primary, theme.colors.secondary]}
+        colors={gradientColors}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
-        style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.1, shadowRadius: 2, elevation: 2 }}
+        style={{ 
+          shadowColor: theme.colors.background === '#1A1A1A' ? '#000000' : '#000', 
+          shadowOffset: { width: 0, height: 1 }, 
+          shadowOpacity: theme.colors.background === '#1A1A1A' ? 0.3 : 0.1, 
+          shadowRadius: 2, 
+          elevation: 2 
+        }}
       >
         {renderContent()}
       </LinearGradient>

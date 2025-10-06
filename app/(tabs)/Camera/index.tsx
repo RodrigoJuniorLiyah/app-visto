@@ -1,6 +1,6 @@
 import { ModernHeader } from '@/components/ModernHeader';
 import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
+import { useTheme } from '@/contexts/ThemeContext';
 import { CameraType, CameraView, useCameraPermissions } from 'expo-camera';
 import { router } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
@@ -8,17 +8,140 @@ import {
   Alert,
   Dimensions,
   Modal,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View
+  TextInput
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import styled from 'styled-components/native';
 import { PhotoStorage } from '../../../services/PhotoStorage';
 
 const { width, height } = Dimensions.get('window');
 
+// Styled Components
+const Container = styled.View`
+  flex: 1;
+  background-color: ${(props: any) => props.theme.colors.background};
+`;
+
+const Camera = styled(CameraView)`
+  flex: 1;
+`;
+
+const Overlay = styled.View`
+  flex: 1;
+  background-color: transparent;
+  justify-content: flex-end;
+`;
+
+const BottomControls = styled.View`
+  padding: 20px;
+  background-color: rgba(0,0,0,0.4);
+  align-items: center;
+`;
+
+const CaptureContainer = styled.View`
+  width: 80px;
+  height: 80px;
+  border-radius: 40px;
+  background-color: rgba(255,255,255,0.3);
+  justify-content: center;
+  align-items: center;
+`;
+
+const CaptureButton = styled.TouchableOpacity`
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+  background-color: white;
+  justify-content: center;
+  align-items: center;
+`;
+
+const CaptureIndicator = styled.View`
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  background-color: red;
+`;
+
+const ModalOverlay = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.7);
+`;
+
+const ModalContent = styled.View`
+  width: 80%;
+  background-color: ${(props: any) => props.theme.colors.white};
+  border-radius: 10px;
+  padding: 20px;
+  align-items: center;
+`;
+
+const ModalTitle = styled.Text`
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: ${(props: any) => props.theme.colors.text};
+`;
+
+const PreviewImage = styled.Image`
+  width: 100%;
+  height: 200px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+`;
+
+const TitleInput = styled(TextInput)`
+  width: 100%;
+  border-width: 1px;
+  border-color: ${(props: any) => props.theme.colors.gray200};
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 20px;
+  color: ${(props: any) => props.theme.colors.text};
+  background-color: ${(props: any) => props.theme.colors.background};
+`;
+
+const ModalActions = styled.View`
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
+`;
+
+const ModalButton = styled.TouchableOpacity<{ variant: 'cancel' | 'save' }>`
+  padding-vertical: 10px;
+  padding-horizontal: 20px;
+  border-radius: 5px;
+  background-color: ${(props: any) => props.variant === 'cancel' ? props.theme.colors.gray200 : props.theme.colors.blue};
+`;
+
+const ModalButtonText = styled.Text<{ variant: 'cancel' | 'save' }>`
+  color: ${(props: any) => props.variant === 'cancel' ? props.theme.colors.text : props.theme.colors.white};
+  font-weight: bold;
+`;
+
+const Message = styled.Text`
+  font-size: 18px;
+  text-align: center;
+  margin-bottom: 20px;
+  color: ${(props: any) => props.theme.colors.text};
+`;
+
+const Button = styled.TouchableOpacity`
+  background-color: ${(props: any) => props.theme.colors.blue};
+  padding-horizontal: 20px;
+  padding-vertical: 10px;
+  border-radius: 5px;
+`;
+
+const ButtonText = styled.Text`
+  color: white;
+  font-size: 16px;
+`;
+
 export default function CameraScreen() {
+  const { theme } = useTheme();
   const [permission, requestPermission] = useCameraPermissions();
   const [facing, setFacing] = useState<CameraType>('back');
   const [isCapturing, setIsCapturing] = useState(false);
@@ -36,25 +159,25 @@ export default function CameraScreen() {
 
   if (!permission) {
     return (
-      <SafeAreaView style={{ flex: 1 }}>
-        <ThemedView style={styles.container}>
+      <SafeAreaView style={{ flex: 1 }} edges={['top']}>
+        <Container>
           <ThemedText>Requesting camera permission...</ThemedText>
-        </ThemedView>
+        </Container>
       </SafeAreaView>
     );
   }
 
   if (!permission.granted) {
     return (
-      <SafeAreaView style={{ flex: 1 }}>
-        <ThemedView style={styles.container}>
-          <ThemedText style={styles.message}>
+      <SafeAreaView style={{ flex: 1 }} edges={['top']}>
+        <Container>
+          <Message>
             Camera permission is required to take photos
-          </ThemedText>
-          <TouchableOpacity style={styles.button} onPress={requestPermission}>
-            <ThemedText style={styles.buttonText}>Grant Permission</ThemedText>
-          </TouchableOpacity>
-        </ThemedView>
+          </Message>
+          <Button onPress={requestPermission}>
+            <ButtonText>Grant Permission</ButtonText>
+          </Button>
+        </Container>
       </SafeAreaView>
     );
   }
@@ -65,11 +188,12 @@ export default function CameraScreen() {
         setIsCapturing(true);
         const photo = await cameraRef.current.takePictureAsync({
           quality: 0.8,
-          base64: false,
+          exif: true,
         });
-        
-        setPhotoUri(photo.uri);
-        setShowTitleModal(true);
+        if (photo?.uri) {
+          setPhotoUri(photo.uri);
+          setShowTitleModal(true);
+        }
       } catch (error) {
         console.error('Error taking picture:', error);
         Alert.alert('Error', 'Failed to take picture');
@@ -80,18 +204,18 @@ export default function CameraScreen() {
   };
 
   const savePhoto = async () => {
-    if (!photoUri) return;
-
-    try {
-      const photo = await photoStorage.savePhoto(photoUri, photoTitle);
-      Alert.alert('Success', 'Photo saved successfully!');
-      setShowTitleModal(false);
-      setPhotoUri(null);
-      setPhotoTitle('');
-      router.back();
-    } catch (error) {
-      console.error('Error saving photo:', error);
-      Alert.alert('Error', 'Failed to save photo');
+    if (photoUri) {
+      try {
+        await photoStorage.savePhoto(photoUri, photoTitle);
+        Alert.alert('Success', 'Photo saved successfully!');
+        setShowTitleModal(false);
+        setPhotoTitle('');
+        setPhotoUri(null);
+        router.push('/(tabs)/Gallery'); // Navigate to gallery after saving
+      } catch (error) {
+        console.error('Error saving photo:', error);
+        Alert.alert('Error', 'Failed to save photo');
+      }
     }
   };
 
@@ -118,193 +242,65 @@ export default function CameraScreen() {
           onPress: toggleCameraFacing
         }}
       />
-      <ThemedView style={styles.container}>
-      <CameraView
-        ref={cameraRef}
-        style={styles.camera}
-        facing={facing}
-        mode="picture"
-      >
-        <View style={styles.overlay}>
+      <Container>
+        <Camera
+          ref={cameraRef}
+          facing={facing}
+          mode="picture"
+        >
+          <Overlay>
+            {/* Bottom controls */}
+            <BottomControls>
+              <CaptureContainer>
+                <CaptureButton
+                  onPress={takePicture}
+                  disabled={isCapturing}
+                >
+                  {isCapturing && <CaptureIndicator />}
+                </CaptureButton>
+              </CaptureContainer>
+            </BottomControls>
+          </Overlay>
+        </Camera>
 
-          {/* Bottom controls */}
-          <View style={styles.bottomControls}>
-            <View style={styles.captureContainer}>
-              <TouchableOpacity
-                style={[
-                  styles.captureButton,
-                  isCapturing && styles.captureButtonActive
-                ]}
-                onPress={takePicture}
-                disabled={isCapturing}
-              >
-                <View style={styles.captureButtonInner} />
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </CameraView>
+        {/* Title Modal */}
+        <Modal
+          visible={showTitleModal}
+          transparent
+          animationType="slide"
+          onRequestClose={cancelPhoto}
+        >
+          <ModalOverlay>
+            <ModalContent>
+              <ModalTitle>Save Photo</ModalTitle>
 
-      {/* Title Modal */}
-      <Modal
-        visible={showTitleModal}
-        transparent
-        animationType="slide"
-        onRequestClose={cancelPhoto}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <ThemedText style={styles.modalTitle}>Save Photo</ThemedText>
-            
-            <TextInput
-              style={styles.titleInput}
-              placeholder="Enter photo title (optional)"
-              value={photoTitle}
-              onChangeText={setPhotoTitle}
-              autoFocus
-            />
+              <TitleInput
+                placeholder="Enter photo title (optional)"
+                value={photoTitle}
+                onChangeText={setPhotoTitle}
+                autoFocus
+                placeholderTextColor={theme.colors.gray500}
+              />
 
-            <View style={styles.modalButtons}>
-              <TouchableOpacity
-                style={[styles.modalButton, styles.cancelButton]}
-                onPress={cancelPhoto}
-              >
-                <ThemedText style={styles.cancelButtonText}>Cancel</ThemedText>
-              </TouchableOpacity>
-              
-              <TouchableOpacity
-                style={[styles.modalButton, styles.saveButton]}
-                onPress={savePhoto}
-              >
-                <ThemedText style={styles.saveButtonText}>Save</ThemedText>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
-      </ThemedView>
+              <ModalActions>
+                <ModalButton
+                  variant="cancel"
+                  onPress={cancelPhoto}
+                >
+                  <ModalButtonText variant="cancel">Cancel</ModalButtonText>
+                </ModalButton>
+
+                <ModalButton
+                  variant="save"
+                  onPress={savePhoto}
+                >
+                  <ModalButtonText variant="save">Save</ModalButtonText>
+                </ModalButton>
+              </ModalActions>
+            </ModalContent>
+          </ModalOverlay>
+        </Modal>
+      </Container>
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  camera: {
-    flex: 1,
-  },
-  overlay: {
-    flex: 1,
-    backgroundColor: 'transparent',
-  },
-  topControls: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingTop: 50,
-    paddingHorizontal: 20,
-  },
-  bottomControls: {
-    position: 'absolute',
-    bottom: 50,
-    left: 0,
-    right: 0,
-    alignItems: 'center',
-  },
-  controlButton: {
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    borderRadius: 25,
-    padding: 10,
-  },
-  captureContainer: {
-    alignItems: 'center',
-  },
-  captureButton: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: 'white',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 4,
-    borderColor: 'rgba(255, 255, 255, 0.3)',
-  },
-  captureButtonActive: {
-    backgroundColor: 'rgba(255, 255, 255, 0.5)',
-  },
-  captureButtonInner: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: 'white',
-  },
-  message: {
-    textAlign: 'center',
-    marginBottom: 20,
-    fontSize: 16,
-  },
-  button: {
-    backgroundColor: '#007AFF',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 8,
-    alignSelf: 'center',
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalContent: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 20,
-    width: width * 0.8,
-    maxWidth: 400,
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  titleInput: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
-    marginBottom: 20,
-  },
-  modalButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  modalButton: {
-    flex: 1,
-    paddingVertical: 12,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginHorizontal: 5,
-  },
-  cancelButton: {
-    backgroundColor: '#f0f0f0',
-  },
-  saveButton: {
-    backgroundColor: '#007AFF',
-  },
-  cancelButtonText: {
-    color: '#333',
-    fontWeight: '600',
-  },
-  saveButtonText: {
-    color: 'white',
-    fontWeight: '600',
-  },
-});

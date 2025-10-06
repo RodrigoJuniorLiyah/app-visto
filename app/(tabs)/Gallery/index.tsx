@@ -1,6 +1,5 @@
 import { ModernHeader } from '@/components/ModernHeader';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
+import { useTheme } from '@/contexts/ThemeContext';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { router, useFocusEffect } from 'expo-router';
@@ -10,19 +9,180 @@ import {
   Dimensions,
   FlatList,
   RefreshControl,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View
+  TextInput
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import styled from 'styled-components/native';
 import { PhotoStorage } from '../../../services/PhotoStorage';
 import { PhotoMetadata } from '../../../types/photo';
 
 const { width } = Dimensions.get('window');
 const ITEM_SIZE = (width - 30) / 2; // 2 columns with padding
 
+// Styled Components
+const Container = styled.View`
+  flex: 1;
+  background-color: ${(props: any) => props.theme.colors.background};
+`;
+
+const SearchContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+  background-color: ${(props: any) => props.theme.colors.white};
+  border-radius: 10px;
+  margin: 10px;
+  padding-horizontal: 10px;
+  shadow-color: #000;
+  shadow-offset: 0px 1px;
+  shadow-opacity: 0.1;
+  shadow-radius: 2px;
+  elevation: 2;
+`;
+
+const SearchIcon = styled(Ionicons).attrs((props: any) => ({
+  name: "search",
+  size: 20,
+}))`
+  margin-right: 10px;
+  color: ${(props: any) => props.theme.colors.gray500};
+`;
+
+const SearchInput = styled(TextInput)`
+  flex: 1;
+  height: 40px;
+  color: ${(props: any) => props.theme.colors.text};
+`;
+
+const ClearButton = styled.TouchableOpacity`
+  padding: 5px;
+`;
+
+const ClearIcon = styled(Ionicons).attrs((props: any) => ({
+  name: "close-circle",
+  size: 20,
+}))`
+  color: ${(props: any) => props.theme.colors.gray500};
+`;
+
+const SelectionActions = styled.View`
+  flex-direction: row;
+  justify-content: space-around;
+  padding-vertical: 10px;
+  background-color: ${(props: any) => props.theme.colors.white};
+  border-bottom-width: 1px;
+  border-bottom-color: ${(props: any) => props.theme.colors.gray200};
+`;
+
+const ActionButton = styled.TouchableOpacity`
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
+  padding: 10px;
+  border-radius: 5px;
+`;
+
+const ActionButtonText = styled.Text`
+  font-size: 14px;
+  font-weight: 600;
+  color: ${(props: any) => props.theme.colors.blue};
+`;
+
+const PhotosList = styled(FlatList)`
+  padding: 5px;
+`;
+
+const PhotoContainer = styled.TouchableOpacity<{ isSelected?: boolean }>`
+  width: ${ITEM_SIZE}px;
+  height: ${ITEM_SIZE}px;
+  margin: 5px;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  background-color: ${(props: any) => props.theme.colors.gray200};
+  border-width: ${(props: any) => props.isSelected ? '3px' : '0px'};
+  border-color: ${(props: any) => props.isSelected ? props.theme.colors.blue : 'transparent'};
+`;
+
+const Photo = styled(Image)`
+  width: 100%;
+  height: 100%;
+`;
+
+const SelectionOverlay = styled.View`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 122, 255, 0.5);
+  justify-content: center;
+  align-items: center;
+`;
+
+const PhotoInfo = styled.View`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0,0,0,0.6);
+  padding: 8px;
+`;
+
+const PhotoTitle = styled.Text`
+  font-size: 13px;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 2px;
+`;
+
+const PhotoDate = styled.Text`
+  font-size: 11px;
+  color: #eee;
+  margin-bottom: 2px;
+`;
+
+const PhotoLocation = styled.Text`
+  font-size: 11px;
+  color: #999;
+`;
+
+const EmptyState = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  padding-horizontal: 40px;
+`;
+
+const EmptyTitle = styled.Text`
+  font-size: 24px;
+  font-weight: 600;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: ${(props: any) => props.theme.colors.text};
+`;
+
+const EmptySubtitle = styled.Text`
+  font-size: 16px;
+  color: ${(props: any) => props.theme.colors.gray500};
+  text-align: center;
+  margin-bottom: 30px;
+`;
+
+const TakePhotoButton = styled.TouchableOpacity`
+  background-color: ${(props: any) => props.theme.colors.blue};
+  padding-horizontal: 30px;
+  padding-vertical: 15px;
+  border-radius: 25px;
+`;
+
+const TakePhotoButtonText = styled.Text`
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+`;
+
 export default function GalleryScreen() {
+  const { theme } = useTheme();
   const [photos, setPhotos] = useState<PhotoMetadata[]>([]);
   const [filteredPhotos, setFilteredPhotos] = useState<PhotoMetadata[]>([]);
   const [searchText, setSearchText] = useState('');
@@ -144,15 +304,12 @@ export default function GalleryScreen() {
     setIsSelectionMode(false);
   };
 
-  const renderPhotoItem = ({ item }: { item: PhotoMetadata }) => {
+  const renderPhotoItem = ({ item }: { item: any }) => {
     const isSelected = selectedPhotos.has(item.id);
 
     return (
-      <TouchableOpacity
-        style={[
-          styles.photoContainer,
-          isSelected && styles.selectedPhoto
-        ]}
+      <PhotoContainer
+        isSelected={isSelected}
         onPress={() => handlePhotoPress(item)}
         onLongPress={() => {
           if (!isSelectionMode) {
@@ -161,49 +318,45 @@ export default function GalleryScreen() {
           }
         }}
       >
-        <Image
+        <Photo
           source={{ uri: item.uri }}
-          style={styles.photo}
           contentFit="cover"
         />
 
         {isSelected && (
-          <View style={styles.selectionOverlay}>
-            <Ionicons name="checkmark-circle" size={30} color="#007AFF" />
-          </View>
+          <SelectionOverlay>
+            <Ionicons name="checkmark-circle" size={30} color={theme.colors.blue} />
+          </SelectionOverlay>
         )}
 
-        <View style={styles.photoInfo}>
-          <ThemedText style={styles.photoTitle} numberOfLines={1}>
+        <PhotoInfo>
+          <PhotoTitle numberOfLines={1}>
             {item.title}
-          </ThemedText>
-          <ThemedText style={styles.photoDate}>
+          </PhotoTitle>
+          <PhotoDate>
             {item.date} {item.time}
-          </ThemedText>
+          </PhotoDate>
           {item.location && (
-            <ThemedText style={styles.photoLocation} numberOfLines={1}>
+            <PhotoLocation numberOfLines={1}>
               📍 {item.location.address || `${item.location.latitude.toFixed(4)}, ${item.location.longitude.toFixed(4)}`}
-            </ThemedText>
+            </PhotoLocation>
           )}
-        </View>
-      </TouchableOpacity>
+        </PhotoInfo>
+      </PhotoContainer>
     );
   };
 
   const renderEmptyState = () => (
-    <View style={styles.emptyState}>
-      <Ionicons name="camera-outline" size={80} color="#ccc" />
-      <ThemedText style={styles.emptyTitle}>No Photos Yet</ThemedText>
-      <ThemedText style={styles.emptySubtitle}>
+    <EmptyState>
+      <Ionicons name="camera-outline" size={80} color={theme.colors.gray500} />
+      <EmptyTitle>No Photos Yet</EmptyTitle>
+      <EmptySubtitle>
         Take your first photo to get started!
-      </ThemedText>
-      <TouchableOpacity
-        style={styles.takePhotoButton}
-        onPress={() => router.push('/Camera')}
-      >
-        <ThemedText style={styles.takePhotoButtonText}>Take Photo</ThemedText>
-      </TouchableOpacity>
-    </View>
+      </EmptySubtitle>
+      <TakePhotoButton onPress={() => router.push('/(tabs)/Camera')}>
+        <TakePhotoButtonText>Take Photo</TakePhotoButtonText>
+      </TakePhotoButton>
+    </EmptyState>
   );
 
   return (
@@ -217,218 +370,56 @@ export default function GalleryScreen() {
           onPress: () => router.push('/(tabs)/Camera')
         }}
       />
-      <ThemedView style={styles.container}>
-
+      <Container>
         {/* Search Bar */}
         {photos.length > 0 && (
-          <View style={styles.searchContainer}>
-            <Ionicons name="search" size={20} color="#666" style={styles.searchIcon} />
-            <TextInput
-              style={styles.searchInput}
+          <SearchContainer>
+            <SearchIcon />
+            <SearchInput
               placeholder="Search photos..."
               value={searchText}
               onChangeText={setSearchText}
-              placeholderTextColor="#666"
+              placeholderTextColor={theme.colors.gray500}
             />
             {searchText.length > 0 && (
-              <TouchableOpacity
-                style={styles.clearButton}
-                onPress={() => setSearchText('')}
-              >
-                <Ionicons name="close-circle" size={20} color="#666" />
-              </TouchableOpacity>
+              <ClearButton onPress={() => setSearchText('')}>
+                <ClearIcon />
+              </ClearButton>
             )}
-          </View>
+          </SearchContainer>
         )}
 
         {/* Selection Actions */}
         {isSelectionMode && selectedPhotos.size > 0 && (
-          <View style={styles.selectionActions}>
-            <TouchableOpacity
-              style={styles.actionButton}
-              onPress={handleDeleteSelected}
-            >
-              <Ionicons name="trash" size={20} color="#FF3B30" />
-              <ThemedText style={styles.actionButtonText}>Delete</ThemedText>
-            </TouchableOpacity>
-
+          <SelectionActions>
+            <ActionButton onPress={handleDeleteSelected}>
+              <Ionicons name="trash" size={20} color={theme.colors.danger} />
+              <ActionButtonText>Delete</ActionButtonText>
+            </ActionButton>
+            
             {selectedPhotos.size === 2 && (
-              <TouchableOpacity
-                style={styles.actionButton}
-                onPress={handleComparePhotos}
-              >
-                <Ionicons name="git-compare" size={20} color="#007AFF" />
-                <ThemedText style={styles.actionButtonText}>Compare</ThemedText>
-              </TouchableOpacity>
+              <ActionButton onPress={handleComparePhotos}>
+                <Ionicons name="git-compare" size={20} color={theme.colors.blue} />
+                <ActionButtonText>Compare</ActionButtonText>
+              </ActionButton>
             )}
-          </View>
+          </SelectionActions>
         )}
 
         {/* Photos Grid */}
-        <FlatList
+        <PhotosList
           data={filteredPhotos}
           renderItem={renderPhotoItem}
           keyExtractor={(item) => item.id}
           numColumns={2}
-          contentContainerStyle={styles.photosList}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
           ListEmptyComponent={renderEmptyState}
           showsVerticalScrollIndicator={false}
         />
-      </ThemedView>
+      </Container>
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    backgroundColor: 'white',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
-  headerTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  headerActions: {
-    flexDirection: 'row',
-    gap: 15,
-  },
-  headerButton: {
-    padding: 8,
-  },
-  searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'white',
-    marginHorizontal: 20,
-    marginVertical: 10,
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
-  },
-  searchIcon: {
-    marginRight: 10,
-  },
-  searchInput: {
-    flex: 1,
-    fontSize: 16,
-    color: '#333',
-  },
-  clearButton: {
-    marginLeft: 10,
-  },
-  selectionActions: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    paddingVertical: 15,
-    backgroundColor: 'white',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-    gap: 30,
-  },
-  actionButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 20,
-    backgroundColor: '#f0f0f0',
-    gap: 8,
-  },
-  actionButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  photosList: {
-    padding: 10,
-    flexGrow: 1,
-  },
-  photoContainer: {
-    width: ITEM_SIZE,
-    margin: 5,
-    backgroundColor: 'white',
-    borderRadius: 10,
-    overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  selectedPhoto: {
-    borderWidth: 3,
-    borderColor: '#007AFF',
-  },
-  photo: {
-    width: '100%',
-    height: ITEM_SIZE,
-  },
-  selectionOverlay: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    borderRadius: 15,
-    padding: 5,
-  },
-  photoInfo: {
-    padding: 10,
-  },
-  photoTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    marginBottom: 4,
-  },
-  photoDate: {
-    fontSize: 12,
-    color: '#666',
-    marginBottom: 2,
-  },
-  photoLocation: {
-    fontSize: 11,
-    color: '#999',
-  },
-  emptyState: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 40,
-  },
-  emptyTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    marginTop: 20,
-    marginBottom: 10,
-  },
-  emptySubtitle: {
-    fontSize: 16,
-    color: '#666',
-    textAlign: 'center',
-    marginBottom: 30,
-  },
-  takePhotoButton: {
-    backgroundColor: '#007AFF',
-    paddingHorizontal: 30,
-    paddingVertical: 15,
-    borderRadius: 25,
-  },
-  takePhotoButtonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-});

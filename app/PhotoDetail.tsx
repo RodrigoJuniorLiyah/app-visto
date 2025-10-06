@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import styled from 'styled-components/native';
+import { useTheme } from '../contexts/ThemeContext';
 import { PhotoStorage } from '../services/PhotoStorage';
 import { PhotoMetadata } from '../types/photo';
 
@@ -21,7 +22,7 @@ const { width, height } = Dimensions.get('window');
 // Styled Components
 const Container = styled.View`
   flex: 1;
-  background-color: ${props => props.theme.colors.background};
+  background-color: ${(props: any) => props.theme.colors.background};
 `;
 
 const Content = styled.ScrollView`
@@ -30,13 +31,13 @@ const Content = styled.ScrollView`
 `;
 
 const PhotoCard = styled.View`
-  background-color: ${props => props.theme.colors.white};
+  background-color: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? '#2A2A2A' : props.theme.colors.white};
   border-radius: 16px;
   margin-bottom: 20px;
   overflow: hidden;
-  shadow-color: ${props => props.theme.colors.text};
+  shadow-color: ${(props: any) => props.theme.colors.text};
   shadow-offset: 0px 4px;
-  shadow-opacity: 0.1;
+  shadow-opacity: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? 0.3 : 0.1};
   shadow-radius: 8px;
   elevation: 4;
   position: relative;
@@ -65,13 +66,13 @@ const OverlayButton = styled.TouchableOpacity`
 `;
 
 const InfoCard = styled.View`
-  background-color: ${props => props.theme.colors.white};
+  background-color: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? '#2A2A2A' : props.theme.colors.white};
   border-radius: 16px;
   margin-bottom: 20px;
   padding: 20px;
-  shadow-color: ${props => props.theme.colors.text};
+  shadow-color: ${(props: any) => props.theme.colors.text};
   shadow-offset: 0px 2px;
-  shadow-opacity: 0.1;
+  shadow-opacity: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? 0.3 : 0.1};
   shadow-radius: 4px;
   elevation: 3;
 `;
@@ -86,7 +87,7 @@ const CardHeader = styled.View`
 const CardTitle = styled.Text`
   font-size: 18px;
   font-weight: 600;
-  color: ${props => props.theme.colors.text};
+  color: ${(props: any) => props.theme.colors.text};
 `;
 
 const InfoGrid = styled.View`
@@ -106,30 +107,30 @@ const InfoContent = styled.View`
 const InfoLabel = styled.Text`
   font-size: 14px;
   font-weight: 600;
-  color: ${props => props.theme.colors.gray700};
+  color: ${(props: any) => props.theme.colors.gray700};
   margin-bottom: 4px;
 `;
 
 const InfoValue = styled.Text`
   font-size: 16px;
-  color: ${props => props.theme.colors.text};
+  color: ${(props: any) => props.theme.colors.text};
 `;
 
 const CoordinatesText = styled.Text`
   font-size: 12px;
-  color: ${props => props.theme.colors.gray500};
+  color: ${(props: any) => props.theme.colors.gray500};
   margin-top: 4px;
 `;
 
 const ActionsCard = styled.View`
-  background-color: ${props => props.theme.colors.white};
+  background-color: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? '#2A2A2A' : props.theme.colors.white};
   border-radius: 16px;
   margin-bottom: 50px;
   padding: 20px;
   
-  shadow-color: ${props => props.theme.colors.text};
+  shadow-color: ${(props: any) => props.theme.colors.text};
   shadow-offset: 0px 2px;
-  shadow-opacity: 0.1;
+  shadow-opacity: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? 0.3 : 0.1};
   shadow-radius: 4px;
   elevation: 3;
 `;
@@ -159,7 +160,7 @@ const ActionButton = styled.TouchableOpacity<{ variant: 'edit' | 'share' | 'dele
 `;
 
 const ActionButtonText = styled.Text`
-  color: ${props => props.theme.colors.white};
+  color: ${(props: any) => props.theme.colors.white};
   font-size: 14px;
   font-weight: 600;
 `;
@@ -172,7 +173,7 @@ const ModalOverlay = styled.View`
 `;
 
 const ModalContent = styled.View`
-  background-color: ${props => props.theme.colors.white};
+  background-color: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? '#2A2A2A' : props.theme.colors.white};
   border-radius: 16px;
   padding: 24px;
   width: ${width * 0.8}px;
@@ -184,17 +185,17 @@ const ModalTitle = styled.Text`
   font-weight: 600;
   margin-bottom: 20px;
   text-align: center;
-  color: ${props => props.theme.colors.text};
+  color: ${(props: any) => props.theme.colors.text};
 `;
 
 const TitleInput = styled(TextInput)`
   border-width: 1px;
-  border-color: ${props => props.theme.colors.gray200};
+  border-color: ${(props: any) => props.theme.colors.gray200};
   border-radius: 12px;
   padding: 16px;
   font-size: 16px;
   margin-bottom: 20px;
-  background-color: ${props => props.theme.colors.background};
+  background-color: ${(props: any) => props.theme.colors.background};
 `;
 
 const ModalButtons = styled.View`
@@ -222,6 +223,7 @@ const ModalButtonText = styled.Text<{ variant: 'cancel' | 'save' }>`
 `;
 
 export default function PhotoDetailScreen() {
+  const { theme } = useTheme();
   const { photoId } = useLocalSearchParams<{ photoId: string }>();
   const [photo, setPhoto] = useState<PhotoMetadata | null>(null);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -337,10 +339,10 @@ export default function PhotoDetailScreen() {
             />
             <PhotoOverlay>
               <OverlayButton onPress={() => setShowEditModal(true)}>
-                <Ionicons name="create" size={20} color="white" />
+                <Ionicons name="create" size={20} color={theme.colors.white} />
               </OverlayButton>
               <OverlayButton onPress={handleSharePhoto}>
-                <Ionicons name="share" size={20} color="white" />
+                <Ionicons name="share" size={20} color={theme.colors.white} />
               </OverlayButton>
             </PhotoOverlay>
           </PhotoCard>
@@ -348,13 +350,13 @@ export default function PhotoDetailScreen() {
           {/* Photo Info Card */}
           <InfoCard>
             <CardHeader>
-              <Ionicons name="information-circle" size={24} color="#007AFF" />
+              <Ionicons name="information-circle" size={24} color={theme.colors.blue} />
               <CardTitle>Photo Information</CardTitle>
             </CardHeader>
             
             <InfoGrid>
               <InfoItem>
-                <Ionicons name="text" size={16} color="#666" />
+                <Ionicons name="text" size={16} color={theme.colors.gray500} />
                 <InfoContent>
                   <InfoLabel>Title</InfoLabel>
                   <InfoValue>
@@ -364,7 +366,7 @@ export default function PhotoDetailScreen() {
               </InfoItem>
 
               <InfoItem>
-                <Ionicons name="time" size={16} color="#666" />
+                <Ionicons name="time" size={16} color={theme.colors.gray500} />
                 <InfoContent>
                   <InfoLabel>Date & Time</InfoLabel>
                   <InfoValue>
@@ -375,7 +377,7 @@ export default function PhotoDetailScreen() {
 
               {photo.location && (
                 <InfoItem>
-                  <Ionicons name="location" size={16} color="#666" />
+                  <Ionicons name="location" size={16} color={theme.colors.gray500} />
                   <InfoContent>
                     <InfoLabel>Location</InfoLabel>
                     <InfoValue>
@@ -392,7 +394,7 @@ export default function PhotoDetailScreen() {
               )}
 
               <InfoItem>
-                <Ionicons name="resize" size={16} color="#666" />
+                <Ionicons name="resize" size={16} color={theme.colors.gray500} />
                 <InfoContent>
                   <InfoLabel>Dimensions</InfoLabel>
                   <InfoValue>
@@ -402,7 +404,7 @@ export default function PhotoDetailScreen() {
               </InfoItem>
 
               <InfoItem>
-                <Ionicons name="folder" size={16} color="#666" />
+                <Ionicons name="folder" size={16} color={theme.colors.gray500} />
                 <InfoContent>
                   <InfoLabel>File Size</InfoLabel>
                   <InfoValue>
@@ -416,7 +418,7 @@ export default function PhotoDetailScreen() {
           {/* Actions Card */}
           <ActionsCard>
             <CardHeader>
-              <Ionicons name="settings" size={24} color="#007AFF" />
+              <Ionicons name="settings" size={24} color={theme.colors.blue} />
               <CardTitle>Actions</CardTitle>
             </CardHeader>
             
@@ -425,7 +427,7 @@ export default function PhotoDetailScreen() {
                 variant="edit"
                 onPress={() => setShowEditModal(true)}
               >
-                <Ionicons name="create" size={20} color="white" />
+                <Ionicons name="create" size={20} color={theme.colors.white} />
                 <ActionButtonText>Edit Title</ActionButtonText>
               </ActionButton>
               
@@ -433,7 +435,7 @@ export default function PhotoDetailScreen() {
                 variant="share"
                 onPress={handleSharePhoto}
               >
-                <Ionicons name="share" size={20} color="white" />
+                <Ionicons name="share" size={20} color={theme.colors.white} />
                 <ActionButtonText>Share</ActionButtonText>
               </ActionButton>
               
@@ -441,7 +443,7 @@ export default function PhotoDetailScreen() {
                 variant="delete"
                 onPress={handleDeletePhoto}
               >
-                <Ionicons name="trash" size={20} color="white" />
+                <Ionicons name="trash" size={20} color={theme.colors.white} />
                 <ActionButtonText>Delete</ActionButtonText>
               </ActionButton>
             </ActionsGrid>
