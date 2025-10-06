@@ -19,39 +19,44 @@ import {
   InfoTitle,
   Subtitle,
   Title,
+  CameraIcon,
+  GalleryIcon,
+  InfoIcon,
+  CompareIcon,
 } from '@/Styles/Home/HomeStyles';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React from 'react';
+import { lightTheme } from '@/constants/theme';
 
 export default function HomeScreen() {
   const features = [
     {
       title: 'Take Photos',
-      description: 'Capture moments with your camera',
+      description: 'Capture amazing moments with your camera',
       icon: 'camera',
-      color: '#0761A6',
+      color: lightTheme.colors.primary,
       onPress: () => router.push('/(tabs)/Camera'),
     },
     {
       title: 'View Gallery',
-      description: 'Browse all your captured photos',
+      description: 'Browse through your photo collection',
       icon: 'images',
-      color: '#4AB38B',
+      color: lightTheme.colors.secondary,
       onPress: () => router.push('/(tabs)/Gallery'),
     },
     {
       title: 'Photo Details',
-      description: 'View metadata and location info',
+      description: 'View metadata and location information',
       icon: 'information-circle',
-      color: '#1377FE',
+      color: lightTheme.colors.blue,
       onPress: () => router.push('/(tabs)/Gallery'),
     },
     {
       title: 'Compare Photos',
-      description: 'Side-by-side photo comparison',
+      description: 'Side-by-side photo comparison tool',
       icon: 'git-compare',
-      color: '#F59E0B',
+      color: lightTheme.colors.alert,
       onPress: () => router.push('/(tabs)/Gallery'),
     },
   ];
@@ -77,7 +82,10 @@ export default function HomeScreen() {
             >
               <FeatureContent>
                 <FeatureIcon color={feature.color}>
-                  <Ionicons name={feature.icon as any} size={24} color="white" />
+                  {feature.icon === 'camera' && <CameraIcon />}
+                  {feature.icon === 'images' && <GalleryIcon />}
+                  {feature.icon === 'information-circle' && <InfoIcon />}
+                  {feature.icon === 'git-compare' && <CompareIcon />}
                 </FeatureIcon>
 
                 <FeatureText>

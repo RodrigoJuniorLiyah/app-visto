@@ -8,64 +8,83 @@ export const Container = styled.ScrollView`
 `;
 
 export const Content = styled.View`
-  padding: 24px;
+  padding: 20px;
 `;
 
 export const Header = styled.View`
   align-items: center;
-  margin-bottom: 48px;
-  padding-top: 24px;
-  padding-bottom: 24px;
+  margin-bottom: 32px;
+  padding: 24px 20px;
+  background: linear-gradient(135deg, ${lightTheme.colors.primary} 0%, ${lightTheme.colors.secondary} 100%);
+  border-radius: 20px;
+  shadow-color: ${lightTheme.colors.primary};
+  shadow-offset: 0px 8px;
+  shadow-opacity: 0.3;
+  shadow-radius: 16px;
+  elevation: 8;
 `;
 
 export const Title = styled.Text`
-  font-size: 32px;
+  font-size: 28px;
   font-weight: bold;
-  color: ${lightTheme.colors.text};
+  color: ${lightTheme.colors.white};
   text-align: center;
-  margin-bottom: 16px;
-`
+  margin-bottom: 8px;
+  text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+`;
 
 export const Subtitle = styled.Text`
   font-size: 16px;
-  color: ${lightTheme.colors.gray700};
+  color: ${lightTheme.colors.white};
   text-align: center;
-  line-height: 24px;
+  line-height: 22px;
+  opacity: 0.9;
 `;
 
 export const FeaturesContainer = styled.View`
-  margin-bottom: 48px;
+  margin-bottom: 32px;
 `;
 
 export const FeaturesTitle = styled.Text`
-  font-size: 20px;
+  font-size: 22px;
   font-weight: bold;
   color: ${lightTheme.colors.text};
-  margin-bottom: 24px;
+  margin-bottom: 20px;
+  text-align: center;
 `;
 
 export const FeatureCard = styled.TouchableOpacity<{ color?: string }>`
   background-color: ${lightTheme.colors.white};
-  border-radius: 12px;
+  border-radius: 16px;
   margin-bottom: 16px;
-  border-left-width: 4px;
-  border-left-color: ${lightTheme.colors.primary};
+  border-left-width: 5px;
+  border-left-color: ${props => props.color || lightTheme.colors.primary};
+  shadow-color: ${lightTheme.colors.text};
+  shadow-offset: 0px 4px;
+  shadow-opacity: 0.1;
+  shadow-radius: 12px;
+  elevation: 4;
 `;
 
 export const FeatureContent = styled.View`
   flex-direction: row;
   align-items: center;
-  padding: 24px;
+  padding: 20px;
 `;
 
 export const FeatureIcon = styled.View<{ color?: string }>`
-  width: 48px;
-  height: 48px;
-  border-radius: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 28px;
   justify-content: center;
   align-items: center;
-  margin-right: 24px;
-  background-color: ${lightTheme.colors.primary};
+  margin-right: 16px;
+  background: linear-gradient(135deg, ${props => props.color || lightTheme.colors.primary} 0%, ${props => props.color || lightTheme.colors.secondary} 100%);
+  shadow-color: ${props => props.color || lightTheme.colors.primary};
+  shadow-offset: 0px 4px;
+  shadow-opacity: 0.3;
+  shadow-radius: 8px;
+  elevation: 4;
 `;
 
 export const FeatureText = styled.View`
@@ -73,7 +92,7 @@ export const FeatureText = styled.View`
 `;
 
 export const FeatureTitle = styled.Text`
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
   color: ${lightTheme.colors.text};
   margin-bottom: 4px;
@@ -82,45 +101,78 @@ export const FeatureTitle = styled.Text`
 export const FeatureDescription = styled.Text`
   font-size: 14px;
   color: ${lightTheme.colors.gray700};
+  line-height: 20px;
 `;
 
 export const InfoContainer = styled.View`
-  background-color: ${lightTheme.colors.white};
-  border-radius: 12px;
+  background: linear-gradient(135deg, ${lightTheme.colors.white} 0%, ${lightTheme.colors.gray100} 100%);
+  border-radius: 16px;
   padding: 24px;
+  shadow-color: ${lightTheme.colors.text};
+  shadow-offset: 0px 4px;
+  shadow-opacity: 0.1;
+  shadow-radius: 12px;
+  elevation: 4;
 `;
 
 export const InfoTitle = styled.Text`
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
   color: ${lightTheme.colors.text};
-  margin-bottom: 24px;
+  margin-bottom: 20px;
+  text-align: center;
 `;
 
 export const InfoList = styled.View`
-  gap: 8px;
+  gap: 12px;
 `;
 
 export const InfoItem = styled.View`
   flex-direction: row;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
+  padding: 8px 0;
 `;
 
 export const InfoText = styled.Text`
-  font-size: 14px;
+  font-size: 15px;
   color: ${lightTheme.colors.text};
   flex: 1;
+  line-height: 22px;
 `;
 
 export const ChevronIcon = styled(Ionicons).attrs({
   name: "chevron-forward",
   size: 20,
-  color: lightTheme.colors.gray700,
+  color: lightTheme.colors.primary,
 })``;
 
 export const CheckIcon = styled(Ionicons).attrs({
   name: "checkmark-circle",
-  size: 16,
+  size: 20,
   color: lightTheme.colors.success,
+})``;
+
+export const CameraIcon = styled(Ionicons).attrs({
+  name: "camera",
+  size: 24,
+  color: lightTheme.colors.white,
+})``;
+
+export const GalleryIcon = styled(Ionicons).attrs({
+  name: "images",
+  size: 24,
+  color: lightTheme.colors.white,
+})``;
+
+export const InfoIcon = styled(Ionicons).attrs({
+  name: "information-circle",
+  size: 24,
+  color: lightTheme.colors.white,
+})``;
+
+export const CompareIcon = styled(Ionicons).attrs({
+  name: "git-compare",
+  size: 24,
+  color: lightTheme.colors.white,
 })``;
