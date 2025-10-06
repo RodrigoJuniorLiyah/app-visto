@@ -17,19 +17,20 @@ const Content = styled.View`
 const Header = styled.View`
   align-items: center;
   margin-bottom: ${props => props.theme.spacing.xxl}px;
-  padding-vertical: ${props => props.theme.spacing.lg}px;
+  padding-top: ${props => props.theme.spacing.lg}px;
+  padding-bottom: ${props => props.theme.spacing.lg}px;
 `;
 
 const Title = styled.Text`
-  font-size: ${props => props.theme.fontSizes.xxxl}px;
+  font-size: ${props => props.theme.typography.xxxl.fontSize}px;
   font-weight: ${props => props.theme.fontWeights.bold};
-  color: ${props => props.theme.colors.foreground};
+  color: ${props => props.theme.colors.text};
   text-align: center;
   margin-bottom: ${props => props.theme.spacing.md}px;
 `;
 
 const Subtitle = styled.Text`
-  font-size: ${props => props.theme.fontSizes.md}px;
+  font-size: ${props => props.theme.typography.md.fontSize}px;
   color: ${props => props.theme.colors.textSecondary};
   text-align: center;
   line-height: ${props => props.theme.lineHeights.lg}px;
@@ -40,9 +41,9 @@ const FeaturesContainer = styled.View`
 `;
 
 const FeaturesTitle = styled.Text`
-  font-size: ${props => props.theme.fontSizes.xl}px;
+  font-size: ${props => props.theme.typography.xl.fontSize}px;
   font-weight: ${props => props.theme.fontWeights.semibold};
-  color: ${props => props.theme.colors.foreground};
+  color: ${props => props.theme.colors.text};
   margin-bottom: ${props => props.theme.spacing.lg}px;
 `;
 
@@ -75,14 +76,14 @@ const FeatureText = styled.View`
 `;
 
 const FeatureTitle = styled.Text`
-  font-size: ${props => props.theme.fontSizes.md}px;
+  font-size: ${props => props.theme.typography.md.fontSize}px;
   font-weight: ${props => props.theme.fontWeights.semibold};
-  color: ${props => props.theme.colors.foreground};
+  color: ${props => props.theme.colors.text};
   margin-bottom: ${props => props.theme.spacing.xs}px;
 `;
 
 const FeatureDescription = styled.Text`
-  font-size: ${props => props.theme.fontSizes.sm}px;
+  font-size: ${props => props.theme.typography.sm.fontSize}px;
   color: ${props => props.theme.colors.textSecondary};
 `;
 
@@ -93,9 +94,9 @@ const InfoContainer = styled.View`
 `;
 
 const InfoTitle = styled.Text`
-  font-size: ${props => props.theme.fontSizes.lg}px;
+  font-size: ${props => props.theme.typography.lg.fontSize}px;
   font-weight: ${props => props.theme.fontWeights.semibold};
-  color: ${props => props.theme.colors.foreground};
+  color: ${props => props.theme.colors.text};
   margin-bottom: ${props => props.theme.spacing.lg}px;
 `;
 
@@ -110,8 +111,8 @@ const InfoItem = styled.View`
 `;
 
 const InfoText = styled.Text`
-  font-size: ${props => props.theme.fontSizes.sm}px;
-  color: ${props => props.theme.colors.foreground};
+  font-size: ${props => props.theme.typography.sm.fontSize}px;
+  color: ${props => props.theme.colors.text};
   flex: 1;
 `;
 
