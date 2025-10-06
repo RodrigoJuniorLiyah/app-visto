@@ -134,8 +134,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 6,
-    minHeight: 40,
+    paddingVertical: 10,
+    minHeight: 48,
   },
   leftSection: {
     width: 40,
@@ -167,17 +167,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    fontSize: 15,
+    fontSize: 18,
     fontWeight: '600',
     color: lightTheme.colors.white,
     textAlign: 'center',
   },
   subtitle: {
-    fontSize: 11,
+    fontSize: 14,
     color: lightTheme.colors.white,
     opacity: 0.8,
     textAlign: 'center',
-    marginTop: 1,
+    marginTop: 2,
   },
   minimalTitle: {
     fontSize: 16,
