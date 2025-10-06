@@ -1,9 +1,9 @@
-import { File, Directory } from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 import * as Location from 'expo-location';
 import { PhotoMetadata } from '../types/photo';
 
-const PHOTOS_DIR = `${Directory.DocumentDirectory}photos/`;
-const METADATA_FILE = `${Directory.DocumentDirectory}photo_metadata.json`;
+const PHOTOS_DIR = `${FileSystem.documentDirectory}photos/`;
+const METADATA_FILE = `${FileSystem.documentDirectory}photo_metadata.json`;
 
 export class PhotoStorage {
   private static instance: PhotoStorage;
@@ -22,9 +22,9 @@ export class PhotoStorage {
 
   private async loadPhotos(): Promise<void> {
     try {
-      const metadataFile = new File(METADATA_FILE);
-      if (await metadataFile.existsAsync()) {
-        const content = await metadataFile.readAsStringAsync();
+      const fileInfo = await FileSystem.getInfoAsync(METADATA_FILE);
+      if (fileInfo.exists) {
+        const content = await FileSystem.readAsStringAsync(METADATA_FILE);
         this.photos = JSON.parse(content);
       }
     } catch (error) {
@@ -35,8 +35,7 @@ export class PhotoStorage {
 
   private async savePhotos(): Promise<void> {
     try {
-      const metadataFile = new File(METADATA_FILE);
-      await metadataFile.writeAsStringAsync(JSON.stringify(this.photos));
+      await FileSystem.writeAsStringAsync(METADATA_FILE, JSON.stringify(this.photos));
     } catch (error) {
       console.error('Error saving photos:', error);
     }
@@ -51,10 +50,10 @@ export class PhotoStorage {
       
       // Ensure photos directory exists
       console.log('Checking photos directory...');
-      const photosDir = new Directory(PHOTOS_DIR);
-      if (!(await photosDir.existsAsync())) {
+      const dirInfo = await FileSystem.getInfoAsync(PHOTOS_DIR);
+      if (!dirInfo.exists) {
         console.log('Creating photos directory...');
-        await photosDir.makeAsync({ intermediates: true });
+        await FileSystem.makeDirectoryAsync(PHOTOS_DIR, { intermediates: true });
       }
 
       // Get current location
@@ -63,8 +62,7 @@ export class PhotoStorage {
       
       // Get file info
       console.log('Getting file info...');
-      const sourceFile = new File(uri);
-      const fileInfo = await sourceFile.getInfoAsync();
+      const fileInfo = await FileSystem.getInfoAsync(uri);
       console.log('File info:', fileInfo);
       
       // Get image dimensions
@@ -80,8 +78,10 @@ export class PhotoStorage {
 
       // Copy photo to app directory
       console.log('Copying photo...');
-      const destinationFile = new File(newUri);
-      await sourceFile.copyAsync(destinationFile);
+      await FileSystem.copyAsync({
+        from: uri,
+        to: newUri,
+      });
       console.log('Photo copied successfully');
 
       // Create metadata
@@ -187,9 +187,9 @@ export class PhotoStorage {
       if (!photo) return false;
 
       // Delete file
-      const photoFile = new File(photo.uri);
-      if (await photoFile.existsAsync()) {
-        await photoFile.deleteAsync();
+      const fileInfo = await FileSystem.getInfoAsync(photo.uri);
+      if (fileInfo.exists) {
+        await FileSystem.deleteAsync(photo.uri);
       }
 
       // Remove from array
