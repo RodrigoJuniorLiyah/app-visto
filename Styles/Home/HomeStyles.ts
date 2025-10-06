@@ -15,7 +15,7 @@ export const Header = styled.View`
   align-items: center;
   margin-bottom: 32px;
   padding: 24px 20px;
-  background: linear-gradient(135deg, ${lightTheme.colors.primary} 0%, ${lightTheme.colors.secondary} 100%);
+  background-color: ${lightTheme.colors.primary};
   border-radius: 20px;
   shadow-color: ${lightTheme.colors.primary};
   shadow-offset: 0px 8px;
@@ -79,7 +79,7 @@ export const FeatureIcon = styled.View<{ color?: string }>`
   justify-content: center;
   align-items: center;
   margin-right: 16px;
-  background: linear-gradient(135deg, ${props => props.color || lightTheme.colors.primary} 0%, ${props => props.color || lightTheme.colors.secondary} 100%);
+  background-color: ${props => props.color || lightTheme.colors.primary};
   shadow-color: ${props => props.color || lightTheme.colors.primary};
   shadow-offset: 0px 4px;
   shadow-opacity: 0.3;
@@ -105,7 +105,7 @@ export const FeatureDescription = styled.Text`
 `;
 
 export const InfoContainer = styled.View`
-  background: linear-gradient(135deg, ${lightTheme.colors.white} 0%, ${lightTheme.colors.gray100} 100%);
+  background-color: ${lightTheme.colors.white};
   border-radius: 16px;
   padding: 24px;
   shadow-color: ${lightTheme.colors.text};

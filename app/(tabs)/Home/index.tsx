@@ -1,6 +1,9 @@
+import { lightTheme } from '@/constants/theme';
 import {
+  CameraIcon,
   CheckIcon,
   ChevronIcon,
+  CompareIcon,
   Container,
   Content,
   FeatureCard,
@@ -11,23 +14,19 @@ import {
   FeaturesTitle,
   FeatureText,
   FeatureTitle,
+  GalleryIcon,
   Header,
   InfoContainer,
+  InfoIcon,
   InfoItem,
   InfoList,
   InfoText,
   InfoTitle,
   Subtitle,
   Title,
-  CameraIcon,
-  GalleryIcon,
-  InfoIcon,
-  CompareIcon,
 } from '@/Styles/Home/HomeStyles';
-import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import React from 'react';
-import { lightTheme } from '@/constants/theme';
 
 export default function HomeScreen() {
   const features = [
