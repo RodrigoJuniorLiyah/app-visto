@@ -1,6 +1,4 @@
 import { ModernHeader } from '@/components/ModernHeader';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
 import { Ionicons } from '@expo/vector-icons';
 import { Image } from 'expo-image';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -10,18 +8,219 @@ import {
   Alert,
   Dimensions,
   Modal,
-  ScrollView,
   Share,
-  StyleSheet,
   TextInput,
   TouchableOpacity,
-  View
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import styled from 'styled-components/native';
+import { lightTheme } from '../constants/theme';
 import { PhotoStorage } from '../services/PhotoStorage';
 import { PhotoMetadata } from '../types/photo';
 
 const { width, height } = Dimensions.get('window');
+
+// Styled Components
+const Container = styled.View`
+  flex: 1;
+  background-color: ${lightTheme.colors.background};
+`;
+
+const Content = styled.ScrollView`
+  flex: 1;
+  padding: 16px;
+`;
+
+const PhotoCard = styled.View`
+  background-color: ${lightTheme.colors.white};
+  border-radius: 16px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  shadow-color: ${lightTheme.colors.text};
+  shadow-offset: 0px 4px;
+  shadow-opacity: 0.1;
+  shadow-radius: 8px;
+  elevation: 4;
+  position: relative;
+`;
+
+const Photo = styled(Image)`
+  width: 100%;
+  height: 300px;
+`;
+
+const PhotoOverlay = styled.View`
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  flex-direction: row;
+  gap: 8px;
+`;
+
+const OverlayButton = styled.TouchableOpacity`
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 20px;
+  width: 40px;
+  height: 40px;
+  justify-content: center;
+  align-items: center;
+`;
+
+const InfoCard = styled.View`
+  background-color: ${lightTheme.colors.white};
+  border-radius: 16px;
+  margin-bottom: 20px;
+  padding: 20px;
+  shadow-color: ${lightTheme.colors.text};
+  shadow-offset: 0px 2px;
+  shadow-opacity: 0.1;
+  shadow-radius: 4px;
+  elevation: 3;
+`;
+
+const CardHeader = styled.View`
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 16px;
+  gap: 8px;
+`;
+
+const CardTitle = styled.Text`
+  font-size: 18px;
+  font-weight: 600;
+  color: ${lightTheme.colors.text};
+`;
+
+const InfoGrid = styled.View`
+  gap: 16px;
+`;
+
+const InfoItem = styled.View`
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 12px;
+`;
+
+const InfoContent = styled.View`
+  flex: 1;
+`;
+
+const InfoLabel = styled.Text`
+  font-size: 14px;
+  font-weight: 600;
+  color: ${lightTheme.colors.gray700};
+  margin-bottom: 4px;
+`;
+
+const InfoValue = styled.Text`
+  font-size: 16px;
+  color: ${lightTheme.colors.text};
+`;
+
+const CoordinatesText = styled.Text`
+  font-size: 12px;
+  color: ${lightTheme.colors.gray500};
+  margin-top: 4px;
+`;
+
+const ActionsCard = styled.View`
+  background-color: ${lightTheme.colors.white};
+  border-radius: 16px;
+  margin-bottom: 20px;
+  padding: 20px;
+  shadow-color: ${lightTheme.colors.text};
+  shadow-offset: 0px 2px;
+  shadow-opacity: 0.1;
+  shadow-radius: 4px;
+  elevation: 3;
+`;
+
+const ActionsGrid = styled.View`
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 12px;
+`;
+
+const ActionButton = styled.TouchableOpacity<{ variant: 'edit' | 'share' | 'delete' }>`
+  flex: 1;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 16px;
+  border-radius: 12px;
+  gap: 8px;
+  background-color: ${(props: { variant: 'edit' | 'share' | 'delete' }) => {
+    switch (props.variant) {
+      case 'edit': return lightTheme.colors.blue;
+      case 'share': return lightTheme.colors.success;
+      case 'delete': return lightTheme.colors.danger;
+      default: return lightTheme.colors.blue;
+    }
+  }};
+`;
+
+const ActionButtonText = styled.Text`
+  color: ${lightTheme.colors.white};
+  font-size: 14px;
+  font-weight: 600;
+`;
+
+const ModalOverlay = styled.View`
+  flex: 1;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+`;
+
+const ModalContent = styled.View`
+  background-color: ${lightTheme.colors.white};
+  border-radius: 16px;
+  padding: 24px;
+  width: ${width * 0.8}px;
+  max-width: 400px;
+`;
+
+const ModalTitle = styled.Text`
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  text-align: center;
+  color: ${lightTheme.colors.text};
+`;
+
+const TitleInput = styled(TextInput)`
+  border-width: 1px;
+  border-color: ${lightTheme.colors.gray200};
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 16px;
+  margin-bottom: 20px;
+  background-color: ${lightTheme.colors.background};
+`;
+
+const ModalButtons = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 12px;
+`;
+
+const ModalButton = styled.TouchableOpacity<{ variant: 'cancel' | 'save' }>`
+  flex: 1;
+  padding: 16px;
+  border-radius: 12px;
+  align-items: center;
+  background-color: ${(props: { variant: 'cancel' | 'save' }) => 
+    props.variant === 'cancel' ? lightTheme.colors.gray200 : lightTheme.colors.blue
+  };
+`;
+
+const ModalButtonText = styled.Text<{ variant: 'cancel' | 'save' }>`
+  color: ${(props: { variant: 'cancel' | 'save' }) => 
+    props.variant === 'cancel' ? lightTheme.colors.text : lightTheme.colors.white
+  };
+  font-weight: 600;
+  font-size: 16px;
+`;
 
 export default function PhotoDetailScreen() {
   const { photoId } = useLocalSearchParams<{ photoId: string }>();
@@ -110,9 +309,9 @@ export default function PhotoDetailScreen() {
 
   if (!photo) {
     return (
-      <ThemedView style={styles.container}>
-        <ThemedText>Loading...</ThemedText>
-      </ThemedView>
+      <Container>
+        <InfoValue>Loading...</InfoValue>
+      </Container>
     );
   }
 
@@ -129,289 +328,165 @@ export default function PhotoDetailScreen() {
           onPress: handleSharePhoto
         }}
       />
-      <ThemedView style={styles.container}>
-
-      <ScrollView style={styles.content}>
-        {/* Photo */}
-        <View style={styles.photoContainer}>
-          <Image
-            source={{ uri: photo.uri }}
-            style={styles.photo}
-            contentFit="contain"
-          />
-        </View>
-
-        {/* Photo Info */}
-        <View style={styles.infoContainer}>
-          <View style={styles.infoSection}>
-            <ThemedText style={styles.infoLabel}>Title</ThemedText>
-            <ThemedText style={styles.infoValue}>
-              {photo.title || 'Untitled'}
-            </ThemedText>
-          </View>
-
-          <View style={styles.infoSection}>
-            <ThemedText style={styles.infoLabel}>Date & Time</ThemedText>
-            <ThemedText style={styles.infoValue}>
-              {photo.date} at {photo.time}
-            </ThemedText>
-          </View>
-
-          {photo.location && (
-            <View style={styles.infoSection}>
-              <ThemedText style={styles.infoLabel}>Location</ThemedText>
-              <ThemedText style={styles.infoValue}>
-                {photo.location.address || 
-                  `${photo.location.latitude.toFixed(6)}, ${photo.location.longitude.toFixed(6)}`}
-              </ThemedText>
-              {photo.location.address && (
-                <ThemedText style={styles.coordinatesText}>
-                  📍 {photo.location.latitude.toFixed(6)}, {photo.location.longitude.toFixed(6)}
-                </ThemedText>
-              )}
-            </View>
-          )}
-
-          <View style={styles.infoSection}>
-            <ThemedText style={styles.infoLabel}>Dimensions</ThemedText>
-            <ThemedText style={styles.infoValue}>
-              {photo.width} × {photo.height}
-            </ThemedText>
-          </View>
-
-          <View style={styles.infoSection}>
-            <ThemedText style={styles.infoLabel}>File Size</ThemedText>
-            <ThemedText style={styles.infoValue}>
-              {(photo.size / 1024 / 1024).toFixed(2)} MB
-            </ThemedText>
-          </View>
-        </View>
-
-        {/* Actions */}
-        <View style={styles.actionsContainer}>
-          <TouchableOpacity
-            style={[styles.actionButton, styles.editButton]}
-            onPress={() => setShowEditModal(true)}
-          >
-            <Ionicons name="create" size={20} color="white" />
-            <ThemedText style={styles.actionButtonText}>Edit Title</ThemedText>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.actionButton, styles.shareButton]}
-            onPress={handleSharePhoto}
-          >
-            <Ionicons name="share" size={20} color="white" />
-            <ThemedText style={styles.actionButtonText}>Share</ThemedText>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.actionButton, styles.deleteButton]}
-            onPress={handleDeletePhoto}
-          >
-            <Ionicons name="trash" size={20} color="white" />
-            <ThemedText style={styles.actionButtonText}>Delete</ThemedText>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-
-      {/* Edit Modal */}
-      <Modal
-        visible={showEditModal}
-        transparent
-        animationType="slide"
-        onRequestClose={() => setShowEditModal(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            <ThemedText style={styles.modalTitle}>Edit Photo Title</ThemedText>
-            
-            <TextInput
-              style={styles.titleInput}
-              placeholder="Enter photo title"
-              value={editTitle}
-              onChangeText={setEditTitle}
-              autoFocus
+      <Container>
+        <Content showsVerticalScrollIndicator={false}>
+          {/* Photo Card */}
+          <PhotoCard>
+            <Photo
+              source={{ uri: photo.uri }}
+              contentFit="cover"
             />
+            <PhotoOverlay>
+              <OverlayButton onPress={() => setShowEditModal(true)}>
+                <Ionicons name="create" size={20} color="white" />
+              </OverlayButton>
+              <OverlayButton onPress={handleSharePhoto}>
+                <Ionicons name="share" size={20} color="white" />
+              </OverlayButton>
+            </PhotoOverlay>
+          </PhotoCard>
 
-            <View style={styles.modalButtons}>
-              <TouchableOpacity
-                style={[styles.modalButton, styles.cancelButton]}
-                onPress={() => setShowEditModal(false)}
+          {/* Photo Info Card */}
+          <InfoCard>
+            <CardHeader>
+              <Ionicons name="information-circle" size={24} color="#007AFF" />
+              <CardTitle>Photo Information</CardTitle>
+            </CardHeader>
+            
+            <InfoGrid>
+              <InfoItem>
+                <Ionicons name="text" size={16} color="#666" />
+                <InfoContent>
+                  <InfoLabel>Title</InfoLabel>
+                  <InfoValue>
+                    {photo.title || 'Untitled'}
+                  </InfoValue>
+                </InfoContent>
+              </InfoItem>
+
+              <InfoItem>
+                <Ionicons name="time" size={16} color="#666" />
+                <InfoContent>
+                  <InfoLabel>Date & Time</InfoLabel>
+                  <InfoValue>
+                    {photo.date} at {photo.time}
+                  </InfoValue>
+                </InfoContent>
+              </InfoItem>
+
+              {photo.location && (
+                <InfoItem>
+                  <Ionicons name="location" size={16} color="#666" />
+                  <InfoContent>
+                    <InfoLabel>Location</InfoLabel>
+                    <InfoValue>
+                      {photo.location.address || 
+                       `${photo.location.latitude.toFixed(6)}, ${photo.location.longitude.toFixed(6)}`}
+                    </InfoValue>
+                    {photo.location.address && (
+                      <CoordinatesText>
+                        📍 {photo.location.latitude.toFixed(6)}, {photo.location.longitude.toFixed(6)}
+                      </CoordinatesText>
+                    )}
+                  </InfoContent>
+                </InfoItem>
+              )}
+
+              <InfoItem>
+                <Ionicons name="resize" size={16} color="#666" />
+                <InfoContent>
+                  <InfoLabel>Dimensions</InfoLabel>
+                  <InfoValue>
+                    {photo.width} × {photo.height}
+                  </InfoValue>
+                </InfoContent>
+              </InfoItem>
+
+              <InfoItem>
+                <Ionicons name="folder" size={16} color="#666" />
+                <InfoContent>
+                  <InfoLabel>File Size</InfoLabel>
+                  <InfoValue>
+                    {(photo.size / 1024 / 1024).toFixed(2)} MB
+                  </InfoValue>
+                </InfoContent>
+              </InfoItem>
+            </InfoGrid>
+          </InfoCard>
+
+          {/* Actions Card */}
+          <ActionsCard>
+            <CardHeader>
+              <Ionicons name="settings" size={24} color="#007AFF" />
+              <CardTitle>Actions</CardTitle>
+            </CardHeader>
+            
+            <ActionsGrid>
+              <ActionButton
+                variant="edit"
+                onPress={() => setShowEditModal(true)}
               >
-                <ThemedText style={styles.cancelButtonText}>Cancel</ThemedText>
-              </TouchableOpacity>
+                <Ionicons name="create" size={20} color="white" />
+                <ActionButtonText>Edit Title</ActionButtonText>
+              </ActionButton>
               
-              <TouchableOpacity
-                style={[styles.modalButton, styles.saveButton]}
-                onPress={handleEditTitle}
+              <ActionButton
+                variant="share"
+                onPress={handleSharePhoto}
               >
-                <ThemedText style={styles.saveButtonText}>Save</ThemedText>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
-      </ThemedView>
+                <Ionicons name="share" size={20} color="white" />
+                <ActionButtonText>Share</ActionButtonText>
+              </ActionButton>
+              
+              <ActionButton
+                variant="delete"
+                onPress={handleDeletePhoto}
+              >
+                <Ionicons name="trash" size={20} color="white" />
+                <ActionButtonText>Delete</ActionButtonText>
+              </ActionButton>
+            </ActionsGrid>
+          </ActionsCard>
+        </Content>
+
+        {/* Edit Modal */}
+        <Modal
+          visible={showEditModal}
+          transparent
+          animationType="slide"
+          onRequestClose={() => setShowEditModal(false)}
+        >
+          <ModalOverlay>
+            <ModalContent>
+              <ModalTitle>Edit Photo Title</ModalTitle>
+              
+              <TitleInput
+                placeholder="Enter photo title"
+                value={editTitle}
+                onChangeText={setEditTitle}
+                autoFocus
+              />
+
+              <ModalButtons>
+                <ModalButton
+                  variant="cancel"
+                  onPress={() => setShowEditModal(false)}
+                >
+                  <ModalButtonText variant="cancel">Cancel</ModalButtonText>
+                </ModalButton>
+                
+                <ModalButton
+                  variant="save"
+                  onPress={handleEditTitle}
+                >
+                  <ModalButtonText variant="save">Save</ModalButtonText>
+                </ModalButton>
+              </ModalButtons>
+            </ModalContent>
+          </ModalOverlay>
+        </Modal>
+      </Container>
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f5f5f5',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    backgroundColor: 'white',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
-  },
-  headerButton: {
-    padding: 8,
-  },
-  headerTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-  },
-  headerActions: {
-    flexDirection: 'row',
-    gap: 10,
-  },
-  content: {
-    flex: 1,
-  },
-  photoContainer: {
-    backgroundColor: 'white',
-    margin: 20,
-    borderRadius: 10,
-    overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  photo: {
-    width: '100%',
-    height: height * 0.4,
-  },
-  infoContainer: {
-    backgroundColor: 'white',
-    margin: 20,
-    marginTop: 0,
-    borderRadius: 10,
-    padding: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  infoSection: {
-    marginBottom: 15,
-  },
-  infoLabel: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#666',
-    marginBottom: 5,
-  },
-  infoValue: {
-    fontSize: 16,
-    color: '#333',
-  },
-  coordinatesText: {
-    fontSize: 12,
-    color: '#999',
-    marginTop: 5,
-  },
-  actionsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingHorizontal: 20,
-    paddingBottom: 20,
-    gap: 10,
-  },
-  actionButton: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    gap: 8,
-  },
-  editButton: {
-    backgroundColor: '#007AFF',
-  },
-  shareButton: {
-    backgroundColor: '#34C759',
-  },
-  deleteButton: {
-    backgroundColor: '#FF3B30',
-  },
-  actionButtonText: {
-    color: 'white',
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalContent: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 20,
-    width: width * 0.8,
-    maxWidth: 400,
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  titleInput: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
-    marginBottom: 20,
-  },
-  modalButtons: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  modalButton: {
-    flex: 1,
-    paddingVertical: 12,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginHorizontal: 5,
-  },
-  cancelButton: {
-    backgroundColor: '#f0f0f0',
-  },
-  saveButton: {
-    backgroundColor: '#007AFF',
-  },
-  cancelButtonText: {
-    color: '#333',
-    fontWeight: '600',
-  },
-  saveButtonText: {
-    color: 'white',
-    fontWeight: '600',
-  },
-});
