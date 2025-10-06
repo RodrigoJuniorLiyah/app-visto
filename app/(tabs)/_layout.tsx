@@ -26,6 +26,24 @@ export default function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="Gallery/index"
+        options={{
+          title: 'Gallery',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="images" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="Camera/index"
+        options={{
+          title: 'Camera',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="camera" size={size} color={color} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }
