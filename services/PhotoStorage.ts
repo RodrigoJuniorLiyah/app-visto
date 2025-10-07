@@ -1,6 +1,8 @@
 import * as FileSystem from 'expo-file-system/legacy';
+import * as ImageManipulator from 'expo-image-manipulator';
 import * as Location from 'expo-location';
 import { PhotoMetadata } from '../types/photo';
+import { ImageCache } from './ImageCache';
 
 const PHOTOS_DIR = `${FileSystem.documentDirectory}photos/`;
 const METADATA_FILE = `${FileSystem.documentDirectory}photo_metadata.json`;
@@ -8,9 +10,11 @@ const METADATA_FILE = `${FileSystem.documentDirectory}photo_metadata.json`;
 export class PhotoStorage {
   private static instance: PhotoStorage;
   private photos: PhotoMetadata[] = [];
+  private imageCache: ImageCache;
 
   private constructor() {
-    this.loadPhotos();
+    this.imageCache = ImageCache.getInstance();
+    // loadPhotos() será chamado quando necessário
   }
 
   public static getInstance(): PhotoStorage {
@@ -76,13 +80,30 @@ export class PhotoStorage {
       const newUri = `${PHOTOS_DIR}${filename}`;
       console.log('New URI:', newUri);
 
-      // Copy photo to app directory
-      console.log('Copying photo...');
-      await FileSystem.copyAsync({
-        from: uri,
+      // Compress and save photo
+      console.log('Compressing and saving photo...');
+      const compressedResult = await ImageManipulator.manipulateAsync(
+        uri,
+        [
+          {
+            resize: {
+              width: 1920, // Máximo 1920px de largura
+              height: 1920, // Máximo 1920px de altura
+            },
+          },
+        ],
+        {
+          compress: 0.85, // 85% de qualidade
+          format: ImageManipulator.SaveFormat.JPEG,
+        }
+      );
+
+      // Mover arquivo comprimido para o diretório de fotos
+      await FileSystem.moveAsync({
+        from: compressedResult.uri,
         to: newUri,
       });
-      console.log('Photo copied successfully');
+      console.log('Photo compressed and saved successfully');
 
       // Create metadata
       const photo: PhotoMetadata = {
@@ -103,6 +124,16 @@ export class PhotoStorage {
       // Add to photos array
       this.photos.unshift(photo); // Add to beginning for newest first
       await this.savePhotos();
+      
+      // Cache the image for better performance
+      try {
+        console.log('🔄 Iniciando cache da foto:', newUri);
+        await this.imageCache.cacheImage(newUri);
+        console.log('✅ Photo cached successfully');
+      } catch (cacheError) {
+        console.warn('❌ Failed to cache photo:', cacheError);
+      }
+      
       console.log('Photo saved successfully');
 
       return photo;
@@ -171,6 +202,10 @@ export class PhotoStorage {
       console.error('Error getting image dimensions:', error);
       return { width: 1920, height: 1080 }; // Default dimensions
     }
+  }
+
+  public async loadPhotosFromStorage(): Promise<void> {
+    await this.loadPhotos();
   }
 
   public getAllPhotos(): PhotoMetadata[] {

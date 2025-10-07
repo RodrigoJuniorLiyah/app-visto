@@ -1,5 +1,8 @@
+import { CacheManager } from '@/components/CacheManager';
 import { ModernHeader } from '@/components/ModernHeader';
 import { useTheme } from '@/contexts/ThemeContext';
+import { CacheDebugger } from '@/services/CacheDebugger';
+import { PhotoStorage } from '@/services/PhotoStorage';
 import {
   CameraIcon,
   CheckIcon,
@@ -24,11 +27,27 @@ import {
   InfoTitle,
   SafeContainer
 } from '@/Styles/Home/HomeStyles';
+import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 export default function HomeScreen() {
   const { theme } = useTheme();
+  
+  // Garantir que o PhotoStorage seja inicializado
+  useEffect(() => {
+    const initializeStorage = async () => {
+      try {
+        const photoStorage = PhotoStorage.getInstance();
+        await photoStorage.loadPhotosFromStorage();
+        console.log('✅ PhotoStorage inicializado na Home');
+      } catch (error) {
+        console.error('❌ Erro ao inicializar PhotoStorage:', error);
+      }
+    };
+    
+    initializeStorage();
+  }, []);
   
   const features = [
     {
@@ -129,6 +148,27 @@ export default function HomeScreen() {
             </InfoItem>
           </InfoList>
         </InfoContainer>
+
+        <CacheManager />
+        
+        <FeatureCard
+          color={theme.colors.alert}
+          onPress={async () => {
+            console.log('🔍 Iniciando debug do cache...');
+            await CacheDebugger.debugCache();
+          }}
+        >
+          <FeatureContent>
+            <FeatureIcon color={theme.colors.alert}>
+              <Ionicons name="bug" size={24} color="white" />
+            </FeatureIcon>
+            <FeatureText>
+              <FeatureTitle>Debug Cache</FeatureTitle>
+              <FeatureDescription>Verificar status do cache</FeatureDescription>
+            </FeatureText>
+            <ChevronIcon />
+          </FeatureContent>
+        </FeatureCard>
         </Content>
       </Container>
     </SafeContainer>

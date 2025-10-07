@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
-import { Image } from 'expo-image';
 import { Dimensions, FlatList, TextInput } from 'react-native';
 import styled from 'styled-components/native';
+import { ImageWithLoading } from '../../components/ImageWithLoading';
 
 const { width } = Dimensions.get('window');
 const ITEM_SIZE = (width - 30) / 2; // 2 columns with padding
@@ -105,7 +105,7 @@ export const PhotoContainer = styled.TouchableOpacity<{ isSelected?: boolean }>`
   background-color: ${(props: any) => props.theme.colors.gray200};
 `;
 
-export const Photo = styled(Image)`
+export const Photo = styled(ImageWithLoading)`
   width: 100%;
   height: 100%;
 `;

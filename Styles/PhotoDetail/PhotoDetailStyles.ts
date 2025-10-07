@@ -1,6 +1,6 @@
-import { Image } from 'expo-image';
 import { Dimensions, TextInput } from 'react-native';
 import styled from 'styled-components/native';
+import { ImageWithLoading } from '../../components/ImageWithLoading';
 
 const { width, height } = Dimensions.get('window');
 
@@ -33,7 +33,7 @@ export const PhotoCard = styled.View`
   background-color: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? '#2A2A2A' : props.theme.colors.white};
 `;
 
-export const Photo = styled(Image)`
+export const Photo = styled(ImageWithLoading)`
   width: 100%;
   height: 300px;
 `;

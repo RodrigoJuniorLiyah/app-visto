@@ -3634,6 +3634,13 @@ expo-image-loader@~6.0.0:
   resolved "https://registry.npmjs.org/expo-image-loader/-/expo-image-loader-6.0.0.tgz"
   integrity sha512-nKs/xnOGw6ACb4g26xceBD57FKLFkSwEUTDXEDF3Gtcu3MqF3ZIYd3YM+sSb1/z9AKV1dYT7rMSGVNgsveXLIQ==
 
+expo-image-manipulator@^14.0.7:
+  version "14.0.7"
+  resolved "https://registry.yarnpkg.com/expo-image-manipulator/-/expo-image-manipulator-14.0.7.tgz#e0798d849bcb4e58b570cb74159fd1ffb56edb5e"
+  integrity sha512-NMHssudagLTAT6ZQ2upnJYT+gVLAt5vC+iD+TBIdV3ZS44yhrq+p2gCrYahDvtVywfmTI5WsbH+Sh1BXbmJUQw==
+  dependencies:
+    expo-image-loader "~6.0.0"
+
 expo-image-picker@~17.0.8:
   version "17.0.8"
   resolved "https://registry.npmjs.org/expo-image-picker/-/expo-image-picker-17.0.8.tgz"
@@ -6008,9 +6015,9 @@ react-native-is-edge-to-edge@^1.1.6, react-native-is-edge-to-edge@^1.2.1:
   resolved "https://registry.npmjs.org/react-native-is-edge-to-edge/-/react-native-is-edge-to-edge-1.2.1.tgz"
   integrity sha512-FLbPWl/MyYQWz+KwqOZsSyj2JmLKglHatd3xLZWskXOpRaio4LfEDEz8E/A6uD8QoTHW6Aobw1jbEwK7KMgR7Q==
 
-react-native-reanimated@~4.1.1:
+react-native-reanimated@^4.1.2:
   version "4.1.2"
-  resolved "https://registry.npmjs.org/react-native-reanimated/-/react-native-reanimated-4.1.2.tgz"
+  resolved "https://registry.yarnpkg.com/react-native-reanimated/-/react-native-reanimated-4.1.2.tgz#d2ab20c575740b29002d115617d6621c83e81c89"
   integrity sha512-qzmQiFrvjm62pRBcj97QI9Xckc3EjgHQoY1F2yjktd0kpjhoyePeuTEXjYRCAVIy7IV/1cfeSup34+zFThFoHQ==
   dependencies:
     react-native-is-edge-to-edge "^1.2.1"

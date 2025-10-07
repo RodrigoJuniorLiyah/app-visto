@@ -27,13 +27,13 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { router, useFocusEffect } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
-import {
-  Alert,
-  RefreshControl
-} from 'react-native';
+import { Alert, Dimensions, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { PhotoStorage } from '../../../services/PhotoStorage';
 import { PhotoMetadata } from '../../../types/photo';
+
+const { width } = Dimensions.get('window');
+const ITEM_SIZE = (width - 30) / 2; // 2 columns with padding
 
 export default function GalleryScreen() {
   const { theme } = useTheme();
@@ -43,6 +43,7 @@ export default function GalleryScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const [selectedPhotos, setSelectedPhotos] = useState<Set<string>>(new Set());
   const [isSelectionMode, setIsSelectionMode] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const photoStorage = PhotoStorage.getInstance();
 
   useEffect(() => {
@@ -61,12 +62,22 @@ export default function GalleryScreen() {
 
   const loadPhotos = async () => {
     try {
-      // Force reload photos from storage
+      console.log('🔄 Carregando fotos da galeria...');
+      setIsLoading(true);
+      
+      // Primeiro, carregar fotos do armazenamento
+      await photoStorage.loadPhotosFromStorage();
+      
+      // Depois, obter todas as fotos
       const allPhotos = photoStorage.getAllPhotos();
+      console.log('📸 Fotos carregadas:', allPhotos.length);
+      
       setPhotos(allPhotos);
+      setIsLoading(false);
 
     } catch (error) {
-      console.error('Error loading photos:', error);
+      console.error('❌ Error loading photos:', error);
+      setIsLoading(false);
       Alert.alert('Erro', 'Falha ao carregar fotos');
     }
   };
@@ -200,18 +211,32 @@ export default function GalleryScreen() {
     );
   };
 
-  const renderEmptyState = () => (
-    <EmptyState>
-      <Ionicons name="camera-outline" size={80} color={theme.colors.gray500} />
-      <EmptyTitle>Ainda Não Há Fotos</EmptyTitle>
-      <EmptySubtitle>
-        Tire sua primeira foto para começar!
-      </EmptySubtitle>
-      <TakePhotoButton onPress={() => router.push('/(tabs)/Camera')}>
-        <TakePhotoButtonText>Tirar Foto</TakePhotoButtonText>
-      </TakePhotoButton>
-    </EmptyState>
-  );
+  const renderEmptyState = () => {
+    if (isLoading) {
+      return (
+        <EmptyState>
+          <Ionicons name="hourglass-outline" size={80} color={theme.colors.gray500} />
+          <EmptyTitle>Carregando Fotos...</EmptyTitle>
+          <EmptySubtitle>
+            Aguarde enquanto carregamos suas fotos
+          </EmptySubtitle>
+        </EmptyState>
+      );
+    }
+
+    return (
+      <EmptyState>
+        <Ionicons name="camera-outline" size={80} color={theme.colors.gray500} />
+        <EmptyTitle>Ainda Não Há Fotos</EmptyTitle>
+        <EmptySubtitle>
+          Tire sua primeira foto para começar!
+        </EmptySubtitle>
+        <TakePhotoButton onPress={() => router.push('/(tabs)/Camera')}>
+          <TakePhotoButtonText>Tirar Foto</TakePhotoButtonText>
+        </TakePhotoButton>
+      </EmptyState>
+    );
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }} edges={['top']}>
@@ -271,6 +296,15 @@ export default function GalleryScreen() {
           }
           ListEmptyComponent={renderEmptyState}
           showsVerticalScrollIndicator={false}
+          initialNumToRender={10}
+          maxToRenderPerBatch={5}
+          windowSize={10}
+          removeClippedSubviews={true}
+          getItemLayout={(data: any, index: number) => ({
+            length: ITEM_SIZE,
+            offset: ITEM_SIZE * Math.floor(index / 2),
+            index,
+          })}
         />
       </Container>
     </SafeAreaView>
