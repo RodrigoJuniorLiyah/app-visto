@@ -20,6 +20,15 @@ interface ModernHeaderProps {
 
 // Styled Components
 const HeaderContainer = styled.View<{ variant: string }>`
+  border-bottom-width: ${(props: any) => props.variant === 'minimal' ? '0.5px' : '0px'};
+  border-bottom-color: ${(props: any) => props.theme.colors.gray200};
+
+  shadow-color: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? '#000000' : '#000'};
+  shadow-offset: 0px 1px;
+  shadow-opacity: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? 0.3 : 0.1};
+  shadow-radius: 2px;
+  elevation: 2;
+
   background-color: ${(props: any) => {
     switch (props.variant) {
       case 'gradient': return 'transparent';
@@ -27,18 +36,12 @@ const HeaderContainer = styled.View<{ variant: string }>`
       default: return props.theme.colors.background === '#1A1A1A' ? '#2A2A2A' : props.theme.colors.primary;
     }
   }};
-  border-bottom-width: ${(props: any) => props.variant === 'minimal' ? '0.5px' : '0px'};
-  border-bottom-color: ${(props: any) => props.theme.colors.gray200};
-  shadow-color: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? '#000000' : '#000'};
-  shadow-offset: 0px 1px;
-  shadow-opacity: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? 0.3 : 0.1};
-  shadow-radius: 2px;
-  elevation: 2;
 `;
 
 const Content = styled.View`
   flex-direction: row;
   align-items: center;
+
   padding-horizontal: 16px;
   padding-vertical: 20px;
   min-height: 80px;
@@ -46,72 +49,86 @@ const Content = styled.View`
 
 const LeftSection = styled.View`
   width: 40px;
+
   align-items: flex-start;
 `;
 
 const CenterSection = styled.View`
   flex: 1;
+
   align-items: center;
   padding-horizontal: 12px;
 `;
 
 const RightSection = styled.View`
   width: 40px;
-  align-items: flex-end;
+
   flex-direction: row;
+  align-items: flex-end;
   gap: 8px;
 `;
 
 const BackButton = styled.TouchableOpacity<{ variant: string }>`
   width: 32px;
   height: 32px;
+
+  justify-content: center;
+  align-items: center;
+
   border-radius: 16px;
+
   background-color: ${(props: any) => 
     props.variant === 'minimal' 
       ? props.theme.colors.gray100 
       : 'rgba(255, 255, 255, 0.15)'
   };
-  justify-content: center;
-  align-items: center;
 `;
 
 const RightButton = styled.TouchableOpacity<{ variant: string }>`
   width: 32px;
   height: 32px;
+
+  justify-content: center;
+  align-items: center;
+
   border-radius: 16px;
+
   background-color: ${(props: any) => 
     props.variant === 'minimal' 
       ? props.theme.colors.gray100 
       : 'rgba(255, 255, 255, 0.15)'
   };
-  justify-content: center;
-  align-items: center;
 `;
 
 const Title = styled.Text<{ variant: string }>`
   font-size: 18px;
   font-weight: 700;
+
+  text-align: center;
+  letter-spacing: 0.5px;
+
   color: ${(props: any) => 
     props.variant === 'minimal' 
       ? props.theme.colors.text 
       : props.theme.colors.white
   };
-  text-align: center;
-  letter-spacing: 0.5px;
 `;
 
 const Subtitle = styled.Text<{ variant: string }>`
   font-size: 12px;
+  font-weight: 500;
+
+  text-align: center;
+  margin-top: 4px;
+  letter-spacing: 0.3px;
+
+  opacity: ${(props: any) => props.variant === 'minimal' ? 1 : 0.85};
+
   color: ${(props: any) => 
     props.variant === 'minimal' 
       ? props.theme.colors.gray700 
       : props.theme.colors.white
   };
-  opacity: ${(props: any) => props.variant === 'minimal' ? 1 : 0.85};
-  text-align: center;
-  margin-top: 4px;
-  font-weight: 500;
-  letter-spacing: 0.3px;
 `;
 
 export function ModernHeader({
@@ -191,4 +208,3 @@ export function ModernHeader({
     </HeaderContainer>
   );
 }
-

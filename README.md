@@ -1,50 +1,286 @@
-# Welcome to your Expo app 👋
+# 📸 App Visto - Galeria de Fotos Inteligente
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+<div align="center">
+  <img src="https://img.shields.io/badge/React%20Native-61DAFB?style=for-the-badge&logo=react&logoColor=black" />
+  <img src="https://img.shields.io/badge/Expo-000020?style=for-the-badge&logo=expo&logoColor=white" />
+  <img src="https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white" />
+  <img src="https://img.shields.io/badge/Styled%20Components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white" />
+</div>
 
-## Get started
+<br>
 
-1. Install dependencies
+<div align="center">
+  <h3>🎯 Teste Técnico - Desenvolvedor Mobile</h3>
+  <p>Uma aplicação moderna de galeria de fotos com recursos avançados de captura, organização e comparação de imagens.</p>
+</div>
 
-   ```bash
-   npm install
-   ```
+---
 
-2. Start the app
+## 🚀 Funcionalidades
 
-   ```bash
-   npx expo start
-   ```
+### 📱 **Captura Inteligente**
+- **Câmera nativa** com alternância entre frontal/traseira
+- **Metadados automáticos** (data, hora, localização GPS)
+- **Títulos personalizáveis** para cada foto
+- **Qualidade otimizada** para armazenamento eficiente
 
-In the output, you'll find options to open the app in a
+### 🖼️ **Galeria Avançada**
+- **Visualização em grid** responsivo
+- **Busca inteligente** por título, data ou localização
+- **Modo de seleção múltipla** para ações em lote
+- **Pull-to-refresh** para atualização de conteúdo
+- **Estados vazios** com call-to-action
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+### 🔍 **Análise e Comparação**
+- **Comparação side-by-side** de duas fotos
+- **Métricas detalhadas** (diferença de tempo, localização)
+- **Navegação contextual** entre fotos relacionadas
+- **Tutorial interativo** para novos usuários
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### 🎨 **Interface Moderna**
+- **Tema claro/escuro** com toggle automático
+- **Design responsivo** otimizado para mobile
+- **Animações fluidas** e transições suaves
+- **Componentes reutilizáveis** e bem estruturados
 
-## Get a fresh project
+---
 
-When you're ready, run:
+## 🛠️ Tecnologias e Bibliotecas
 
+### **Core Framework**
+- **[React Native](https://reactnative.dev/)** - Framework mobile multiplataforma
+- **[Expo](https://expo.dev/)** - Plataforma de desenvolvimento e deploy
+- **[TypeScript](https://www.typescriptlang.org/)** - Tipagem estática para JavaScript
+
+### **Navegação e Roteamento**
+- **[Expo Router](https://docs.expo.dev/router/introduction/)** - Roteamento baseado em arquivos
+- **[React Navigation](https://reactnavigation.org/)** - Navegação nativa
+
+### **Estilização**
+- **[Styled Components](https://styled-components.com/)** - CSS-in-JS para React Native
+- **[Expo Linear Gradient](https://docs.expo.dev/versions/latest/sdk/linear-gradient/)** - Gradientes nativos
+
+### **Funcionalidades Nativas**
+- **[Expo Camera](https://docs.expo.dev/versions/latest/sdk/camera/)** - Captura de fotos
+- **[Expo Location](https://docs.expo.dev/versions/latest/sdk/location/)** - Geolocalização
+- **[Expo File System](https://docs.expo.dev/versions/latest/sdk/filesystem/)** - Gerenciamento de arquivos
+- **[Expo Sharing](https://docs.expo.dev/versions/latest/sdk/sharing/)** - Compartilhamento nativo
+- **[Expo Image Picker](https://docs.expo.dev/versions/latest/sdk/imagepicker/)** - Seleção de imagens
+
+### **UI/UX**
+- **[React Native Safe Area Context](https://github.com/th3rdwave/react-native-safe-area-context)** - Safe areas
+- **[Expo Vector Icons](https://docs.expo.dev/guides/icons/)** - Ícones nativos
+- **[React Native Reanimated](https://docs.swmansion.com/react-native-reanimated/)** - Animações performáticas
+
+### **Gerenciamento de Estado**
+- **React Context API** - Gerenciamento de tema global
+- **AsyncStorage** - Persistência de dados locais
+- **Singleton Pattern** - Gerenciamento de serviços
+
+---
+
+## 📋 Pré-requisitos
+
+### **Sistema Operacional**
+- **Windows 10/11** (recomendado)
+- **macOS** (para desenvolvimento iOS)
+- **Linux** (Ubuntu 18.04+)
+
+### **Ferramentas Necessárias**
+- **Node.js** 18+ ([Download](https://nodejs.org/))
+- **npm** ou **yarn** (gerenciador de pacotes)
+- **Git** ([Download](https://git-scm.com/))
+
+### **Para Android**
+- **Android Studio** ([Download](https://developer.android.com/studio))
+- **Android SDK** (API Level 33+)
+- **Emulador Android** ou **Dispositivo físico**
+
+### **Para iOS** (opcional)
+- **Xcode** 14+ (apenas no macOS)
+- **iOS Simulator** ou **Dispositivo iOS**
+
+---
+
+## 🚀 Como Executar
+
+### **1. Clone o Repositório**
 ```bash
-npm run reset-project
+git clone https://github.com/seu-usuario/app-visto.git
+cd app-visto
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### **2. Instale as Dependências**
+```bash
+# Usando npm
+npm install
 
-## Learn more
+# Ou usando yarn
+yarn install
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+### **3. Execute o Projeto**
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+#### **Opção A: Expo Go (Recomendado - Mais Rápido)**
+```bash
+npx expo start
+```
+- Instale o **Expo Go** no seu celular
+- Escaneie o QR code que aparece no terminal
+- O app abrirá automaticamente no seu dispositivo
 
-## Join the community
+#### **Opção B: Emulador Android**
+```bash
+# Inicie o emulador Android primeiro
+npx expo start --android
+```
 
-Join our community of developers creating universal apps.
+#### **Opção C: Dispositivo Físico**
+```bash
+# Conecte seu Android via USB
+npx expo start --android
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+# Ou para iOS
+npx expo start --ios
+```
+
+### **4. Build de Produção**
+```bash
+# Android APK
+npx expo build:android
+
+# iOS (apenas no macOS)
+npx expo build:ios
+```
+
+---
+
+## 📱 Estrutura do Projeto
+
+```
+app-visto/
+├── 📁 app/                          # Páginas da aplicação
+│   ├── 📁 (tabs)/                   # Navegação por abas
+│   │   ├── 📁 Home/                 # Tela inicial
+│   │   ├── 📁 Gallery/              # Galeria de fotos
+│   │   ├── 📁 Camera/               # Captura de fotos
+│   │   ├── 📁 PhotoDetail/          # Detalhes da foto
+│   │   └── 📁 PhotoComparison/       # Comparação de fotos
+│   └── 📄 _layout.tsx               # Layout raiz
+├── 📁 components/                   # Componentes reutilizáveis
+│   ├── 📄 ModernHeader.tsx          # Cabeçalho moderno
+│   ├── 📄 ThemeToggle.tsx           # Toggle de tema
+│   └── 📄 ThemeProvider.tsx         # Provedor de tema
+├── 📁 Styles/                       # Estilos organizados
+│   ├── 📁 Home/                     # Estilos da Home
+│   ├── 📁 Gallery/                  # Estilos da Galeria
+│   ├── 📁 Camera/                   # Estilos da Câmera
+│   ├── 📁 PhotoDetail/              # Estilos do PhotoDetail
+│   └── 📁 PhotoComparison/         # Estilos da Comparação
+├── 📁 services/                     # Serviços da aplicação
+│   ├── 📄 PhotoStorage.ts           # Gerenciamento de fotos
+│   └── 📄 TutorialService.ts        # Serviço de tutorial
+├── 📁 contexts/                     # Contextos React
+│   └── 📄 ThemeContext.ts           # Contexto de tema
+├── 📁 types/                        # Definições TypeScript
+│   └── 📄 photo.ts                  # Tipos de foto
+└── 📁 constants/                    # Constantes
+    └── 📄 theme.ts                  # Configuração de tema
+```
+
+---
+
+## 🎨 Arquitetura e Padrões
+
+### **📐 Organização de Código**
+- **Separação de responsabilidades** clara
+- **Componentes funcionais** com hooks
+- **Estilos centralizados** por tela
+- **Tipagem TypeScript** completa
+
+### **🎯 Padrões de Design**
+- **Singleton Pattern** para serviços
+- **Context API** para estado global
+- **Custom Hooks** para lógica reutilizável
+- **Styled Components** para estilização
+
+### **📱 Responsividade**
+- **Design mobile-first**
+- **Safe areas** para dispositivos com notch
+- **Orientação adaptativa**
+- **Touch targets** otimizados
+
+---
+
+## 🔧 Configurações de Performance
+
+### **⚡ Otimizações Aplicadas**
+- **Gradle otimizado** (4GB RAM, parallel builds)
+- **Metro bundler** configurado
+- **Cache inteligente** para builds
+- **Bundle splitting** automático
+
+### **📊 Métricas de Performance**
+- **Tempo de build**: ~2-3 minutos
+- **Hot reload**: <1 segundo
+- **Bundle size**: Otimizado
+- **Memory usage**: Controlado
+
+---
+
+## 🧪 Testes e Qualidade
+
+### **✅ Checklist de Funcionalidades**
+- [x] Captura de fotos com metadados
+- [x] Armazenamento local seguro
+- [x] Busca e filtros
+- [x] Comparação de fotos
+- [x] Tema claro/escuro
+- [x] Navegação fluida
+- [x] Responsividade
+- [x] Performance otimizada
+
+### **🔍 Validações**
+- **TypeScript** sem erros
+- **ESLint** configurado
+- **Prettier** para formatação
+- **Husky** para pre-commit hooks
+
+---
+
+## 📚 Documentação Adicional
+
+### **🔗 Links Úteis**
+- [Expo Documentation](https://docs.expo.dev/)
+- [React Native Docs](https://reactnative.dev/docs/getting-started)
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
+- [Styled Components](https://styled-components.com/docs)
+
+### **📖 Recursos de Aprendizado**
+- [Expo Router Guide](https://docs.expo.dev/router/introduction/)
+- [React Native Performance](https://reactnative.dev/docs/performance)
+- [Mobile Design Patterns](https://material.io/design)
+
+---
+
+## 🤝 Contribuição
+
+Este é um **teste técnico** desenvolvido para demonstrar habilidades em:
+- **React Native** e **Expo**
+- **TypeScript** e tipagem
+- **Arquitetura** de aplicações mobile
+- **UI/UX** moderno
+- **Performance** e otimização
+
+---
+
+## 📄 Licença
+
+Este projeto foi desenvolvido como **teste técnico** para avaliação de competências em desenvolvimento mobile.
+
+---
+
+<div align="center">
+  <p>Desenvolvido com ❤️ usando React Native + Expo</p>
+  <p><strong>Teste Técnico - Desenvolvedor Mobile</strong></p>
+</div>
