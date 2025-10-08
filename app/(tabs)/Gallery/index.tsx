@@ -1,28 +1,29 @@
+import ComparisonTutorial from '@/components/ComparisonTutorial';
 import { ModernHeader } from '@/components/ModernHeader';
 import { useTheme } from '@/contexts/ThemeContext';
 import {
-  ActionButton,
-  ActionButtonText,
-  ClearButton,
-  ClearIcon,
-  Container,
-  EmptyState,
-  EmptySubtitle,
-  EmptyTitle,
-  Photo,
-  PhotoContainer,
-  PhotoDate,
-  PhotoInfo,
-  PhotoLocation,
-  PhotosList,
-  PhotoTitle,
-  SearchContainer,
-  SearchIcon,
-  SearchInput,
-  SelectionActions,
-  SelectionOverlay,
-  TakePhotoButton,
-  TakePhotoButtonText
+    ActionButton,
+    ActionButtonText,
+    ClearButton,
+    ClearIcon,
+    Container,
+    EmptyState,
+    EmptySubtitle,
+    EmptyTitle,
+    Photo,
+    PhotoContainer,
+    PhotoDate,
+    PhotoInfo,
+    PhotoLocation,
+    PhotosList,
+    PhotoTitle,
+    SearchContainer,
+    SearchIcon,
+    SearchInput,
+    SelectionActions,
+    SelectionOverlay,
+    TakePhotoButton,
+    TakePhotoButtonText
 } from '@/Styles/Gallery/GalleryStyles';
 import { Ionicons } from '@expo/vector-icons';
 import { router, useFocusEffect } from 'expo-router';
@@ -30,6 +31,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Alert, Dimensions, RefreshControl } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { PhotoStorage } from '../../../services/PhotoStorage';
+import { TutorialService } from '../../../services/TutorialService';
 import { PhotoMetadata } from '../../../types/photo';
 
 const { width } = Dimensions.get('window');
@@ -44,7 +46,9 @@ export default function GalleryScreen() {
   const [selectedPhotos, setSelectedPhotos] = useState<Set<string>>(new Set());
   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [showTutorial, setShowTutorial] = useState(false);
   const photoStorage = PhotoStorage.getInstance();
+  const tutorialService = TutorialService.getInstance();
 
   useEffect(() => {
     loadPhotos();
@@ -106,9 +110,16 @@ export default function GalleryScreen() {
       togglePhotoSelection(photo.id);
     } else {
       router.push({
-        pathname: '/PhotoDetail',
+        pathname: '/(tabs)/PhotoDetail',
         params: { photoId: photo.id }
       });
+    }
+  };
+
+  const handlePhotoLongPress = (photo: PhotoMetadata) => {
+    if (!isSelectionMode) {
+      setIsSelectionMode(true);
+      setSelectedPhotos(new Set([photo.id]));
     }
   };
 
@@ -124,6 +135,11 @@ export default function GalleryScreen() {
 
   const toggleSelectionMode = () => {
     setIsSelectionMode(!isSelectionMode);
+    setSelectedPhotos(new Set());
+  };
+
+  const exitSelectionMode = () => {
+    setIsSelectionMode(false);
     setSelectedPhotos(new Set());
   };
 
@@ -159,7 +175,7 @@ export default function GalleryScreen() {
 
     const photoIds = [...selectedPhotos];
     router.push({
-      pathname: '/PhotoComparison',
+      pathname: '/(tabs)/PhotoComparison',
       params: {
         photoId1: photoIds[0],
         photoId2: photoIds[1]
@@ -167,6 +183,23 @@ export default function GalleryScreen() {
     });
     setSelectedPhotos(new Set());
     setIsSelectionMode(false);
+  };
+
+  const handleTutorialClose = async () => {
+    setShowTutorial(false);
+    try {
+      await tutorialService.markComparisonTutorialAsSeen();
+    } catch (error) {
+      console.error('Erro ao marcar tutorial como visto:', error);
+    }
+  };
+
+  const handleShowTutorial = () => {
+    setShowTutorial(true);
+  };
+
+  const handleTutorialFromHome = () => {
+    setShowTutorial(true);
   };
 
   const renderPhotoItem = ({ item }: { item: PhotoMetadata }) => {
@@ -269,12 +302,19 @@ export default function GalleryScreen() {
         )}
 
         {/* Selection Actions */}
-        {isSelectionMode && selectedPhotos.size > 0 && (
+        {isSelectionMode && (
           <SelectionActions>
-            <ActionButton onPress={handleDeleteSelected}>
-              <Ionicons name="trash" size={20} color={theme.colors.danger} />
-                  <ActionButtonText>Excluir</ActionButtonText>
+            <ActionButton onPress={exitSelectionMode}>
+              <Ionicons name="close" size={20} color={theme.colors.gray700} />
+              <ActionButtonText>Cancelar</ActionButtonText>
             </ActionButton>
+            
+            {selectedPhotos.size > 0 && (
+              <ActionButton onPress={handleDeleteSelected}>
+                <Ionicons name="trash" size={20} color={theme.colors.danger} />
+                <ActionButtonText>Excluir</ActionButtonText>
+              </ActionButton>
+            )}
             
             {selectedPhotos.size === 2 && (
               <ActionButton onPress={handleComparePhotos}>
@@ -307,6 +347,12 @@ export default function GalleryScreen() {
           })}
         />
       </Container>
+
+      {/* Tutorial Modal */}
+      <ComparisonTutorial
+        visible={showTutorial}
+        onClose={handleTutorialClose}
+      />
     </SafeAreaView>
   );
 }

@@ -142,7 +142,7 @@ export default function PhotoDetailScreen() {
         subtitle={photo?.title || 'Carregando...'}
         variant="gradient"
         showBackButton
-        onBackPress={() => router.back()}
+        onBackPress={() => router.push('/(tabs)/Gallery')}
         rightAction={{
           icon: "share",
           onPress: handleSharePhoto
@@ -155,6 +155,7 @@ export default function PhotoDetailScreen() {
             <Photo
               source={{ uri: photo.uri }}
               contentFit="cover"
+              useThumbnail={false}
             />
             <PhotoOverlay>
               <OverlayButton onPress={() => setShowEditModal(true)}>

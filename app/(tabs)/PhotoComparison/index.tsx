@@ -2,22 +2,22 @@ import { ModernHeader } from '@/components/ModernHeader';
 import { useTheme } from '@/contexts/ThemeContext';
 import { PhotoStorage } from '@/services/PhotoStorage';
 import {
-  ActionButton,
-  ActionButtonText,
-  ComparisonContainer,
-  ComparisonItem,
-  ComparisonLabel,
-  ComparisonTitle,
-  ComparisonValue,
-  Container,
-  Content,
-  Photo,
-  PhotoContainer,
-  PhotoDate,
-  PhotoInfo,
-  PhotoLocation,
-  PhotoTitle,
-  PhotoWrapper
+    ActionButton,
+    ActionButtonText,
+    ComparisonContainer,
+    ComparisonItem,
+    ComparisonLabel,
+    ComparisonTitle,
+    ComparisonValue,
+    Container,
+    Content,
+    Photo,
+    PhotoContainer,
+    PhotoDate,
+    PhotoInfo,
+    PhotoLocation,
+    PhotoTitle,
+    PhotoWrapper
 } from '@/Styles/PhotoComparison/PhotoComparisonStyles';
 import { PhotoMetadata } from '@/types/photo';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -94,7 +94,7 @@ export default function PhotoComparisonScreen() {
           subtitle="Compare duas fotos"
           variant="gradient"
           showBackButton
-          onBackPress={() => router.back()}
+          onBackPress={() => router.push('/(tabs)/Gallery')}
         />
         <Container>
           <Content>

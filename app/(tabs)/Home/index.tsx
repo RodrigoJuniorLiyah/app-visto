@@ -1,38 +1,42 @@
 import { CacheManager } from '@/components/CacheManager';
+import ComparisonTutorial from '@/components/ComparisonTutorial';
 import { ModernHeader } from '@/components/ModernHeader';
 import { useTheme } from '@/contexts/ThemeContext';
 import { CacheDebugger } from '@/services/CacheDebugger';
 import { PhotoStorage } from '@/services/PhotoStorage';
+import { TutorialService } from '@/services/TutorialService';
 import {
-  CameraIcon,
-  CheckIcon,
-  ChevronIcon,
-  CompareIcon,
-  Container,
-  Content,
-  FeatureCard,
-  FeatureContent,
-  FeatureDescription,
-  FeatureIcon,
-  FeaturesContainer,
-  FeaturesTitle,
-  FeatureText,
-  FeatureTitle,
-  GalleryIcon,
-  InfoContainer,
-  InfoIcon,
-  InfoItem,
-  InfoList,
-  InfoText,
-  InfoTitle,
-  SafeContainer
+    CameraIcon,
+    CheckIcon,
+    ChevronIcon,
+    CompareIcon,
+    Container,
+    Content,
+    FeatureCard,
+    FeatureContent,
+    FeatureDescription,
+    FeatureIcon,
+    FeaturesContainer,
+    FeaturesTitle,
+    FeatureText,
+    FeatureTitle,
+    GalleryIcon,
+    InfoContainer,
+    InfoIcon,
+    InfoItem,
+    InfoList,
+    InfoText,
+    InfoTitle,
+    SafeContainer
 } from '@/Styles/Home/HomeStyles';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 export default function HomeScreen() {
   const { theme } = useTheme();
+  const [showTutorial, setShowTutorial] = useState(false);
+  const tutorialService = TutorialService.getInstance();
   
   // Garantir que o PhotoStorage seja inicializado
   useEffect(() => {
@@ -48,6 +52,27 @@ export default function HomeScreen() {
     
     initializeStorage();
   }, []);
+
+  const handleShowTutorial = () => {
+    setShowTutorial(true);
+  };
+
+  const handleTutorialClose = async () => {
+    setShowTutorial(false);
+    try {
+      await tutorialService.markComparisonTutorialAsSeen();
+    } catch (error) {
+      console.error('Erro ao marcar tutorial como visto:', error);
+    }
+  };
+
+  const handleTutorialComplete = () => {
+    router.push('/(tabs)/Gallery');
+  };
+
+  const handleTutorialSkip = () => {
+    router.push('/(tabs)/Gallery');
+  };
   
   const features = [
     {
@@ -76,7 +101,7 @@ export default function HomeScreen() {
       description: 'Ferramenta de comparação lado a lado',
       icon: 'git-compare',
       color: theme.colors.alert,
-      onPress: () => router.push('/(tabs)/Gallery'),
+      onPress: handleShowTutorial,
     },
   ];
 
@@ -169,8 +194,32 @@ export default function HomeScreen() {
             <ChevronIcon />
           </FeatureContent>
         </FeatureCard>
+
+        <FeatureCard
+          color={theme.colors.blue}
+          onPress={handleShowTutorial}
+        >
+          <FeatureContent>
+            <FeatureIcon color={theme.colors.blue}>
+              <Ionicons name="help-circle" size={24} color="white" />
+            </FeatureIcon>
+            <FeatureText>
+              <FeatureTitle>Tutorial de Comparação</FeatureTitle>
+              <FeatureDescription>Aprenda a comparar fotos</FeatureDescription>
+            </FeatureText>
+            <ChevronIcon />
+          </FeatureContent>
+        </FeatureCard>
         </Content>
       </Container>
+
+      {/* Tutorial Modal */}
+      <ComparisonTutorial
+        visible={showTutorial}
+        onClose={handleTutorialClose}
+        onComplete={handleTutorialComplete}
+        onSkip={handleTutorialSkip}
+      />
     </SafeContainer>
   );
 }
