@@ -2,27 +2,26 @@ import { ModernHeader } from '@/components/ModernHeader';
 import { useTheme } from '@/contexts/ThemeContext';
 import { PhotoStorage } from '@/services/PhotoStorage';
 import {
-    ActionButton,
-    ActionButtonText,
-    ComparisonContainer,
-    ComparisonItem,
-    ComparisonLabel,
-    ComparisonTitle,
-    ComparisonValue,
-    Container,
-    Content,
-    Photo,
-    PhotoContainer,
-    PhotoDate,
-    PhotoInfo,
-    PhotoLocation,
-    PhotoTitle,
-    PhotoWrapper
+  ActionButton,
+  ActionButtonText,
+  ComparisonContainer,
+  ComparisonItem,
+  ComparisonLabel,
+  ComparisonTitle,
+  ComparisonValue,
+  Container,
+  Content,
+  Photo,
+  PhotoContainer,
+  PhotoDate,
+  PhotoInfo,
+  PhotoLocation,
+  PhotoTitle,
+  PhotoWrapper
 } from '@/Styles/PhotoComparison/PhotoComparisonStyles';
 import { PhotoMetadata } from '@/types/photo';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function PhotoComparisonScreen() {
   const { theme } = useTheme();
@@ -88,7 +87,7 @@ export default function PhotoComparisonScreen() {
 
   if (!photo1 || !photo2) {
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }} edges={['top']}>
+      <Container style={{ flex: 1, backgroundColor: theme.colors.background }}>
         <ModernHeader
           title="📊 Comparação de Fotos"
           subtitle="Compare duas fotos"
@@ -101,7 +100,7 @@ export default function PhotoComparisonScreen() {
             <ComparisonTitle>Carregando...</ComparisonTitle>
           </Content>
         </Container>
-      </SafeAreaView>
+      </Container>
     );
   }
 
@@ -115,17 +114,17 @@ export default function PhotoComparisonScreen() {
     : null;
 
   return (
-    <SafeAreaView style={{ flex: 1 }} edges={['top']}>
+    <Container style={{ flex: 1, backgroundColor: theme.colors.background }}>
       <ModernHeader
         title="📊 Comparação de Fotos"
         subtitle="Compare duas fotos"
         variant="gradient"
         showBackButton
-        onBackPress={() => router.back()}
+        onBackPress={() => router.push('/(tabs)/Gallery')}
         rightAction={{
           icon: "eye",
           onPress: () => router.push({
-            pathname: '/(tabs)/PhotoDetail/index',
+            pathname: '/(tabs)/PhotoDetail',
             params: { photoId: photo1.id }
           })
         }}
@@ -208,20 +207,20 @@ export default function PhotoComparisonScreen() {
 
           {/* Action Buttons */}
           <ActionButton onPress={() => router.push({
-            pathname: '/(tabs)/PhotoDetail/index',
+            pathname: '/(tabs)/PhotoDetail',
             params: { photoId: photo1.id }
           })}>
             <ActionButtonText>Ver Detalhes da Foto 1</ActionButtonText>
           </ActionButton>
 
           <ActionButton onPress={() => router.push({
-            pathname: '/(tabs)/PhotoDetail/index',
+            pathname: '/(tabs)/PhotoDetail',
             params: { photoId: photo2.id }
           })}>
             <ActionButtonText>Ver Detalhes da Foto 2</ActionButtonText>
           </ActionButton>
         </Content>
       </Container>
-    </SafeAreaView>
+    </Container>
   );
 }
