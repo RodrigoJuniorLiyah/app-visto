@@ -21,6 +21,11 @@ jest.mock('expo-image-manipulator', () => ({
   },
 }));
 
+// Mock do expo-image
+jest.mock('expo-image', () => ({
+  Image: 'Image',
+}));
+
 // Mock do expo-location
 jest.mock('expo-location', () => ({
   requestForegroundPermissionsAsync: jest.fn(),
@@ -55,11 +60,34 @@ jest.mock('react-native-reanimated', () => {
 // Mock do styled-components
 jest.mock('styled-components/native', () => {
   const React = require('react');
+  
   const styled = (Component) => (strings, ...values) => {
     return React.forwardRef((props, ref) => {
-      return React.createElement(Component, { ...props, ref });
+      // Simular styled component com props do tema
+      const mockProps = {
+        ...props,
+        theme: props.theme || {
+          colors: {
+            primary: '#007AFF',
+            secondary: '#5856D6',
+            background: '#FFFFFF',
+            text: '#000000',
+            gray100: '#F2F2F7',
+            gray300: '#C7C7CC',
+            gray500: '#8E8E93',
+            gray700: '#48484A',
+            white: '#FFFFFF',
+            blue: '#007AFF',
+            danger: '#FF3B30',
+            alert: '#FF9500',
+          },
+        },
+      };
+      
+      return React.createElement(Component, { ...mockProps, ref });
     });
   };
+  
   return styled;
 });
 
@@ -70,6 +98,49 @@ jest.mock('styled-components/native', () => {
 //   removeItem: jest.fn(),
 //   clear: jest.fn(),
 // }));
+
+// Mock do react-native para evitar erros de TurboModule
+jest.mock('react-native', () => {
+  return {
+    Alert: {
+      alert: jest.fn(),
+    },
+    Dimensions: {
+      get: jest.fn(() => ({ width: 375, height: 812 })),
+    },
+    Platform: {
+      OS: 'ios',
+      select: jest.fn((obj) => obj.ios),
+    },
+    StatusBar: 'StatusBar',
+    StyleSheet: {
+      create: jest.fn((styles) => styles),
+      flatten: jest.fn((style) => style),
+    },
+    View: 'View',
+    Text: 'Text',
+    TouchableOpacity: 'TouchableOpacity',
+    ScrollView: 'ScrollView',
+    FlatList: 'FlatList',
+    Image: 'Image',
+    TextInput: 'TextInput',
+    SafeAreaView: 'SafeAreaView',
+    useColorScheme: jest.fn(() => 'light'),
+    Appearance: {
+      getColorScheme: jest.fn(() => 'light'),
+    },
+  };
+});
+
+// Mock do @expo/vector-icons
+jest.mock('@expo/vector-icons', () => ({
+  Ionicons: 'Ionicons',
+}));
+
+// Mock do expo-font
+jest.mock('expo-font', () => ({
+  loadAsync: jest.fn(),
+}));
 
 // Mock do console para reduzir logs nos testes
 global.console = {
