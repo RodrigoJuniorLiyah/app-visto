@@ -482,12 +482,6 @@ Este é um **teste técnico** desenvolvido para demonstrar habilidades em:
 
 ---
 
-## 📄 Licença
-
-Este projeto foi desenvolvido como **teste técnico** para avaliação de competências em desenvolvimento mobile.
-
----
-
 ## 👨‍💻 Autor
 
 <div align="center">
@@ -522,3 +516,9 @@ Este projeto foi desenvolvido como **teste técnico** para avaliação de compet
   <p><em>Desenvolvido com ❤️ usando React Native + Expo</em></p>
   <p><strong>Teste Técnico - Desenvolvedor Mobile</strong></p>
 </div>
+
+---
+
+## 📄 Licença
+
+Este projeto foi desenvolvido como **teste técnico** para avaliação de competências em desenvolvimento mobile.
