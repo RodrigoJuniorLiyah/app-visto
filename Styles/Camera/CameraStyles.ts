@@ -4,7 +4,6 @@ import styled from 'styled-components/native';
 
 const { width, height } = Dimensions.get('window');
 
-// Styled Components
 export const Container = styled.View`
   flex: 1;
 

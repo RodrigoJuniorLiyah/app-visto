@@ -14,7 +14,6 @@ export class PhotoStorage {
 
   private constructor() {
     this.imageCache = ImageCache.getInstance();
-    // loadPhotos() será chamado quando necessário
   }
 
   public static getInstance(): PhotoStorage {
@@ -52,7 +51,6 @@ export class PhotoStorage {
     try {
       console.log('Starting photo save process...');
       
-      // Ensure photos directory exists
       console.log('Checking photos directory...');
       const dirInfo = await FileSystem.getInfoAsync(PHOTOS_DIR);
       if (!dirInfo.exists) {
@@ -60,27 +58,22 @@ export class PhotoStorage {
         await FileSystem.makeDirectoryAsync(PHOTOS_DIR, { intermediates: true });
       }
 
-      // Get current location
       console.log('Getting location...');
       const location = await this.getCurrentLocation();
       
-      // Get file info
       console.log('Getting file info...');
       const fileInfo = await FileSystem.getInfoAsync(uri);
       console.log('File info:', fileInfo);
       
-      // Get image dimensions
       console.log('Getting image dimensions...');
       const imageInfo = await this.getImageDimensions(uri);
       console.log('Image dimensions:', imageInfo);
 
-      // Generate unique filename
       const timestamp = Date.now();
       const filename = `photo_${timestamp}.jpg`;
       const newUri = `${PHOTOS_DIR}${filename}`;
       console.log('New URI:', newUri);
 
-      // Compress and save photo
       console.log('Compressing and saving photo...');
       const compressedResult = await ImageManipulator.manipulateAsync(
         uri,
@@ -98,14 +91,12 @@ export class PhotoStorage {
         }
       );
 
-      // Mover arquivo comprimido para o diretório de fotos
       await FileSystem.moveAsync({
         from: compressedResult.uri,
         to: newUri,
       });
       console.log('Photo compressed and saved successfully');
 
-      // Create metadata
       const photo: PhotoMetadata = {
         id: `photo_${timestamp}`,
         uri: newUri,
@@ -121,11 +112,9 @@ export class PhotoStorage {
 
       console.log('Photo metadata created:', photo);
 
-      // Add to photos array
       this.photos.unshift(photo); // Add to beginning for newest first
       await this.savePhotos();
       
-      // Cache the image for better performance
       try {
         console.log('🔄 Iniciando cache da foto:', newUri);
         await this.imageCache.cacheImage(newUri);
@@ -154,7 +143,6 @@ export class PhotoStorage {
         accuracy: Location.Accuracy.Balanced,
       });
 
-      // Get address from coordinates
       const address = await this.getAddressFromCoordinates(
         location.coords.latitude,
         location.coords.longitude
@@ -193,10 +181,6 @@ export class PhotoStorage {
 
   private async getImageDimensions(uri: string): Promise<{ width: number; height: number }> {
     try {
-      // For now, we'll use default dimensions since getting real dimensions
-      // requires additional native modules that can cause build issues
-      // In a production app, you might want to use expo-image-manipulator
-      // or react-native-image-size with proper Android configuration
       return { width: 1920, height: 1080 }; // Default dimensions
     } catch (error) {
       console.error('Error getting image dimensions:', error);
@@ -221,13 +205,11 @@ export class PhotoStorage {
       const photo = this.photos.find(p => p.id === id);
       if (!photo) return false;
 
-      // Delete file
       const fileInfo = await FileSystem.getInfoAsync(photo.uri);
       if (fileInfo.exists) {
         await FileSystem.deleteAsync(photo.uri);
       }
 
-      // Remove from array
       this.photos = this.photos.filter(p => p.id !== id);
       await this.savePhotos();
 

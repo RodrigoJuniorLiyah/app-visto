@@ -6,7 +6,6 @@ import { ImageWithLoading } from '../../components/ImageWithLoading';
 const { width } = Dimensions.get('window');
 const ITEM_SIZE = (width - 30) / 2; // 2 columns with padding
 
-// Styled Components
 export const Container = styled.View`
   flex: 1;
 
@@ -28,7 +27,12 @@ export const SearchContainer = styled.View`
   shadow-radius: 2px;
   elevation: 2;
 
-  background-color: ${(props: any) => props.theme.colors.white};
+  background-color: ${(props: any) => {
+    if (props.theme?.colors?.background === '#1A1A1A') {
+      return '#2A2A2A'; // Background escuro para modo escuro
+    }
+    return props.theme?.colors?.white || '#FFFFFF'; // Branco para modo claro
+  }};
 `;
 
 export const SearchIcon = styled(Ionicons).attrs((props: any) => ({
@@ -37,14 +41,25 @@ export const SearchIcon = styled(Ionicons).attrs((props: any) => ({
 }))`
   margin-right: 10px;
 
-  color: ${(props: any) => props.theme.colors.gray500};
+  color: ${(props: any) => {
+    if (props.theme?.colors?.background === '#1A1A1A') {
+      return '#A0A0A0'; // Cinza claro para modo escuro
+    }
+    return props.theme?.colors?.gray500 || '#6C757D'; // Cinza escuro para modo claro
+  }};
 `;
 
 export const SearchInput = styled(TextInput)`
   flex: 1;
   height: 40px;
 
-  color: ${(props: any) => props.theme.colors.text};
+  color: ${(props: any) => {
+    if (props.theme?.colors?.background === '#1A1A1A') {
+      return '#FFFFFF'; // Branco para modo escuro
+    }
+    return props.theme?.colors?.text || '#212529'; // Cor do tema ou fallback
+  }};
+  font-size: 16px;
 `;
 
 export const ClearButton = styled.TouchableOpacity`
@@ -55,7 +70,12 @@ export const ClearIcon = styled(Ionicons).attrs((props: any) => ({
   name: "close-circle",
   size: 20,
 }))`
-  color: ${(props: any) => props.theme.colors.gray500};
+  color: ${(props: any) => {
+    if (props.theme?.colors?.background === '#1A1A1A') {
+      return '#A0A0A0'; // Cinza claro para modo escuro
+    }
+    return props.theme?.colors?.gray500 || '#6C757D'; // Cinza escuro para modo claro
+  }};
 `;
 
 export const SelectionActions = styled.View`
@@ -130,6 +150,8 @@ export const PhotoInfo = styled.View`
   right: 0;
 
   padding: 8px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 
   background-color: rgba(0,0,0,0.6);
 `;

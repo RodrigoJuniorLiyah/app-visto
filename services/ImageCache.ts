@@ -44,7 +44,6 @@ export class ImageCache {
         const content = await FileSystem.readAsStringAsync(cacheFile);
         const cacheData = JSON.parse(content);
         
-        // Verificar se os arquivos ainda existem
         for (const [key, cachedImage] of Object.entries(cacheData)) {
           const thumbnailExists = await FileSystem.getInfoAsync((cachedImage as CachedImage).thumbnailUri);
           const compressedExists = await FileSystem.getInfoAsync((cachedImage as CachedImage).compressedUri);
@@ -91,11 +90,9 @@ export class ImageCache {
     const currentSize = await this.getCacheSize();
     
     if (currentSize > this.config.maxCacheSize) {
-      // Ordenar por data de cache (mais antigos primeiro)
       const sortedEntries = Array.from(this.cache.entries())
         .sort(([, a], [, b]) => a.cachedAt - b.cachedAt);
       
-      // Remover 20% dos itens mais antigos
       const itemsToRemove = Math.ceil(sortedEntries.length * 0.2);
       
       for (let i = 0; i < itemsToRemove; i++) {
@@ -121,14 +118,12 @@ export class ImageCache {
     if (this.cache.has(cacheKey)) {
       const cachedImage = this.cache.get(cacheKey)!;
       
-      // Verificar se os arquivos ainda existem
       const thumbnailExists = await FileSystem.getInfoAsync(cachedImage.thumbnailUri);
       const compressedExists = await FileSystem.getInfoAsync(cachedImage.compressedUri);
       
       if (thumbnailExists.exists && compressedExists.exists) {
         return cachedImage;
       } else {
-        // Remover do cache se os arquivos não existem
         this.cache.delete(cacheKey);
       }
     }
@@ -141,7 +136,6 @@ export class ImageCache {
     const cacheKey = this.getCacheKey(originalUri);
     console.log('🔑 Cache key:', cacheKey);
     
-    // Verificar se já está em cache
     const existing = await this.getCachedImage(originalUri);
     if (existing) {
       console.log('✅ Imagem já está em cache:', existing.thumbnailUri);
@@ -149,14 +143,12 @@ export class ImageCache {
     }
     
     try {
-      // Criar diretórios se não existirem
       const thumbnailsDir = `${FileSystem.documentDirectory}thumbnails/`;
       const compressedDir = `${FileSystem.documentDirectory}compressed/`;
       
       await FileSystem.makeDirectoryAsync(thumbnailsDir, { intermediates: true });
       await FileSystem.makeDirectoryAsync(compressedDir, { intermediates: true });
       
-      // Gerar thumbnail
       const thumbnailResult = await ImageManipulator.manipulateAsync(
         originalUri,
         [
@@ -173,7 +165,6 @@ export class ImageCache {
         }
       );
       
-      // Gerar versão comprimida (mantém proporção original)
       const compressedResult = await ImageManipulator.manipulateAsync(
         originalUri,
         [
@@ -190,7 +181,6 @@ export class ImageCache {
         }
       );
       
-      // Mover arquivos para diretórios de cache
       const timestamp = Date.now();
       const thumbnailUri = `${thumbnailsDir}thumb_${timestamp}.jpg`;
       const compressedUri = `${compressedDir}comp_${timestamp}.jpg`;
@@ -205,7 +195,6 @@ export class ImageCache {
         to: compressedUri,
       });
       
-      // Criar objeto de cache
       const cachedImage: CachedImage = {
         originalUri,
         thumbnailUri,
@@ -214,13 +203,10 @@ export class ImageCache {
         cachedAt: Date.now(),
       };
       
-      // Adicionar ao cache
       this.cache.set(cacheKey, cachedImage);
       
-      // Salvar cache no disco
       await this.saveCacheToDisk();
       
-      // Limpar cache se necessário
       await this.cleanupCache();
       
       return cachedImage;
@@ -256,7 +242,6 @@ export class ImageCache {
 
   public async clearCache(): Promise<void> {
     try {
-      // Deletar todos os arquivos de cache
       for (const cachedImage of this.cache.values()) {
         try {
           await FileSystem.deleteAsync(cachedImage.thumbnailUri);
@@ -266,10 +251,8 @@ export class ImageCache {
         }
       }
       
-      // Limpar cache em memória
       this.cache.clear();
       
-      // Deletar arquivo de cache
       const cacheFile = `${FileSystem.documentDirectory}image_cache.json`;
       const fileInfo = await FileSystem.getInfoAsync(cacheFile);
       if (fileInfo.exists) {
@@ -288,7 +271,6 @@ export class ImageCache {
   }
 
   private getCacheKey(uri: string): string {
-    // Usar hash simples baseado na URI
     return uri.split('/').pop() || uri;
   }
 

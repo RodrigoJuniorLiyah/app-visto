@@ -1,29 +1,30 @@
 import ComparisonTutorial from '@/components/ComparisonTutorial';
+import DateFilterModal from '@/components/DateFilterModal';
 import { ModernHeader } from '@/components/ModernHeader';
 import { useTheme } from '@/contexts/ThemeContext';
 import {
-    ActionButton,
-    ActionButtonText,
-    ClearButton,
-    ClearIcon,
-    Container,
-    EmptyState,
-    EmptySubtitle,
-    EmptyTitle,
-    Photo,
-    PhotoContainer,
-    PhotoDate,
-    PhotoInfo,
-    PhotoLocation,
-    PhotosList,
-    PhotoTitle,
-    SearchContainer,
-    SearchIcon,
-    SearchInput,
-    SelectionActions,
-    SelectionOverlay,
-    TakePhotoButton,
-    TakePhotoButtonText
+  ActionButton,
+  ActionButtonText,
+  ClearButton,
+  ClearIcon,
+  Container,
+  EmptyState,
+  EmptySubtitle,
+  EmptyTitle,
+  Photo,
+  PhotoContainer,
+  PhotoDate,
+  PhotoInfo,
+  PhotoLocation,
+  PhotosList,
+  PhotoTitle,
+  SearchContainer,
+  SearchIcon,
+  SearchInput,
+  SelectionActions,
+  SelectionOverlay,
+  TakePhotoButton,
+  TakePhotoButtonText
 } from '@/Styles/Gallery/GalleryStyles';
 import { Ionicons } from '@expo/vector-icons';
 import { router, useFocusEffect } from 'expo-router';
@@ -46,6 +47,11 @@ export default function GalleryScreen() {
   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [showTutorial, setShowTutorial] = useState(false);
+  const [showDateFilter, setShowDateFilter] = useState(false);
+  const [selectedDateRange, setSelectedDateRange] = useState<{
+    startDate: Date | null;
+    endDate: Date | null;
+  }>({ startDate: null, endDate: null });
   const photoStorage = PhotoStorage.getInstance();
   const tutorialService = TutorialService.getInstance();
 
@@ -61,17 +67,15 @@ export default function GalleryScreen() {
 
   useEffect(() => {
     filterPhotos();
-  }, [photos, searchText]);
+  }, [photos, searchText, selectedDateRange]);
 
   const loadPhotos = async () => {
     try {
       console.log('🔄 Carregando fotos da galeria...');
       setIsLoading(true);
       
-      // Primeiro, carregar fotos do armazenamento
       await photoStorage.loadPhotosFromStorage();
       
-      // Depois, obter todas as fotos
       const allPhotos = photoStorage.getAllPhotos();
       console.log('📸 Fotos carregadas:', allPhotos.length);
       
@@ -86,12 +90,38 @@ export default function GalleryScreen() {
   };
 
   const filterPhotos = () => {
-    if (!searchText.trim()) {
-      setFilteredPhotos(photos);
-      return;
+    let filtered = photos;
+
+    if (searchText.trim()) {
+      filtered = photoStorage.searchPhotos(searchText);
     }
 
-    const filtered = photoStorage.searchPhotos(searchText);
+    if (selectedDateRange.startDate || selectedDateRange.endDate) {
+      filtered = filtered.filter(photo => {
+        const photoDate = new Date(photo.timestamp);
+        
+        if (selectedDateRange.startDate && selectedDateRange.endDate) {
+          const startDate = new Date(selectedDateRange.startDate);
+          startDate.setHours(0, 0, 0, 0); // Início do dia
+          
+          const endDate = new Date(selectedDateRange.endDate);
+          endDate.setHours(23, 59, 59, 999); // Final do dia
+          
+          return photoDate >= startDate && photoDate <= endDate;
+        } else if (selectedDateRange.startDate) {
+          const startDate = new Date(selectedDateRange.startDate);
+          startDate.setHours(0, 0, 0, 0); // Início do dia
+          return photoDate >= startDate;
+        } else if (selectedDateRange.endDate) {
+          const endDate = new Date(selectedDateRange.endDate);
+          endDate.setHours(23, 59, 59, 999); // Final do dia
+          return photoDate <= endDate;
+        }
+        
+        return true;
+      });
+    }
+
     setFilteredPhotos(filtered);
   };
 
@@ -104,6 +134,14 @@ export default function GalleryScreen() {
     }
   }, []);
 
+  const handleDateFilter = () => {
+    setShowDateFilter(!showDateFilter);
+  };
+
+  const handleDateRangeChange = (startDate: Date | null, endDate: Date | null) => {
+    setSelectedDateRange({ startDate, endDate });
+  };
+
   const handlePhotoPress = (photo: PhotoMetadata) => {
     if (isSelectionMode) {
       togglePhotoSelection(photo.id);
@@ -115,13 +153,6 @@ export default function GalleryScreen() {
     }
   };
 
-  const handlePhotoLongPress = (photo: PhotoMetadata) => {
-    if (!isSelectionMode) {
-      setIsSelectionMode(true);
-      setSelectedPhotos(new Set([photo.id]));
-    }
-  };
-
   const togglePhotoSelection = (photoId: string) => {
     const newSelection = new Set(selectedPhotos);
     if (newSelection.has(photoId)) {
@@ -130,11 +161,6 @@ export default function GalleryScreen() {
       newSelection.add(photoId);
     }
     setSelectedPhotos(newSelection);
-  };
-
-  const toggleSelectionMode = () => {
-    setIsSelectionMode(!isSelectionMode);
-    setSelectedPhotos(new Set());
   };
 
   const exitSelectionMode = () => {
@@ -193,14 +219,6 @@ export default function GalleryScreen() {
     }
   };
 
-  const handleShowTutorial = () => {
-    setShowTutorial(true);
-  };
-
-  const handleTutorialFromHome = () => {
-    setShowTutorial(true);
-  };
-
   const renderPhotoItem = ({ item }: { item: PhotoMetadata }) => {
     const isSelected = selectedPhotos.has(item.id);
 
@@ -218,6 +236,7 @@ export default function GalleryScreen() {
         <Photo
           source={{ uri: item.uri }}
           contentFit="cover"
+          style={{borderRadius: 10}}
         />
 
         {isSelected && (
@@ -297,6 +316,13 @@ export default function GalleryScreen() {
                 <ClearIcon />
               </ClearButton>
             )}
+            <ClearButton onPress={handleDateFilter}>
+              <Ionicons 
+                name="calendar-outline" 
+                size={20} 
+                color={selectedDateRange.startDate || selectedDateRange.endDate ? theme.colors.primary : theme.colors.gray500} 
+              />
+            </ClearButton>
           </SearchContainer>
         )}
 
@@ -351,6 +377,14 @@ export default function GalleryScreen() {
       <ComparisonTutorial
         visible={showTutorial}
         onClose={handleTutorialClose}
+      />
+
+      {/* Date Filter Modal */}
+      <DateFilterModal
+        visible={showDateFilter}
+        onClose={() => setShowDateFilter(false)}
+        onDateRangeChange={handleDateRangeChange}
+        selectedDateRange={selectedDateRange}
       />
     </Container>
   );

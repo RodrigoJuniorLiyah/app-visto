@@ -4,7 +4,6 @@ import { ImageWithLoading } from '../../components/ImageWithLoading';
 
 const { width } = Dimensions.get('window');
 
-// Styled Components
 export const Container = styled.View`
   flex: 1;
 

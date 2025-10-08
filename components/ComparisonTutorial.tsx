@@ -135,7 +135,6 @@ export default function ComparisonTutorial({ visible, onClose, onComplete, onSki
   const { theme } = useTheme();
   const [currentStep, setCurrentStep] = useState(0);
 
-  // Reset tutorial quando for aberto
   useEffect(() => {
     if (visible) {
       setCurrentStep(0);

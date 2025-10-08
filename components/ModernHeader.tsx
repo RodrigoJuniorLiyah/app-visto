@@ -18,7 +18,6 @@ interface ModernHeaderProps {
   variant?: 'default' | 'gradient' | 'minimal';
 }
 
-// Styled Components
 const HeaderContainer = styled.View<{ variant: string }>`
   border-bottom-width: ${(props: any) => props.variant === 'minimal' ? '0.5px' : '0px'};
   border-bottom-color: ${(props: any) => props.theme.colors.gray200};
