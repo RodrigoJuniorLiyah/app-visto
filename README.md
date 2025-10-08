@@ -45,6 +45,87 @@
 
 ---
 
+## 📱 Screenshots da Aplicação
+
+### 🏠 **Tela Inicial**
+<div align="center">
+  <img src="assets/images/prints/inicioTemaClaro.png" alt="Tela Inicial" width="200"/>
+  <p><em>Tela inicial com cards de funcionalidades e tutorial de comparação</em></p>
+</div>
+
+**Funcionalidades:**
+- Cards informativos sobre as funcionalidades
+- Tutorial interativo para comparação de fotos
+- Toggle de tema claro/escuro
+- Navegação para câmera e galeria
+
+---
+
+### 📸 **Captura de Fotos**
+<div align="center">
+  <img src="assets/images/prints/camera.png" alt="Câmera" width="200"/>
+  <p><em>Interface de captura com metadados automáticos</em></p>
+</div>
+
+**Funcionalidades:**
+- Câmera nativa com alternância frontal/traseira
+- Captura de localização GPS automática
+- Título personalizável para cada foto
+- Compressão inteligente para otimização
+
+---
+
+### 🖼️ **Galeria de Fotos**
+<div align="center">
+  <img src="assets/images/prints/galeria.png" alt="Galeria" width="200"/>
+  <p><em>Visualização em grid com busca e filtros</em></p>
+</div>
+
+**Funcionalidades:**
+- Grid responsivo de fotos
+- Busca inteligente por título
+- Filtro por data com DatePicker nativo
+- Modo de seleção múltipla
+- Pull-to-refresh para atualização
+
+---
+
+### 🔍 **Detalhes da Foto**
+<div align="center">
+  <img src="assets/images/prints/detalhes.png" alt="Detalhes" width="200"/>
+  <p><em>Visualização detalhada com metadados completos</em></p>
+</div>
+
+**Funcionalidades:**
+- Visualização em alta qualidade
+- Metadados completos (data, hora, localização)
+- Ações de compartilhamento
+- Navegação para comparação
+- Botões de ação contextuais
+
+---
+
+### 🌙 **Tema Escuro**
+<div align="center">
+  <img src="assets/images/prints/inicio.png" alt="Tema Escuro" width="200"/>
+  <p><em>Interface adaptativa com tema escuro</em></p>
+</div>
+
+**Funcionalidades:**
+- Toggle automático de tema
+- Contraste otimizado para acessibilidade
+- Cores adaptativas em todos os componentes
+- Experiência visual consistente
+
+---
+
+### 📋 **Outras Funcionalidades (Sem Screenshots)**
+- **⚖️ Comparação de Fotos** - Análise side-by-side com métricas detalhadas
+- **📅 Filtro por Data** - DatePicker nativo para filtros temporais
+- **🎓 Tutorial Interativo** - Guia passo-a-passo para comparação
+
+---
+
 ## 🛠️ Tecnologias e Bibliotecas
 
 ### **Core Framework**
@@ -111,20 +192,20 @@ cd app-visto
 ```
 
 ### **2. Instale as Dependências**
-```bash
+   ```bash
 # Usando npm
-npm install
+   npm install
 
 # Ou usando yarn
 yarn install
-```
+   ```
 
 ### **3. Execute o Projeto**
 
 #### **Opção A: Expo Go (Recomendado - Mais Rápido)**
-```bash
-npx expo start
-```
+   ```bash
+   npx expo start
+   ```
 - Instale o **Expo Go** no seu celular
 - Escaneie o QR code que aparece no terminal
 - O app abrirá automaticamente no seu dispositivo
@@ -407,7 +488,37 @@ Este projeto foi desenvolvido como **teste técnico** para avaliação de compet
 
 ---
 
+## 👨‍💻 Autor
+
 <div align="center">
-  <p>Desenvolvido com ❤️ usando React Native + Expo</p>
+  <img src="https://github.com/RodrigoJuniorLiyah.png" alt="Rodrigo Junior" width="150" style="border-radius: 50%;"/>
+  
+  <h3>Rodrigo Junior</h3>
+  
+  <p><strong>Desenvolvedor Front-end & Mobile</strong></p>
+  
+  <p>😺 🐱‍👤 Nothing will make me give up on my dreams.</p>
+  
+  <a href="https://github.com/RodrigoJuniorLiyah" target="_blank">
+    <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub"/>
+  </a>
+  
+  <a href="https://www.linkedin.com/in/rodrigo-cabral-dev/" target="_blank">
+    <img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn"/>
+  </a>
+  
+  <a href="mailto:rodrigo.junior7@outlook.com" target="_blank">
+    <img src="https://img.shields.io/badge/Email-0078D4?style=for-the-badge&logo=microsoft-outlook&logoColor=white" alt="Email"/>
+  </a>
+  
+  <br><br>
+  
+  <p><strong>🌱 Atualmente aprendendo:</strong> Node.js, Python, English</p>
+  <p><strong>💬 Pergunte-me sobre:</strong> JavaScript, TypeScript, CSS e React</p>
+  <p><strong>⚡ Curiosidade:</strong> Eu amo animes 😜</p>
+  
+  <br>
+  
+  <p><em>Desenvolvido com ❤️ usando React Native + Expo</em></p>
   <p><strong>Teste Técnico - Desenvolvedor Mobile</strong></p>
 </div>
