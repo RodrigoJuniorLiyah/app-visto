@@ -1,4 +1,3 @@
-// Teste de validação de tipos PhotoMetadata
 import { PhotoComparison, PhotoFilter, PhotoMetadata, ShareData } from '../../types/photo';
 
 describe('PhotoMetadata Validation', () => {
@@ -165,7 +164,7 @@ describe('PhotoMetadata Validation', () => {
         location: {
           latitude: -23.5505,
           longitude: -46.6333,
-          radius: 10, // 10km radius
+          radius: 10,
         },
       };
 
@@ -217,7 +216,7 @@ describe('PhotoMetadata Validation', () => {
       const photo2: PhotoMetadata = {
         id: 'photo_2',
         uri: 'file:///path/to/photo2.jpg',
-        timestamp: Date.now() + 3600000, // 1 hour later
+        timestamp: Date.now() + 3600000,
         date: '2024-01-15',
         time: '15:30:25',
         size: 2048000,
@@ -297,7 +296,7 @@ describe('PhotoMetadata Validation', () => {
       const photo: PhotoMetadata = {
         id: 'photo_1234567890',
         uri: 'file:///path/to/photo.jpg',
-        title: '', // Empty string
+        title: '',
         timestamp: Date.now(),
         date: '2024-01-15',
         time: '14:30:25',

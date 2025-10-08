@@ -1,4 +1,3 @@
-// Teste simples do ImageCache sem dependências externas
 describe('ImageCache - Basic Tests', () => {
   it('should be a singleton', () => {
     class MockImageCache {
@@ -78,31 +77,25 @@ describe('ImageCache - Basic Tests', () => {
     
     const imageCache = new MockImageCache();
     
-    // Test cache image
     const originalUri = 'test.jpg';
     const cachedImage = imageCache.cacheImage(originalUri);
     expect(cachedImage.originalUri).toBe(originalUri);
     expect(cachedImage.thumbnailUri).toContain('thumb_');
     expect(cachedImage.compressedUri).toContain('comp_');
     
-    // Test get cached image
     const retrievedImage = imageCache.getCachedImage(originalUri);
     expect(retrievedImage).toEqual(cachedImage);
     
-    // Test get thumbnail URI
     const thumbnailUri = imageCache.getThumbnailUri(originalUri);
     expect(thumbnailUri).toContain('thumb_');
     
-    // Test get compressed URI
     const compressedUri = imageCache.getCompressedUri(originalUri);
     expect(compressedUri).toContain('comp_');
     
-    // Test cache stats
     const stats = imageCache.getCacheStats();
     expect(stats.count).toBe(1);
     expect(stats.size).toBeGreaterThan(0);
     
-    // Test clear cache
     imageCache.clearCache();
     const clearedStats = imageCache.getCacheStats();
     expect(clearedStats.count).toBe(0);
