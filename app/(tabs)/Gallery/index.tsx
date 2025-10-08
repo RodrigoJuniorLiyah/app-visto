@@ -29,7 +29,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { router, useFocusEffect } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Alert, Dimensions, RefreshControl } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { PhotoStorage } from '../../../services/PhotoStorage';
 import { TutorialService } from '../../../services/TutorialService';
 import { PhotoMetadata } from '../../../types/photo';
@@ -272,7 +271,7 @@ export default function GalleryScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }} edges={['top']}>
+    <Container style={{ flex: 1, backgroundColor: theme.colors.background }}>
       <ModernHeader
         title="📸 Galeria"
         subtitle={`${photos.length} fotos`}
@@ -353,7 +352,7 @@ export default function GalleryScreen() {
         visible={showTutorial}
         onClose={handleTutorialClose}
       />
-    </SafeAreaView>
+    </Container>
   );
 }
 

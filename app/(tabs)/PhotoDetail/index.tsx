@@ -39,7 +39,6 @@ import {
   Modal,
   Share
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function PhotoDetailScreen() {
   const { theme } = useTheme();
@@ -136,7 +135,7 @@ export default function PhotoDetailScreen() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }} edges={['top']}>
+    <Container style={{ flex: 1, backgroundColor: theme.colors.background }}>
       <ModernHeader
         title="📸 Detalhes da Foto"
         subtitle={photo?.title || 'Carregando...'}
@@ -178,7 +177,7 @@ export default function PhotoDetailScreen() {
               <InfoItem>
                 <Ionicons name="text" size={16} color={theme.colors.gray500} />
                 <InfoContent>
-                  <InfoLabel>Title</InfoLabel>
+                  <InfoLabel>Título</InfoLabel>
                   <InfoValue>
                     {photo.title || 'Untitled'}
                   </InfoValue>
@@ -188,7 +187,7 @@ export default function PhotoDetailScreen() {
               <InfoItem>
                 <Ionicons name="time" size={16} color={theme.colors.gray500} />
                 <InfoContent>
-                  <InfoLabel>Date & Time</InfoLabel>
+                  <InfoLabel>Data e Hora</InfoLabel>
                   <InfoValue>
                     {photo.date} at {photo.time}
                   </InfoValue>
@@ -199,7 +198,7 @@ export default function PhotoDetailScreen() {
                 <InfoItem>
                   <Ionicons name="location" size={16} color={theme.colors.gray500} />
                   <InfoContent>
-                    <InfoLabel>Location</InfoLabel>
+                    <InfoLabel>Localização</InfoLabel>
                     <InfoValue>
                       {photo.location.address || 
                        `${photo.location.latitude.toFixed(6)}, ${photo.location.longitude.toFixed(6)}`}
@@ -216,7 +215,7 @@ export default function PhotoDetailScreen() {
               <InfoItem>
                 <Ionicons name="resize" size={16} color={theme.colors.gray500} />
                 <InfoContent>
-                  <InfoLabel>Dimensions</InfoLabel>
+                  <InfoLabel>Dimensões</InfoLabel>
                   <InfoValue>
                     {photo.width} × {photo.height}
                   </InfoValue>
@@ -226,7 +225,7 @@ export default function PhotoDetailScreen() {
               <InfoItem>
                 <Ionicons name="folder" size={16} color={theme.colors.gray500} />
                 <InfoContent>
-                  <InfoLabel>File Size</InfoLabel>
+                  <InfoLabel>Tamanho do Arquivo</InfoLabel>
                   <InfoValue>
                     {(photo.size / 1024 / 1024).toFixed(2)} MB
                   </InfoValue>
@@ -293,21 +292,21 @@ export default function PhotoDetailScreen() {
                   variant="cancel"
                   onPress={() => setShowEditModal(false)}
                 >
-                  <ModalButtonText variant="cancel">Cancel</ModalButtonText>
+                  <ModalButtonText variant="cancel">Cancelar</ModalButtonText>
                 </ModalButton>
                 
                 <ModalButton
                   variant="save"
                   onPress={handleEditTitle}
                 >
-                  <ModalButtonText variant="save">Save</ModalButtonText>
+                  <ModalButtonText variant="save">Salvar</ModalButtonText>
                 </ModalButton>
               </ModalButtons>
             </ModalContent>
           </ModalOverlay>
         </Modal>
       </Container>
-    </SafeAreaView>
+    </Container>
   );
 }
 

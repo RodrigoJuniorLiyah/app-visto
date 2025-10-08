@@ -27,7 +27,6 @@ import {
   Alert,
   Modal
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { PhotoStorage } from '../../../services/PhotoStorage';
 
 
@@ -50,26 +49,24 @@ export default function CameraScreen() {
 
   if (!permission) {
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.background }} edges={['top']}>
+      <Container style={{ flex: 1, backgroundColor: theme.colors.background,  }}>
         <Container>
           <ThemedText>Requesting camera permission...</ThemedText>
         </Container>
-      </SafeAreaView>
+      </Container>
     );
   }
 
   if (!permission.granted) {
     return (
-      <SafeAreaView style={{ flex: 1 }} edges={['top']}>
-        <Container>
-          <Message>
-            Permissão da câmera é necessária para tirar fotos
-          </Message>
-          <Button onPress={requestPermission}>
-            <ButtonText>Conceder Permissão</ButtonText>
-          </Button>
-        </Container>
-      </SafeAreaView>
+      <Container>
+        <Message>
+          Permissão da câmera é necessária para tirar fotos
+        </Message>
+        <Button onPress={requestPermission}>
+          <ButtonText>Conceder Permissão</ButtonText>
+        </Button>
+      </Container>
     );
   }
 
@@ -121,7 +118,7 @@ export default function CameraScreen() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }} edges={['top']}>
+    <Container style={{ flex: 1, backgroundColor: theme.colors.background,  }}>
       <ModernHeader
         title="📷 Câmera"
         subtitle="Tire uma foto"
@@ -163,10 +160,10 @@ export default function CameraScreen() {
         >
           <ModalOverlay>
             <ModalContent>
-                  <ModalTitle>Salvar Foto</ModalTitle>
+              <ModalTitle>Salvar Foto</ModalTitle>
 
-                  <TitleInput
-                    placeholder="Digite o título da foto (opcional)"
+              <TitleInput
+                placeholder="Digite o título da foto (opcional)"
                 value={photoTitle}
                 onChangeText={setPhotoTitle}
                 autoFocus
@@ -192,6 +189,6 @@ export default function CameraScreen() {
           </ModalOverlay>
         </Modal>
       </Container>
-    </SafeAreaView>
+    </Container>
   );
 }

@@ -1,12 +1,9 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { LinearGradient } from "expo-linear-gradient";
 import { ScrollView } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 
-export const SafeContainer = styled(SafeAreaView).attrs({
-  edges: ['top']
-})`
+export const SafeContainer = styled.View`
   flex: 1;
 
   background-color: ${(props: any) => props.theme.colors.background};

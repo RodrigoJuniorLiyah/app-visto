@@ -23,6 +23,9 @@ const HeaderContainer = styled.View<{ variant: string }>`
   border-bottom-width: ${(props: any) => props.variant === 'minimal' ? '0.5px' : '0px'};
   border-bottom-color: ${(props: any) => props.theme.colors.gray200};
 
+  padding-top: 0px;
+  min-height: 100px;
+
   shadow-color: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? '#000000' : '#000'};
   shadow-offset: 0px 1px;
   shadow-opacity: ${(props: any) => props.theme.colors.background === '#1A1A1A' ? 0.3 : 0.1};
@@ -44,7 +47,8 @@ const Content = styled.View`
 
   padding-horizontal: 16px;
   padding-vertical: 20px;
-  min-height: 80px;
+  padding-top: 50px;
+  min-height: 100px;
 `;
 
 const LeftSection = styled.View`

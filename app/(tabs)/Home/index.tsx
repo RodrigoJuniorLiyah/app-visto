@@ -6,28 +6,28 @@ import { CacheDebugger } from '@/services/CacheDebugger';
 import { PhotoStorage } from '@/services/PhotoStorage';
 import { TutorialService } from '@/services/TutorialService';
 import {
-    CameraIcon,
-    CheckIcon,
-    ChevronIcon,
-    CompareIcon,
-    Container,
-    Content,
-    FeatureCard,
-    FeatureContent,
-    FeatureDescription,
-    FeatureIcon,
-    FeaturesContainer,
-    FeaturesTitle,
-    FeatureText,
-    FeatureTitle,
-    GalleryIcon,
-    InfoContainer,
-    InfoIcon,
-    InfoItem,
-    InfoList,
-    InfoText,
-    InfoTitle,
-    SafeContainer
+  CameraIcon,
+  CheckIcon,
+  ChevronIcon,
+  CompareIcon,
+  Container,
+  Content,
+  FeatureCard,
+  FeatureContent,
+  FeatureDescription,
+  FeatureIcon,
+  FeaturesContainer,
+  FeaturesTitle,
+  FeatureText,
+  FeatureTitle,
+  GalleryIcon,
+  InfoContainer,
+  InfoIcon,
+  InfoItem,
+  InfoList,
+  InfoText,
+  InfoTitle,
+  SafeContainer
 } from '@/Styles/Home/HomeStyles';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
@@ -37,7 +37,7 @@ export default function HomeScreen() {
   const { theme } = useTheme();
   const [showTutorial, setShowTutorial] = useState(false);
   const tutorialService = TutorialService.getInstance();
-  
+
   // Garantir que o PhotoStorage seja inicializado
   useEffect(() => {
     const initializeStorage = async () => {
@@ -49,7 +49,7 @@ export default function HomeScreen() {
         console.error('❌ Erro ao inicializar PhotoStorage:', error);
       }
     };
-    
+
     initializeStorage();
   }, []);
 
@@ -73,7 +73,7 @@ export default function HomeScreen() {
   const handleTutorialSkip = () => {
     router.push('/(tabs)/Gallery');
   };
-  
+
   const features = [
     {
       title: 'Tirar Fotos',
@@ -116,100 +116,84 @@ export default function HomeScreen() {
       <Container>
         <Content>
 
-        <FeaturesContainer>
-          <FeaturesTitle>Features</FeaturesTitle>
+          <FeaturesContainer>
+            <FeaturesTitle>Features</FeaturesTitle>
 
-          {features.map((feature, index) => (
-            <FeatureCard
-              key={index}
-              color={feature.color}
-              onPress={feature.onPress}
-            >
-              <FeatureContent>
-                <FeatureIcon color={feature.color}>
-                  {feature.icon === 'camera' && <CameraIcon />}
-                  {feature.icon === 'images' && <GalleryIcon />}
-                  {feature.icon === 'information-circle' && <InfoIcon />}
-                  {feature.icon === 'git-compare' && <CompareIcon />}
-                </FeatureIcon>
+            {features.map((feature, index) => (
+              <FeatureCard
+                key={index}
+                color={feature.color}
+                onPress={feature.onPress}
+              >
+                <FeatureContent>
+                  <FeatureIcon color={feature.color}>
+                    {feature.icon === 'camera' && <CameraIcon />}
+                    {feature.icon === 'images' && <GalleryIcon />}
+                    {feature.icon === 'information-circle' && <InfoIcon />}
+                    {feature.icon === 'git-compare' && <CompareIcon />}
+                  </FeatureIcon>
 
-                <FeatureText>
-                  <FeatureTitle>{feature.title}</FeatureTitle>
-                  <FeatureDescription>{feature.description}</FeatureDescription>
-                </FeatureText>
+                  <FeatureText>
+                    <FeatureTitle>{feature.title}</FeatureTitle>
+                    <FeatureDescription>{feature.description}</FeatureDescription>
+                  </FeatureText>
 
-                <ChevronIcon />
-              </FeatureContent>
-            </FeatureCard>
-          ))}
-        </FeaturesContainer>
+                  <ChevronIcon />
+                </FeatureContent>
+              </FeatureCard>
+            ))}
+          </FeaturesContainer>
 
-        <InfoContainer>
-          <InfoTitle>Recursos do App</InfoTitle>
-          <InfoList>
-            <InfoItem>
-              <CheckIcon />
-              <InfoText>Integração da câmera com localização</InfoText>
-            </InfoItem>
-            <InfoItem>
-              <CheckIcon />
-              <InfoText>Armazenamento offline e cache</InfoText>
-            </InfoItem>
-            <InfoItem>
-              <CheckIcon />
-              <InfoText>Buscar e filtrar fotos</InfoText>
-            </InfoItem>
-            <InfoItem>
-              <CheckIcon />
-              <InfoText>Ferramenta de comparação de fotos</InfoText>
-            </InfoItem>
-            <InfoItem>
-              <CheckIcon />
-              <InfoText>Compartilhar com metadados</InfoText>
-            </InfoItem>
-            <InfoItem>
-              <CheckIcon />
-              <InfoText>Suporte ao modo escuro</InfoText>
-            </InfoItem>
-          </InfoList>
-        </InfoContainer>
+          <InfoContainer>
+            <InfoTitle>Recursos do App</InfoTitle>
+            <InfoList>
+              <InfoItem>
+                <CheckIcon />
+                <InfoText>Integração da câmera com localização</InfoText>
+              </InfoItem>
+              <InfoItem>
+                <CheckIcon />
+                <InfoText>Armazenamento offline e cache</InfoText>
+              </InfoItem>
+              <InfoItem>
+                <CheckIcon />
+                <InfoText>Buscar e filtrar fotos</InfoText>
+              </InfoItem>
+              <InfoItem>
+                <CheckIcon />
+                <InfoText>Ferramenta de comparação de fotos</InfoText>
+              </InfoItem>
+              <InfoItem>
+                <CheckIcon />
+                <InfoText>Compartilhar com metadados</InfoText>
+              </InfoItem>
+              <InfoItem>
+                <CheckIcon />
+                <InfoText>Suporte ao modo escuro</InfoText>
+              </InfoItem>
+            </InfoList>
+          </InfoContainer>
 
-        <CacheManager />
-        
-        <FeatureCard
-          color={theme.colors.alert}
-          onPress={async () => {
-            console.log('🔍 Iniciando debug do cache...');
-            await CacheDebugger.debugCache();
-          }}
-        >
-          <FeatureContent>
-            <FeatureIcon color={theme.colors.alert}>
-              <Ionicons name="bug" size={24} color="white" />
-            </FeatureIcon>
-            <FeatureText>
-              <FeatureTitle>Debug Cache</FeatureTitle>
-              <FeatureDescription>Verificar status do cache</FeatureDescription>
-            </FeatureText>
-            <ChevronIcon />
-          </FeatureContent>
-        </FeatureCard>
+          <CacheManager />
 
-        <FeatureCard
-          color={theme.colors.blue}
-          onPress={handleShowTutorial}
-        >
-          <FeatureContent>
-            <FeatureIcon color={theme.colors.blue}>
-              <Ionicons name="help-circle" size={24} color="white" />
-            </FeatureIcon>
-            <FeatureText>
-              <FeatureTitle>Tutorial de Comparação</FeatureTitle>
-              <FeatureDescription>Aprenda a comparar fotos</FeatureDescription>
-            </FeatureText>
-            <ChevronIcon />
-          </FeatureContent>
-        </FeatureCard>
+          <FeatureCard
+            color={theme.colors.alert}
+            onPress={async () => {
+              console.log('🔍 Iniciando debug do cache...');
+              await CacheDebugger.debugCache();
+            }}
+          >
+            <FeatureContent>
+              <FeatureIcon color={theme.colors.alert}>
+                <Ionicons name="bug" size={24} color="white" />
+              </FeatureIcon>
+              <FeatureText>
+                <FeatureTitle>Debug Cache</FeatureTitle>
+                <FeatureDescription>Verificar status do cache</FeatureDescription>
+              </FeatureText>
+              <ChevronIcon />
+            </FeatureContent>
+          </FeatureCard>
         </Content>
       </Container>
 
